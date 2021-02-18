@@ -1,5 +1,5 @@
 Class {
-	#name : #RamPresenter,
+	#name : #OvinaRamPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
 		'table',
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #specs }
-RamPresenter class >> defaultSpec [
+OvinaRamPresenter class >> defaultSpec [
 
 	^ SpBoxLayout newVertical
 		add: #table;
@@ -17,20 +17,20 @@ RamPresenter class >> defaultSpec [
 ]
 
 { #category : #examples }
-RamPresenter class >> open [
+OvinaRamPresenter class >> open [
 	<example>
 	self new openWithSpec 
 ]
 
 { #category : #initialization }
-RamPresenter >> columns [
+OvinaRamPresenter >> columns [
 	columns ifNil: [ columns := #(chr number name race inDate) ].
 	^columns 
 
 ]
 
 { #category : #initialization }
-RamPresenter >> initializePresenters [
+OvinaRamPresenter >> initializePresenters [
 	
 
  
@@ -48,16 +48,16 @@ RamPresenter >> initializePresenters [
 ]
 
 { #category : #initialization }
-RamPresenter >> initializeWindow: aWindowPresenter [
+OvinaRamPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		title: 'Væddere';
-		initialExtent: 1200 @ 750 
+		initialExtent: 600 @ 350 
 ]
 
 { #category : #accessing }
-RamPresenter >> items [
+OvinaRamPresenter >> items [
 	"Get the list of all rams"
 	^ (OvinaSheep sheeps values select: [ :sheep | sheep id first = $R ]) 
 		sort: [ :r1 :r2 | r1 id < r2 id]
