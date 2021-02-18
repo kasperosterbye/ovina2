@@ -1,7 +1,7 @@
 Class {
 	#name : #OvinaLamb,
 	#superclass : #OvinaSheep,
-	#category : #Ovina2
+	#category : #'Ovina2-Model'
 }
 
 { #category : #accessing }
