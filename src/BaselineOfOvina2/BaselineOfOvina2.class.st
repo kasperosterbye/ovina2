@@ -12,7 +12,7 @@ BaselineOfOvina2 >> baseline: spec [
 		do: [ spec 
 			blessing: #baseline;
 			baseline: 'SQLite3' with: [ spec repository: 'github://pharo-rdbms/Pharo-SQLite3/src' ];
-			package: 'Ovina2'";
-			package: 'Ovina2-Tests'" ]
+			package: 'Ovina2';
+			package: 'Ovina2-Tests' ]
 
 ]
