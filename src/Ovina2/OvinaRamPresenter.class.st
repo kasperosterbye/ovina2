@@ -1,14 +1,17 @@
+"
+* columns is an ordered collection of associations of columnName to boolean (indicating if column should be included)
+"
 Class {
 	#name : #OvinaRamPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
-		'columns',
 		'tableBox',
 		'table',
 		'columnPicker',
 		'printAll',
 		'newRam',
-		'editColumns'
+		'editColumns',
+		'allColumns'
 	],
 	#category : #'Ovina2-GUI'
 }
@@ -30,10 +33,27 @@ OvinaRamPresenter class >> open [
 ]
 
 { #category : #initialization }
-OvinaRamPresenter >> columns [
-	columns ifNil: [ columns := #(chr number name race inDate) ].
-	^columns 
+OvinaRamPresenter >> activeColumns [
+	"return the column names which are active"
+	^ (self allColumns  select: #value) collect: #key
 
+]
+
+{ #category : #initialization }
+OvinaRamPresenter >> allColumns [
+	allColumns ifNil: [ allColumns := #(chr number name race inDate) collect:[:c| c->true ]].
+	^allColumns 
+
+]
+
+{ #category : #initialization }
+OvinaRamPresenter >> allColumns: columns [
+	" columns is {colName->bool. colName->bool...} 
+	where the booleans indicate if should be included in presentation"
+	allColumns := columns.
+	self initializeTable.
+	self rebuildLayout.
+	self updatePresenter 
 ]
 
 { #category : #initialization }
@@ -48,7 +68,7 @@ OvinaRamPresenter >> initializePresenters [
 		action: [ self halt. ].
 	editColumns := self newButton 
 		label: 'Ret søjler';
-		action: [ self halt. ].
+		action: [ OvinaColumnPresenter openOn: self ].
 	
 ]
 
@@ -56,7 +76,7 @@ OvinaRamPresenter >> initializePresenters [
 OvinaRamPresenter >> initializeTable [
 	 
 	table := self instantiate: SpTablePresenter.
-	self columns do: [ :col |
+	self activeColumns  do: [ :col |
 		table addColumn: (SpStringTableColumn new
 				 title: col;
 				 evaluated: col asSymbol ;
@@ -64,7 +84,7 @@ OvinaRamPresenter >> initializeTable [
 					(s1 perform: col)   threeWayCompareTo:  (s2 perform: col  )
 				] asSortFunction)
 	 ].
-	table items: self items
+	self updatePresenter.
 	
 ]
 
@@ -75,13 +95,6 @@ OvinaRamPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter
 		title: 'Væddere';
 		initialExtent: 600 @ 350 
-]
-
-{ #category : #accessing }
-OvinaRamPresenter >> items [
-	"Get the list of all rams"
-	^ (OvinaSheep sheeps values select: [ :sheep | sheep id first = $R ]) 
-		sort: [ :r1 :r2 | r1 id < r2 id]
 ]
 
 { #category : #printing }
@@ -123,7 +136,7 @@ OvinaRamPresenter >> printTable [
 { #category : #printing }
 OvinaRamPresenter >> printTableHeaders: html [
 	html tag: #tr
-		do: [ columns do: [ :col | html tag: #th with: col asString ] ]
+		do: [ self activeColumns  do: [ :col | html tag: #th with: col asString ] ]
 ]
 
 { #category : #printing }
@@ -131,11 +144,24 @@ OvinaRamPresenter >> printTableRows: html [
 
 	"use the order of the table"
 	|inOrder|
+	"Odd, but this is the best I could come up with"
 	inOrder := (1 to: table items size) collect: [ :index | table itemAt: index ].
-	self halt.
 	inOrder  do: [ :sheep | 
 		html
 			tag: #tr
 			do: [ 
-			columns do: [ :col | html tag: #td with: (sheep perform: col) asString ] ] ] 
+			self activeColumns  do: [ :col | html tag: #td with: (sheep perform: col) asString ] ] ] 
+]
+
+{ #category : #accessing }
+OvinaRamPresenter >> sheeps [
+	"Get the list of all rams"
+	^ (OvinaSheep sheeps values select: [ :sheep | sheep id first = $R ]) 
+		sort: [ :r1 :r2 | r1 id < r2 id]
+]
+
+{ #category : #accessing }
+OvinaRamPresenter >> updatePresenter [ 
+	super updatePresenter.
+	table items: self sheeps
 ]

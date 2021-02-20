@@ -25,6 +25,7 @@ OvinaDB class >> loadOldRams [
 	conn := self openOld.
 	ramRows := (conn execute: 'select * from rams') rows.
 	ramRows do: [ :row | |ram|
+		self halt.
 		ram := OvinaRam new
 			id: 'R', (row at: #ramID) asString;
 			chr: (row at: #chr);

@@ -9,7 +9,9 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'table',
-		'columns'
+		'columns',
+		'sheepPresenter',
+		'backup'
 	],
 	#category : #'Ovina2-GUI'
 }
@@ -23,16 +25,22 @@ OvinaColumnPresenter class >> defaultSpec [
 ]
 
 { #category : #examples }
-OvinaColumnPresenter class >> openOn: columns [
-	<example> 
-	self new 
-		on: columns;
-		openWithSpec 
+OvinaColumnPresenter class >> openOn: sheepPresenter [
+	|instance|
+	instance :=self new on: sheepPresenter.
+	instance openDialogWithSpec 
+		cancelAction: [ instance cancel ]
+]
+
+{ #category : #actions }
+OvinaColumnPresenter >> cancel [
+	sheepPresenter allColumns: backup 
 ]
 
 { #category : #'instance creation' }
 OvinaColumnPresenter >> columns [
-	columns ifNil: [ ^#() ].
+	sheepPresenter  ifNil: [ ^#() ].
+	columns ifNil: [columns := sheepPresenter  allColumns].
 	^columns 
 ]
 
@@ -54,11 +62,6 @@ OvinaColumnPresenter >> columnsMenu [
 				action: [ self moveSelectedColumnRight  ] ]
 ]
 
-{ #category : #'instance creation' }
-OvinaColumnPresenter >> columnsToBePresented [
-	^ (columns select: #value) collect: #key
-]
-
 { #category : #initialization }
 OvinaColumnPresenter >> initializePresenters [
  
@@ -67,8 +70,8 @@ OvinaColumnPresenter >> initializePresenters [
 				 title: 'Inkl';
 				 evaluated: #value;
 				width: 30;
-				onActivation: [:col | self include: col];
-				onDeactivation: [:col | self exclude: col]);
+				onActivation: [:col | col value: true. self updatePresenter ];
+				onDeactivation: [:col | col value: false. self updatePresenter]);
 			addColumn: (SpStringTableColumn new
 				 title: 'Kolonne';
 				 evaluated: #key).
@@ -81,9 +84,9 @@ OvinaColumnPresenter >> initializePresenters [
 OvinaColumnPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
-	"aWindowPresenter
+	aWindowPresenter
 		title: 'Søjler';
-		initialExtent: 600 @ 350 "
+		initialExtent: 600 @ 350 
 ]
 
 { #category : #'instance creation' }
@@ -94,10 +97,11 @@ OvinaColumnPresenter >> isColumnSelected [
 { #category : #'instance creation' }
 OvinaColumnPresenter >> moveSelectedColumnLeft [
 	"Swap the selected item and the one before it"
-	| index tmp |
+	| index tmp columns|
 	self isColumnSelected ifFalse: [ ^ self ].
 	index := table selection selectedIndex.
 	index = 1 ifTrue:[^ self ].
+	columns := self columns.
 	tmp := columns at: index-1.
 	columns at: index - 1 put: (columns at: index).
 	columns at: index put: tmp.
@@ -109,8 +113,9 @@ OvinaColumnPresenter >> moveSelectedColumnLeft [
 { #category : #'instance creation' }
 OvinaColumnPresenter >> moveSelectedColumnRight [
 	"Swap the selected item and the one after it"
-	| index tmp |
+	| index tmp columns|
 	self isColumnSelected ifFalse: [ ^ self ].
+	columns := self columns.
 	index := table selection selectedIndex.
 	index = columns size ifTrue:[^ self ].
 	tmp := columns at: index.
@@ -121,8 +126,9 @@ OvinaColumnPresenter >> moveSelectedColumnRight [
 ]
 
 { #category : #'instance creation' }
-OvinaColumnPresenter >> on: columnList [
-	columns := columnList collect: [ :col | col -> true ].
+OvinaColumnPresenter >> on: presenter [
+	sheepPresenter := presenter. 
+	backup := sheepPresenter allColumns deepCopy.
 	self updatePresenter 
 ]
 
@@ -134,5 +140,7 @@ OvinaColumnPresenter >> selectedColumn [
 { #category : #'instance creation' }
 OvinaColumnPresenter >> updatePresenter [ 
 	super updatePresenter.
-	table items: self columns 
+	table items: self columns.
+	sheepPresenter ifNotNil:	[sheepPresenter allColumns: self columns].
+	
 ]

@@ -148,7 +148,9 @@ OvinaSheep >> number: anObject [
 
 { #category : #printing }
 OvinaSheep >> printOn: aStream [
-	({ id. chr. number } , self properties values ) printOn: aStream
+	aStream nextPutAll: 'Sheep [';
+	print: ({ id. chr. number } , self properties values );
+	nextPut: $]
 ]
 
 { #category : #properties }
