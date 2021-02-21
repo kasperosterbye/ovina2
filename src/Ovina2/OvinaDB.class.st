@@ -19,23 +19,87 @@ OvinaDB class >> dbPath [
 	^'/Users/kasper/tmp/'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #migration }
+OvinaDB class >> loadOldEwes [
+	| conn eweRows |
+	conn := self openOld.
+	eweRows := (conn execute: 'select * from ewes') rows.
+	eweRows do: [ :row | |ewe|
+		ewe := OvinaEwe new
+			id: 'E', (row at: #eweID) asString;
+			chr: (row at: #chr) asString;
+			number: (row at: #number) asString;
+			name: (row at: #name);
+			race: (row at: #race ) asLowercase ;
+			inDate: (row at: #inDate) yyyymmdd .
+		OvinaSheep addSheep: ewe.
+		].
+	conn close.
+]
+
+{ #category : #migration }
+OvinaDB class >> loadOldLambs [
+	| conn lambRows |
+	conn := self openOld.
+	lambRows := (conn execute: 'select * from lambs') rows.
+	lambRows do: [ :row | |lamb|
+		lamb := OvinaLamb new
+			id: 'L', (row at: #lambID) asString;
+			chr: OvinaSheep maarumlamChr;
+			number: (row at: #number) asString;
+			dam: (OvinaSheep sheeps at: ('E', (row at: #momFK) asString));
+			sire: (OvinaSheep sheeps at: ('R', (row at: #dadFK) asString));
+			inDate: (row at: #inDate) yyyymmdd;
+			event: (row at: #event);
+			sex: (row at: #sex);
+			growth: (row at: #growth) asString;
+			usage: (row at: #usage);
+			color: (row at: #color);
+			comment: (row at: #comment).
+		OvinaSheep addSheep: lamb.
+		].
+	conn close.
+]
+
+{ #category : #migration }
 OvinaDB class >> loadOldRams [
 	| conn ramRows |
 	conn := self openOld.
 	ramRows := (conn execute: 'select * from rams') rows.
 	ramRows do: [ :row | |ram|
-		self halt.
 		ram := OvinaRam new
 			id: 'R', (row at: #ramID) asString;
-			chr: (row at: #chr);
-			number: (row at: #number);
+			chr: (row at: #chr) asString;
+			number: (row at: #number) asString;
 			name: (row at: #name);
 			race: (row at: #race ) asLowercase ;
 			inDate: (row at: #inDate) yyyymmdd .
 		OvinaSheep addSheep: ram.
 		].
 	conn close.
+]
+
+{ #category : #migration }
+OvinaDB class >> loadOldRegistrations [
+	| conn regRow |
+	conn := self openOld.
+	regRow := (conn execute: 'select * from descriptors') rows.
+	regRow do: [ :row | |reg|
+		reg := OvinaRegistration  new
+			id: (row at: #descID) asString;
+			kind: (row at: #descTag) asLowercase ;
+			date: (row at: #descDate);
+			comment: (row at: #descComment);
+			default: ''.
+		OvinaRegistration addRegistration: reg
+		].
+	
+	conn close.
+]
+
+{ #category : #migration }
+OvinaDB class >> loadOldSheeps [
+	self loadOldRams; loadOldEwes ; loadOldLambs 
 ]
 
 { #category : #connecting }
@@ -81,13 +145,6 @@ OvinaDB class >> migrateRams [
 { #category : #migration }
 OvinaDB class >> migrateRegistrations [
 
-]
-
-{ #category : #accessing }
-OvinaDB class >> old [
-	"return a connection to the old db"
-	old ifNil: [ old := self openOld  ].
-	^old
 ]
 
 { #category : #connecting }

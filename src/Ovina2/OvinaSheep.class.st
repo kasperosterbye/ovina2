@@ -28,6 +28,11 @@ OvinaSheep class >> addSheep: aSheep [
 	self sheeps at: aSheep id put: aSheep
 ]
 
+{ #category : #sheeps }
+OvinaSheep class >> ewes [
+	^ OvinaSheep sheeps associations select: [ :s| s key first = $E ]
+]
+
 { #category : #properties }
 OvinaSheep class >> get: propName for: sheep [
 	"return the property for sheep. Return nil if none exist. 
@@ -42,6 +47,16 @@ OvinaSheep class >> initializeSheeps [
 	sheeps := nil.
 ]
 
+{ #category : #sheeps }
+OvinaSheep class >> lambs [
+	^ OvinaSheep sheeps associations select: [ :s| s key first = $L ]
+]
+
+{ #category : #properties }
+OvinaSheep class >> maarumlamChr [
+	^ 112633
+]
+
 { #category : #properties }
 OvinaSheep class >> properties [ 
 	properties ifNil: [ properties := Dictionary new ].
@@ -51,6 +66,11 @@ OvinaSheep class >> properties [
 { #category : #properties }
 OvinaSheep class >> propertiesFor: aSheep [
 	^ self properties at: aSheep id
+]
+
+{ #category : #sheeps }
+OvinaSheep class >> rams [
+	^ OvinaSheep sheeps associations select: [ :s| s key first = $R ]
 ]
 
 { #category : #properties }
@@ -84,9 +104,9 @@ OvinaSheep >> chr [
 ]
 
 { #category : #accessing }
-OvinaSheep >> chr: anObject [
+OvinaSheep >> chr: aString [
 
-	chr := anObject
+	chr := aString asInteger
 ]
 
 { #category : #'accessing - properties' }
@@ -101,9 +121,9 @@ OvinaSheep >> id [
 ]
 
 { #category : #accessing }
-OvinaSheep >> id: anObject [
+OvinaSheep >> id: aString [
 
-	id := anObject
+	id := aString
 ]
 
 { #category : #'accessing - properties' }
@@ -141,14 +161,14 @@ OvinaSheep >> number [
 ]
 
 { #category : #accessing }
-OvinaSheep >> number: anObject [
+OvinaSheep >> number: aString [
 
-	number := anObject
+	number := aString asInteger
 ]
 
 { #category : #printing }
 OvinaSheep >> printOn: aStream [
-	aStream nextPutAll: 'Sheep [';
+	aStream nextPutAll: '[';
 	print: ({ id. chr. number } , self properties values );
 	nextPut: $]
 ]

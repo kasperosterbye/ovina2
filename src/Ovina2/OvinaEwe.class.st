@@ -1,11 +1,11 @@
 Class {
-	#name : #OvinaRam,
+	#name : #OvinaEwe,
 	#superclass : #OvinaSheep,
 	#category : #'Ovina2-Model'
 }
 
 { #category : #printing }
-OvinaRam >> printOn: aStream [
-	aStream nextPutAll: 'Ram '.
+OvinaEwe >> printOn: aStream [
+	aStream nextPutAll: 'Ewe '.
 	super printOn: aStream
 ]
