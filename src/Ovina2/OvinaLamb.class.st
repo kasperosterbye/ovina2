@@ -41,10 +41,6 @@ OvinaLamb >> dam: val [
 ]
 
 { #category : #'accessing-properties' }
-OvinaLamb >> damnnt^ [ (self property: #dam)
-]
-
-{ #category : #'accessing-properties' }
 OvinaLamb >> event [
 
 	^ (self property: #event)
