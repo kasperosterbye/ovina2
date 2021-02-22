@@ -19,6 +19,35 @@ OvinaDB class >> dbPath [
 	^'/Users/kasper/tmp/'
 ]
 
+{ #category : #'as yet unclassified' }
+OvinaDB class >> loadOldAll [
+
+	self
+		loadOldRams;
+		loadOldEwes;
+		loadOldLambs;
+		loadOldRegistrations;
+		loadOldEvents 
+]
+
+{ #category : #migration }
+OvinaDB class >> loadOldEvents [
+	| conn eventRow|
+	conn := self openOld.
+	eventRow := (conn execute: 'select * from events') rows.
+	eventRow do: [ :row | |event|
+		event := OvinaEvent  new
+			id: (row at: #eventID) asString;
+			registration: (OvinaRegistration  registrations  at: (row at: #descFK) asString);
+			sheep: (OvinaSheep sheeps at: 
+				(row at: #sheepKind) first asString, (row at: #sheepFK) asString);
+			date: (row at: #eventDate);
+			value: (row at: #value). 
+		OvinaEvent addEvent: event
+		].
+	conn close.
+]
+
 { #category : #migration }
 OvinaDB class >> loadOldEwes [
 	| conn eweRows |
@@ -97,39 +126,12 @@ OvinaDB class >> loadOldRegistrations [
 	conn close.
 ]
 
-{ #category : #migration }
-OvinaDB class >> loadOldSheeps [
-	self loadOldRams; loadOldEwes ; loadOldLambs 
-]
-
 { #category : #connecting }
 OvinaDB class >> migrateAll [
-	self migrateRams.
-	self migrateEwes.
-	self migrateLambs.
-	self migrateRegistrations.
-	self migrateEvents.
-	self migrateProperties.
-]
 
-{ #category : #migration }
-OvinaDB class >> migrateEvents [
-
-]
-
-{ #category : #migration }
-OvinaDB class >> migrateEwes [
-
-]
-
-{ #category : #migration }
-OvinaDB class >> migrateLambs [
-
-]
-
-{ #category : #migration }
-OvinaDB class >> migrateProperties [
-
+	self loadAll.
+	self storeAllSheep.
+	
 ]
 
 { #category : #migration }
@@ -140,11 +142,6 @@ OvinaDB class >> migrateRams [
 	
 	
 	
-]
-
-{ #category : #migration }
-OvinaDB class >> migrateRegistrations [
-
 ]
 
 { #category : #connecting }

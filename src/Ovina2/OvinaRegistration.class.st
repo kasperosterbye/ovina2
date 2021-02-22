@@ -90,3 +90,10 @@ OvinaRegistration >> kind: anObject [
 
 	kind := anObject
 ]
+
+{ #category : #printing }
+OvinaRegistration >> printOn: aStream [
+	"id kind date comment default"
+	aStream nextPutAll: ('Reg [{1}, {2}, {3}]' 
+		format: {kind. date. (comment copyUpTo:  Character space) printString})
+]
