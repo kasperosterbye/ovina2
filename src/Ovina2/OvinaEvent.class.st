@@ -6,7 +6,7 @@ Class {
 		'registration',
 		'sheep',
 		'date',
-		'value'
+		'result'
 	],
 	#classInstVars : [
 		'events'
@@ -16,7 +16,8 @@ Class {
 
 { #category : #initialization }
 OvinaEvent class >> addEvent: event [
-	events at: event id put: event
+
+	self events at: event id put: event
 ]
 
 { #category : #accessing }
@@ -26,7 +27,7 @@ OvinaEvent class >> events [
 ]
 
 { #category : #initialization }
-OvinaEvent class >> initializeRegistrations [
+OvinaEvent class >> initialize [
 	<script>
 	events  := nil.
 ]
@@ -55,6 +56,17 @@ OvinaEvent >> id: anObject [
 	id := anObject
 ]
 
+{ #category : #printing }
+OvinaEvent >> printOn: aStream [
+
+	"id registration sheep date value"
+
+	aStream nextPutAll: ('Event [{1}, {2}, {3}]' format: { 
+				 registration kind.
+				 sheep.
+				 result })
+]
+
 { #category : #accessing }
 OvinaEvent >> registration [
 
@@ -68,6 +80,18 @@ OvinaEvent >> registration: anObject [
 ]
 
 { #category : #accessing }
+OvinaEvent >> result [
+
+	^ result
+]
+
+{ #category : #accessing }
+OvinaEvent >> result: anObject [
+
+	result := anObject
+]
+
+{ #category : #accessing }
 OvinaEvent >> sheep [
 
 	^ sheep
@@ -77,16 +101,4 @@ OvinaEvent >> sheep [
 OvinaEvent >> sheep: anObject [
 
 	sheep := anObject
-]
-
-{ #category : #accessing }
-OvinaEvent >> value1 [
-
-	^ value
-]
-
-{ #category : #accessing }
-OvinaEvent >> value: anObject [
-
-	value := anObject
 ]

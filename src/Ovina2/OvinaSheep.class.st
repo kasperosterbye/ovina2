@@ -42,9 +42,17 @@ OvinaSheep class >> get: propName for: sheep [
 ]
 
 { #category : #sheeps }
-OvinaSheep class >> initializeSheeps [
+OvinaSheep class >> initialize [
 	<script>
 	sheeps := nil.
+]
+
+{ #category : #'as yet unclassified' }
+OvinaSheep class >> kindFromId: id [
+	id first = $L ifTrue:[^OvinaLamb].
+	id first = $E ifTrue:[^OvinaEwe].
+	id first = $R ifTrue:[^OvinaRam].
+	self error: 'Unknow sheep type: ', id
 ]
 
 { #category : #sheeps }
@@ -85,7 +93,7 @@ OvinaSheep class >> set: property to: value for: sheep [
 
 { #category : #sheeps }
 OvinaSheep class >> sheep: id [
-	"return the sheep with id <Integer>. If id is nil, return nil"
+	"return the sheep with id <String>. If id is nil, return nil"
 	id ifNil: [ ^nil ].
 	^sheeps at: id
 ]
@@ -164,6 +172,11 @@ OvinaSheep >> number [
 OvinaSheep >> number: aString [
 
 	number := aString asInteger
+]
+
+{ #category : #'as yet unclassified' }
+OvinaSheep >> ovinaDBString [ 
+	^ id asString printString
 ]
 
 { #category : #printing }

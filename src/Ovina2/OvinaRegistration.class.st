@@ -5,8 +5,8 @@ Class {
 		'id',
 		'kind',
 		'date',
-		'comment',
-		'default'
+		'default',
+		'comment'
 	],
 	#classInstVars : [
 		'registrations'
@@ -20,7 +20,7 @@ OvinaRegistration class >> addRegistration: reg [
 ]
 
 { #category : #initialization }
-OvinaRegistration class >> initializeRegistrations [
+OvinaRegistration class >> initialize [
 	<script>
 	registrations  := nil.
 ]
