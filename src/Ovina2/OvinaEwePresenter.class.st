@@ -1,23 +1,23 @@
 Class {
-	#name : #OvinaRamPresenter,
+	#name : #OvinaEwePresenter,
 	#superclass : #OvinaSheepPresenter,
 	#category : #'Ovina2-GUI'
 }
 
 { #category : #initialization }
-OvinaRamPresenter >> initializeButtons [ 
+OvinaEwePresenter >> initializeButtons [ 
 	super initializeButtons.
 	buttonBar add: (self newButton 
-			label: 'Ny vædder';
+			label: 'Nyt lam';
 			action: [ self error:'Not implemented yet' ])
 ]
 
 { #category : #acccessing }
-OvinaRamPresenter >> sheepClass [
-	^ OvinaRam 
+OvinaEwePresenter >> sheepClass [
+	^ OvinaEwe
 ]
 
 { #category : #initialization }
-OvinaRamPresenter >> title [
-	^'Væddere'
+OvinaEwePresenter >> title [
+	^'Får'
 ]

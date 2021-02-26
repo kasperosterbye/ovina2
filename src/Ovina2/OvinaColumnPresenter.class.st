@@ -11,7 +11,9 @@ Class {
 		'table',
 		'columns',
 		'sheepPresenter',
-		'backup'
+		'backup',
+		'up',
+		'down'
 	],
 	#category : #'Ovina2-GUI'
 }
@@ -19,8 +21,10 @@ Class {
 { #category : #specs }
 OvinaColumnPresenter class >> defaultSpec [
 
-	^ SpBoxLayout newVertical
+	^ SpBoxLayout newVertical 
 		add: #table;
+		add: (SpBoxLayout newHorizontal 
+			add: #up; add: #down; yourself ) expand: false fill: true padding: 3
 		yourself
 ]
 
@@ -64,19 +68,31 @@ OvinaColumnPresenter >> columnsMenu [
 
 { #category : #initialization }
 OvinaColumnPresenter >> initializePresenters [
+	super initializePresenters.
+
+	up := self newButton 
+		label: 'op/venstre';
+		action: [ self moveSelectedColumnLeft  ];
+		yourself.
+	down := self newButton 
+		label: 'ned/højre';
+		action: [ self moveSelectedColumnRight  ];
+		yourself.
  
 	table := self instantiate: SpTablePresenter.
 	table addColumn: (SpCheckBoxTableColumn new
 				 title: 'Inkl';
-				 evaluated: #value;
+				 evaluated: #value ;
 				width: 30;
 				onActivation: [:col | col value: true. self updatePresenter ];
 				onDeactivation: [:col | col value: false. self updatePresenter]);
 			addColumn: (SpStringTableColumn new
 				 title: 'Kolonne';
-				 evaluated: #key).
+				 evaluated: [:col | col key dkName ]).
 	table contextMenu: self columnsMenu .
+	
 	self updatePresenter.
+	
 	
 ]
 
@@ -84,9 +100,10 @@ OvinaColumnPresenter >> initializePresenters [
 OvinaColumnPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
+	
 	aWindowPresenter
 		title: 'Søjler';
-		initialExtent: 600 @ 350 
+		initialExtent: 250 @ 300
 ]
 
 { #category : #'instance creation' }

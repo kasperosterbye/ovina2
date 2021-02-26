@@ -9,7 +9,7 @@ OvinaDBOld class >> dbPath [
 	^'/Users/kasper/tmp/ovina3a.db'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #migration }
 OvinaDBOld class >> loadAll [
 
 	| conn |

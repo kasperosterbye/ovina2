@@ -36,10 +36,19 @@ OvinaDB class >> open [
 ]
 
 { #category : #migration }
+OvinaDB class >> reset [
+
+	| conn |
+	conn := self open.
+	conn resetDB .
+	conn close
+]
+
+{ #category : #migration }
 OvinaDB class >> storeAll [
 
 	| conn |
-	conn := self openNew.
+	conn := self open.
 	conn storeAll.
 	conn close
 ]
@@ -104,6 +113,15 @@ OvinaDB >> loadSheeps [
 		sheep property: (row at: #name) put: (row at: #value).
 		OvinaSheep addSheep: sheep.
 		].
+]
+
+{ #category : #migration }
+OvinaDB >> resetDB [
+	self 
+		execute: 'delete from Events';
+		execute: 'delete from Registrations';
+		execute: 'delete from Properties';
+		execute: 'delete from Sheeps'
 ]
 
 { #category : #store }

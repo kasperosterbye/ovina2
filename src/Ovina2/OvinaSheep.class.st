@@ -28,6 +28,20 @@ OvinaSheep class >> addSheep: aSheep [
 	self sheeps at: aSheep id put: aSheep
 ]
 
+{ #category : #columns }
+OvinaSheep class >> allColumns [
+	"return a list of all columns. A column is specified using pragma 
+	sheepColumn:#('name in danish' optionalStringSetter:)"
+	^ (Pragma allNamed: #sheepColumn: from: self to: OvinaSheep)
+		collect: [ :prag | |args|
+			args := prag arguments first.
+			OvinaColumnSpecification new
+				dkName: args first;
+				getter: prag method selector;
+				setter: (args size > 1 ifTrue: [ args last ] ifFalse: [ nil ])
+				]
+]
+
 { #category : #sheeps }
 OvinaSheep class >> ewes [
 	^ OvinaSheep sheeps associations select: [ :s| s key first = $E ]
@@ -47,7 +61,7 @@ OvinaSheep class >> initialize [
 	sheeps := nil.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #utilities }
 OvinaSheep class >> kindFromId: id [
 	id first = $L ifTrue:[^OvinaLamb].
 	id first = $E ifTrue:[^OvinaEwe].
@@ -107,7 +121,7 @@ OvinaSheep class >> sheeps [
 
 { #category : #accessing }
 OvinaSheep >> chr [
-
+	<sheepColumn: #('chr' chr:)>
 	^ chr
 ]
 
@@ -119,6 +133,7 @@ OvinaSheep >> chr: aString [
 
 { #category : #'accessing - properties' }
 OvinaSheep >> computeRace [
+
 	^'todo'
 ]
 
@@ -136,6 +151,7 @@ OvinaSheep >> id: aString [
 
 { #category : #'accessing - properties' }
 OvinaSheep >> inDate [
+	<sheepColumn:#('Inddato' inDate:)>
 	^(self property: #inDate) asISO8601Date 
 ]
 
@@ -147,24 +163,15 @@ OvinaSheep >> inDate: date [
 	
 ]
 
-{ #category : #'accessing - properties' }
-OvinaSheep >> mother [
-	^self class sheep: (self property: #mother)
-]
-
-{ #category : #'accessing - properties' }
-OvinaSheep >> name [
-	^self property: #name
-]
-
-{ #category : #'accessing - properties' }
-OvinaSheep >> name: name [
-	^self property: #name put: name
+{ #category : #'as yet unclassified' }
+OvinaSheep >> noteField [
+	<sheepColumn:#('note ____________')>
+	^''
 ]
 
 { #category : #accessing }
 OvinaSheep >> number [
-
+	<sheepColumn: #('nummer' number:)>
 	^ number
 ]
 
@@ -207,6 +214,7 @@ OvinaSheep >> property: property put: value [
 { #category : #'accessing - properties' }
 OvinaSheep >> race [
 	|race|
+	<sheepColumn: #('race' race:)>
 	race := self property: #race.
 	race ifNil: [ ^ self computeRace ].
 	^ race
