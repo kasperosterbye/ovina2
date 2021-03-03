@@ -25,6 +25,7 @@ Class {
 
 { #category : #sheeps }
 OvinaSheep class >> addSheep: aSheep [
+	(self sheeps includesKey: aSheep id) ifTrue:[self halt].
 	self sheeps at: aSheep id put: aSheep
 ]
 
@@ -51,7 +52,7 @@ OvinaSheep class >> ewes [
 OvinaSheep class >> get: propName for: sheep [
 	"return the property for sheep. Return nil if none exist. 
 	I return the string value from the database table properties"
-	^(properties at: sheep id ifAbsent: [ ^nil ]) at: propName ifAbsent: [ ^nil ]
+	^(self properties at: sheep id ifAbsent: [ ^nil ]) at: propName ifAbsent: [ ^nil ]
 	
 ]
 
@@ -59,6 +60,8 @@ OvinaSheep class >> get: propName for: sheep [
 OvinaSheep class >> initialize [
 	<script>
 	sheeps := nil.
+	properties := nil.
+	
 ]
 
 { #category : #utilities }
@@ -71,7 +74,7 @@ OvinaSheep class >> kindFromId: id [
 
 { #category : #sheeps }
 OvinaSheep class >> lambs [
-	^ OvinaSheep sheeps associations select: [ :s| s key first = $L ]
+	^ OvinaSheep sheeps select: [ :s| s id first = $L ]
 ]
 
 { #category : #properties }
@@ -109,7 +112,7 @@ OvinaSheep class >> set: property to: value for: sheep [
 OvinaSheep class >> sheep: id [
 	"return the sheep with id <String>. If id is nil, return nil"
 	id ifNil: [ ^nil ].
-	^sheeps at: id
+	^self sheeps at: id
 ]
 
 { #category : #sheeps }
@@ -122,7 +125,7 @@ OvinaSheep class >> sheeps [
 { #category : #accessing }
 OvinaSheep >> chr [
 	<sheepColumn: #('chr' chr:)>
-	^ chr
+	^ chr asInteger 
 ]
 
 { #category : #accessing }
@@ -135,6 +138,11 @@ OvinaSheep >> chr: aString [
 OvinaSheep >> computeRace [
 
 	^'todo'
+]
+
+{ #category : #accessing }
+OvinaSheep >> events [
+	^ OvinaEvent events select: [ :ev | ev sheep = self ]
 ]
 
 { #category : #accessing }
@@ -172,7 +180,7 @@ OvinaSheep >> noteField [
 { #category : #accessing }
 OvinaSheep >> number [
 	<sheepColumn: #('nummer' number:)>
-	^ number
+	^ number asInteger 
 ]
 
 { #category : #accessing }

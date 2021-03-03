@@ -53,6 +53,16 @@ OvinaDB class >> storeAll [
 	conn close
 ]
 
+{ #category : #'as yet unclassified' }
+OvinaDB >> connectLineage [
+
+	"tie connection from lamb to ewe and ram"
+	"assumes all sheeps to be loaded"
+	OvinaSheep lambs do: [ :lamb | 
+		lamb dam addLamb: lamb.
+		lamb sire addLamb: lamb]
+]
+
 { #category : #migration }
 OvinaDB >> loadAll [
 
@@ -74,10 +84,11 @@ OvinaDB >> loadEvents [
 			         registration:
 				         (OvinaRegistration registrations at:
 						          (row at: #registration) asString);
-			         sheep: (OvinaSheep sheeps at: (row at: #sheep) );
+			         sheep: (OvinaSheep sheeps at: (row at: #sheep));
 			         date: (row at: #date);
 			         result: (row at: #result).
-		OvinaEvent addEvent: event ].
+		OvinaEvent addEvent: event.
+		 ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -107,12 +118,12 @@ OvinaDB >> loadSheeps [
 			number: (row at: #number).
 		OvinaSheep addSheep: sheep.
 		].
-	propertyRows := (self execute: 'select * from Sheeps') rows.
+	propertyRows := (self execute: 'select * from Properties') rows.
 	propertyRows do: [ :row | |sheep|
-		sheep := OvinaSheep sheep: (row at: #id).
-		sheep property: (row at: #name) put: (row at: #value).
-		OvinaSheep addSheep: sheep.
+		sheep := OvinaSheep sheep: (row at: #sheep).
+		sheep property: (row at: #name) asSymbol  put: (row at: #value).
 		].
+	self connectLineage
 ]
 
 { #category : #migration }

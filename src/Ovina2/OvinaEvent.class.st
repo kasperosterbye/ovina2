@@ -75,7 +75,6 @@ OvinaEvent >> registration [
 
 { #category : #accessing }
 OvinaEvent >> registration: anObject [
-
 	registration := anObject
 ]
 

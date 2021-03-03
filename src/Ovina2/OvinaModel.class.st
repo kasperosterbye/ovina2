@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-OvinaModel class >> inialize [
+OvinaModel class >> initialize [
 	<script>
 	OvinaSheep initialize.
 	OvinaEvent initialize.

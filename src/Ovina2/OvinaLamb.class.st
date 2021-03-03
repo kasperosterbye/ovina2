@@ -31,13 +31,13 @@ OvinaLamb >> comment: val [
 { #category : #'accessing-properties' }
 OvinaLamb >> dam [
 
-	^ (self property: #dam)
+	^ OvinaSheep sheep: (self property: #dam)
 ]
 
 { #category : #'accessing-properties' }
-OvinaLamb >> dam: val [
+OvinaLamb >> dam: dam [
 
-	self property: #dam put: val
+	self property: #dam put: dam id
 ]
 
 { #category : #'accessing-properties' }
@@ -84,14 +84,25 @@ OvinaLamb >> sex: val [
 
 { #category : #'accessing-properties' }
 OvinaLamb >> sire [
-
-	^ (self property: #sire)
+	^ OvinaSheep sheep: (self property: #sire)
 ]
 
 { #category : #'accessing-properties' }
-OvinaLamb >> sire: val [
+OvinaLamb >> sire: ram [
+	self property: #sire put: ram id
+]
 
-	self property: #sire put: val
+{ #category : #'accessing-properties' }
+OvinaLamb >> slagtevægt [
+	"return -1 if not slaughtered"
+	|slagt|
+	self usage ~= 'slagt' ifTrue: [ ^ -1 ].
+	slagt := self events values select: [ :ev | ev registration kind = 'slagtevægt' ].
+	^ slagt ifEmpty: [ -1 ] 
+		ifNotEmpty: [ |res| 
+			res:= slagt last result.
+			res ifEmpty: [ -1 ] 
+				ifNotEmpty: [ res asNumber ] ]
 ]
 
 { #category : #accessing }

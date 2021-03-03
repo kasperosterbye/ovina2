@@ -95,5 +95,5 @@ OvinaRegistration >> kind: anObject [
 OvinaRegistration >> printOn: aStream [
 	"id kind date comment default"
 	aStream nextPutAll: ('Reg [{1}, {2}, {3}]' 
-		format: {kind. date. (comment copyUpTo:  Character space) printString})
+		format: {kind. date. (comment contractTo: 20) printString})
 ]

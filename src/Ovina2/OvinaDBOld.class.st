@@ -13,6 +13,8 @@ OvinaDBOld class >> dbPath [
 OvinaDBOld class >> loadAll [
 
 	| conn |
+	
+	OvinaModel initialize.
 	conn := self open.
 	conn loadAll.
 	conn close
