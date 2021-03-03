@@ -64,6 +64,11 @@ OvinaLamb >> growth: val [
 	self property: #growth put: val
 ]
 
+{ #category : #accessing }
+OvinaLamb >> name [
+	^ self number asString, ' ', self sex first asUppercase asString , ' ',self dam name
+]
+
 { #category : #printing }
 OvinaLamb >> printOn: aStream [
 	aStream nextPutAll: 'Lamb '.
