@@ -1,5 +1,5 @@
 "
-* columns is an ordered collection of associations of OvinaColumnSpecifications to boolean (indicating if column should be included)
+* allColumns is an ordered collection of associations of OvinaColumnSpecifications to boolean (indicating if column should be included in the view)
 "
 Class {
 	#name : #OvinaSheepPresenter,
@@ -163,7 +163,7 @@ OvinaSheepPresenter >> sheepClass [
 
 { #category : #accessing }
 OvinaSheepPresenter >> sheeps [
-	"Get the list of all rams"
+	"Get the list of all sheeps"
 	^ (OvinaSheep sheeps values select: [ :sheep | sheep class = self sheepClass  ]) 
 		sort: [ :r1 :r2 | r1 id < r2 id]
 ]

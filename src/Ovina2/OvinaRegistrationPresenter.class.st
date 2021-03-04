@@ -2,12 +2,18 @@ Class {
 	#name : #OvinaRegistrationPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
+		'selBar',
+		'selTable',
+		'regButtonBar',
 		'regTable',
+		'regCommentText',
+		'regDefaultText',
 		'eventTable',
-		'buttonBar',
-		'filterLast',
-		'filterKind',
-		'editSelected'
+		'regFilterKind',
+		'regFilterPastYear',
+		'selFilterPresent',
+		'selIncludeLambs',
+		'selectedSheeps'
 	],
 	#category : #'Ovina2-GUI'
 }
@@ -15,15 +21,20 @@ Class {
 { #category : #specs }
 OvinaRegistrationPresenter class >> defaultSpec [
 
-	^ SpPanedLayout newVertical
-		addFirst:
+	^ SpPanedLayout newHorizontal
+		addFirst: (SpBoxLayout newVertical
+			add: #selBar expand: false fill: true padding: 3;
+			add: #selTable);
+		addSecond: (SpPanedLayout newVertical
+		addFirst: 
 			(SpBoxLayout newVertical
-			add: (SpBoxLayout newHorizontal add: #buttonBar;yourself) 
-				expand: false fill: true padding: 3;
+			add: #regButtonBar expand: false fill: true padding: 3;
 			add: #regTable;
-			add: #editSelected withConstraints: [:c| c height: 60; fill: true; padding: 3]); 
-		addSecond: #eventTable
-		yourself
+			add: (SpBoxLayout newHorizontal 
+				add: #regCommentText ;
+				add: #regDefaultText width: 75) 
+				withConstraints: [:c| c height: 60; expand: false; fill: false; padding: 3]); 
+		addSecond: #eventTable)
 ]
 
 { #category : #examples }
@@ -35,9 +46,9 @@ OvinaRegistrationPresenter class >> open [
 { #category : #'as yet unclassified' }
 OvinaRegistrationPresenter >> currentRegistration: reg [
 	reg ifNotNil: [
-		editSelected beEditable; enable; text: reg comment]
+		regCommentText beEditable; enable; text: reg comment]
 	ifNil: [
-		editSelected text: ''; beNotEditable; disable.].
+		regCommentText text: ''; beNotEditable; disable.].
 	self updatePresenter 
 ]
 
@@ -51,33 +62,24 @@ OvinaRegistrationPresenter >> events [
 
 { #category : #initialization }
 OvinaRegistrationPresenter >> initialize [
-	filterLast := false.
-	filterKind := 'all'.
+	regFilterPastYear := false.
+	regFilterKind := 'all'.
 	
 	super initialize.
 ]
 
 { #category : #initialization }
-OvinaRegistrationPresenter >> initializeButtons [
-	 buttonBar 
-		add: (self newButton 
-			label: 'Print';
-			action: [ self error: 'to be implemented' ]);
-		add: ( self newCheckBox 
-			label: 'Seneste år';
-			whenChangedDo: [ :newValue | filterLast := newValue. self updatePresenter ]);
-		add: (self newDropList
-			items: (#('all'), self kinds);
-			whenSelectedItemChangedDo: [ :filter | filterKind := filter. self updatePresenter  ]
-		)
-]
-
-{ #category : #initialization }
 OvinaRegistrationPresenter >> initializeEditor [
-	editSelected := self newText.
-	editSelected 
+	|lastReg| 
+	regCommentText := self newText.
+	regCommentText 
 		disable;
-		whenTextChangedDo: [ :new | self selectedRegistration ifNotNil: [ :reg | reg comment: new asString. ] ]
+		whenTextChangedDo: [ :new | 
+			lastReg := self selectedRegistration .
+			lastReg ifNotNil: [ lastReg comment: regCommentText text asString. ].
+	].
+	
+	regDefaultText := self newText text: 'default'
 		
 ]
 
@@ -103,11 +105,33 @@ OvinaRegistrationPresenter >> initializeEventTable [
 OvinaRegistrationPresenter >> initializePresenters [
 	
 	super initializePresenters.
+	
+	self initializeSelButtons.
+	self initializeSelTable.
 	self initializeRegisterTable.
-	buttonBar := self newButtonBar.
-	self initializeButtons.
+	self initializeRegButtons.
 	self initializeEditor.
 	self initializeEventTable. 
+]
+
+{ #category : #initialization }
+OvinaRegistrationPresenter >> initializeRegButtons [
+
+	regButtonBar := self newButtonBar.
+	regButtonBar 
+		add: (self newButton
+				 label: 'Print';
+				 action: [ self error: 'to be implemented' ]);
+		add: (self newCheckBox
+				 label: 'Seneste år';
+				 whenChangedDo: [ :newValue | 
+					 regFilterPastYear := newValue.
+					 self updatePresenter ]);
+		add: (self newDropList
+				 items: #( 'all' ) , self kinds;
+				 whenSelectedItemChangedDo: [ :filter | 
+					 regFilterKind := filter.
+					 self updatePresenter ])
 ]
 
 { #category : #initialization }
@@ -127,7 +151,50 @@ OvinaRegistrationPresenter >> initializeRegisterTable [
 			sortFunction: [ :s1 :s2 | (s1 kind) threeWayCompareTo:  (s2 kind)] asSortFunction);
 		whenSelectedDo: [ :foo | self currentRegistration: foo ];
 		whenNoneSelectedDo: [ self currentRegistration: nil ];
-		sortingBlock: [ :s1 :s2 | (s2 date) threeWayCompareTo:  (s1 date)] asSortFunction  
+		sortingBlock: [ :s1 :s2 | (s2 date) threeWayCompareTo:  (s1 date)] asSortFunction;
+		beResizable   
+	
+]
+
+{ #category : #initialization }
+OvinaRegistrationPresenter >> initializeSelButtons [
+	 
+	selBar  := self newButtonBar.
+	selBar 
+		add: (self newButton
+				 label: 'Todo';
+				 action: [ self error: 'to be implemented' ]);
+		add: (self newCheckBox
+				 label: 'Aktuelle';
+				 whenChangedDo: [ :newValue | 
+					 selFilterPresent := newValue.
+					 self updatePresenter ]);
+		add: (self newCheckBox
+				 label: 'Inkluder lam';
+				 whenChangedDo: [ :newValue | 
+					 selIncludeLambs := newValue.
+					 self updatePresenter ])
+]
+
+{ #category : #initialization }
+OvinaRegistrationPresenter >> initializeSelTable [
+	regTable := self instantiate: SpTablePresenter.
+	regTable addColumn: (SpStringTableColumn new
+			title: 'type' ;
+			evaluated: #kind ;
+			sortFunction: [ :s1 :s2 | (s1 kind) threeWayCompareTo:  (s2 kind)] asSortFunction);
+		addColumn: (SpStringTableColumn new
+			title: 'dato' ;
+			evaluated: #date ;
+			sortFunction: [ :s1 :s2 | (s1 date) threeWayCompareTo:  (s2 date)] asSortFunction);
+	   addColumn: (SpStringTableColumn new
+			title: 'kommentar' ;
+			evaluated: [:reg | reg comment asString truncateTo: 40];
+			sortFunction: [ :s1 :s2 | (s1 kind) threeWayCompareTo:  (s2 kind)] asSortFunction);
+		whenSelectedDo: [ :foo | self currentRegistration: foo ];
+		whenNoneSelectedDo: [ self currentRegistration: nil ];
+		sortingBlock: [ :s1 :s2 | (s2 date) threeWayCompareTo:  (s1 date)] asSortFunction;
+		beResizable   
 	
 ]
 
@@ -154,11 +221,11 @@ OvinaRegistrationPresenter >> kinds [
 OvinaRegistrationPresenter >> registrations [
 	| registrations |
 	registrations :=OvinaRegistration registrations values.
-	filterLast ifTrue: [ |cutof|
+	regFilterPastYear ifTrue: [ |cutof|
 		cutof := (registrations collect: [:ds| ds date asISO8601Date]) max - 365 days.
 		registrations := registrations select: [ :r | r date asISO8601Date > cutof ] ].
-	(filterKind = 'all') ifFalse: [ 
-		registrations := registrations select: [ :r | r kind = filterKind  ] ].
+	(regFilterKind = 'all') ifFalse: [ 
+		registrations := registrations select: [ :r | r kind = regFilterKind  ] ].
 	^registrations 
 ]
 
