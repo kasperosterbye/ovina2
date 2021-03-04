@@ -21,6 +21,21 @@ Class {
 { #category : #specs }
 OvinaRegistrationPresenter class >> defaultSpec [
 
+	^ SpPanedLayout newVertical
+		addFirst: 
+			(SpBoxLayout newVertical
+			add: #regButtonBar expand: false fill: true padding: 3;
+			add: #regTable;
+			add: (SpBoxLayout newHorizontal 
+				add: #regCommentText ;
+				add: #regDefaultText width: 75) 
+				withConstraints: [:c| c height: 60; expand: false; fill: false; padding: 3]); 
+		addSecond: #eventTable
+]
+
+{ #category : #specs }
+OvinaRegistrationPresenter class >> defaultSpecNew [
+
 	^ SpPanedLayout newHorizontal
 		addFirst: (SpBoxLayout newVertical
 			add: #selBar expand: false fill: true padding: 3;
@@ -96,7 +111,9 @@ OvinaRegistrationPresenter >> initializeEventTable [
 			sortFunction: [ :s1 :s2 | (s1 date) threeWayCompareTo:  (s2 date)] asSortFunction);
 	   addColumn: (SpStringTableColumn new
 			title: 'værdi' ;
-			evaluated: [:reg | reg result truncateTo: 40])
+			evaluated: [:reg | reg result truncateTo: 40];
+			beEditable;
+			onAcceptEdition: [ :event :newText | event result: newText asString ] )
 	
 	
 ]
