@@ -1,3 +1,12 @@
+"
+My Metacello is:
+
+```smalltalk
+Metacello new
+	repository: 'github://`kasperosterbye/kasperosterbye/ovina2';
+	load
+```
+"
 Class {
 	#name : #BaselineOfOvina2,
 	#superclass : #BaselineOf,
