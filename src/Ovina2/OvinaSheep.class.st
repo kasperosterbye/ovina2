@@ -194,6 +194,13 @@ OvinaSheep >> ovinaDBString [
 	^ id asString printString
 ]
 
+{ #category : #'accessing - properties' }
+OvinaSheep >> present [
+	"return true if the sheep is still alive"
+	^true
+	
+]
+
 { #category : #printing }
 OvinaSheep >> printOn: aStream [
 	aStream nextPutAll: '[';

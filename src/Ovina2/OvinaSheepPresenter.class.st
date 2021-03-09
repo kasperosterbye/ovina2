@@ -12,7 +12,7 @@ Class {
 		'editColumns',
 		'allColumns'
 	],
-	#category : #'Ovina2-GUI'
+	#category : #'Ovina2-GUI Sheep'
 }
 
 { #category : #specs }

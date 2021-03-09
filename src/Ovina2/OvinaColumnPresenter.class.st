@@ -15,7 +15,7 @@ Class {
 		'up',
 		'down'
 	],
-	#category : #'Ovina2-GUI'
+	#category : #'Ovina2-GUI Sheep'
 }
 
 { #category : #specs }

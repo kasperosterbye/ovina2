@@ -1,6 +1,15 @@
 Extension { #name : #SpMorphicTableCellBuilder }
 
 { #category : #'*Ovina2' }
+SpMorphicTableCellBuilder >> addBackgroundColorColumn: aTableColumn item: item toMorph: aMorph [
+	aTableColumn displayBackgroundColor ifNotNil: [ :block |
+		(block cull: item) ifNotNil: [ :aColor |
+			aMorph color: aColor.
+			aMorph submorphs do: [:each | each color: aColor]]].
+	^ aMorph
+]
+
+{ #category : #'*Ovina2' }
 SpMorphicTableCellBuilder >> visitStringColumn: aTableColumn [
 	| content item |
 	
@@ -17,12 +26,13 @@ SpMorphicTableCellBuilder >> visitStringColumn: aTableColumn [
 		ifTrue: [ self visitStringColumnEditable: aTableColumn on: content ]
 		ifFalse: [ "add cell"
 			self addCell: content column: aTableColumn.
-			"add background (this is a special case of properties, 
+			].
+	"add background (this is a special case of properties, 
 			since background needs to be applied to the cell and not to the text)"
 			self
 				addBackgroundColorColumn: aTableColumn
 				item: item
-				toMorph: cell ]
+				toMorph: cell 
 
 ]
 
@@ -31,7 +41,6 @@ SpMorphicTableCellBuilder >> visitStringColumnEditable: aTableColumn on: content
 
 	| presenter morph |
 	presenter := SpTextInputFieldPresenter new
-		             addStyle: 'compact';
 		             text: content;
 		             yourself.
 

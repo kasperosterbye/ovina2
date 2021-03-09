@@ -6,7 +6,7 @@ Class {
 		'getter',
 		'setter'
 	],
-	#category : #'Ovina2-GUI'
+	#category : #'Ovina2-GUI Sheep'
 }
 
 { #category : #accessing }

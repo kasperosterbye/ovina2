@@ -66,7 +66,9 @@ OvinaLamb >> growth: val [
 
 { #category : #accessing }
 OvinaLamb >> name [
-	^ self number asString, ' ', self sex first asUppercase asString , ' ',self dam name
+	"self number asString, ' ', self sex first asUppercase asString , ' ',self dam name."
+	
+	^ self dam name, ' ', self sex first asUppercase asString , ' ',self number asString.
 ]
 
 { #category : #printing }

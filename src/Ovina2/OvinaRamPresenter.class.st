@@ -1,7 +1,7 @@
 Class {
 	#name : #OvinaRamPresenter,
 	#superclass : #OvinaSheepPresenter,
-	#category : #'Ovina2-GUI'
+	#category : #'Ovina2-GUI Sheep'
 }
 
 { #category : #initialization }
