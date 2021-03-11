@@ -41,7 +41,7 @@ OvinaHistoryPresenter >> initializePresenters [
 	registrations := self instantiate: OvinaHistRegistrations.
 	events := self instantiate: OvinaHistEvents.
 	
-	registrations whenChangedDo: [ events updatePresenter ].
+	registrations whenChangedDo: [ self registrationChanged  ].
 	events histPresenter: self.
 	
 	
@@ -62,6 +62,8 @@ OvinaHistoryPresenter >> initializeWindow: aWindowPresenter [
 OvinaHistoryPresenter >> registrationChanged [
 	"callback from registrations"
 	events updatePresenter.
+	selections selected: (events events collect: #sheep)
+	
 ]
 
 { #category : #'as yet unclassified' }

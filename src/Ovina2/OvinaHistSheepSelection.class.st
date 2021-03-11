@@ -101,6 +101,14 @@ OvinaHistSheepSelection >> initializeWindow: aWindowPresenter [
 		initialExtent: 600 @ 950 
 ]
 
+{ #category : #initialization }
+OvinaHistSheepSelection >> selected: someSheeps [
+	sheepSelected := Dictionary new.
+	someSheeps do: [ :s | sheepSelected at: s put: true ].
+	self updatePresenter.
+	
+]
+
 { #category : #'as yet unclassified' }
 OvinaHistSheepSelection >> selectedSheeps [
 	"return which sheeps are currently selected"
@@ -117,7 +125,7 @@ OvinaHistSheepSelection >> toggleSheepSelection: sheep [
 
 { #category : #'as yet unclassified' }
 OvinaHistSheepSelection >> updatePresenter [
-	sheeps  := OvinaSheep sheeps select: [ :sheep | filterPresent ==> sheep present  ].
+	sheeps  ifNil: [sheeps := OvinaSheep sheeps select: [ :sheep | filterPresent ==> sheep present  ]].
 	table items: sheeps.
 	changedAction ifNotNil: [ changedAction value ]
 	
