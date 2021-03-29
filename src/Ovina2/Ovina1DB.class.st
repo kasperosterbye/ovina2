@@ -1,27 +1,16 @@
 Class {
-	#name : #OvinaDBOld,
-	#superclass : #SQLite3Connection,
+	#name : #Ovina1DB,
+	#superclass : #OvinaDB,
 	#category : #'Ovina2-Database'
 }
 
 { #category : #connecting }
-OvinaDBOld class >> dbPath [
+Ovina1DB class >> dbPath [
 	^'/Users/kasper/tmp/ovina3a.db'
 ]
 
-{ #category : #migration }
-OvinaDBOld class >> loadAll [
-
-	| conn |
-	
-	OvinaModel initialize.
-	conn := self open.
-	conn loadAll.
-	conn close
-]
-
 { #category : #connecting }
-OvinaDBOld class >> open [
+Ovina1DB class >> open [
 	"return a connection object for the old databasedatabase"
 	|path| 
 	path := self dbPath.
@@ -31,7 +20,7 @@ OvinaDBOld class >> open [
 ]
 
 { #category : #'as yet unclassified' }
-OvinaDBOld >> loadAll [
+Ovina1DB >> loadAll [
 
 	self
 		loadRams;
@@ -42,7 +31,7 @@ OvinaDBOld >> loadAll [
 ]
 
 { #category : #migration }
-OvinaDBOld >> loadEvents [
+Ovina1DB >> loadEvents [
 
 	| eventRow |
 	eventRow := (self execute: 'select * from events') rows.
@@ -62,7 +51,7 @@ OvinaDBOld >> loadEvents [
 ]
 
 { #category : #migration }
-OvinaDBOld >> loadEwes [
+Ovina1DB >> loadEwes [
 	| eweRows |
 	eweRows := (self execute: 'select * from ewes') rows.
 	eweRows do: [ :row | |ewe|
@@ -72,13 +61,14 @@ OvinaDBOld >> loadEwes [
 			number: (row at: #number) asString;
 			name: (row at: #name);
 			race: (row at: #race ) asLowercase ;
-			inDate: (row at: #inDate) yyyymmdd .
+			inDate: (row at: #inDate) yyyymmdd;
+			outDate: (row at: #outDate). "Oddly stored as text"
 		OvinaSheep addSheep: ewe.
 		].
 ]
 
 { #category : #migration }
-OvinaDBOld >> loadLambs [
+Ovina1DB >> loadLambs [
 	|  lambRows |
 	lambRows := (self execute: 'select * from lambs') rows.
 	lambRows do: [ :row | |lamb|
@@ -100,10 +90,10 @@ OvinaDBOld >> loadLambs [
 ]
 
 { #category : #migration }
-OvinaDBOld >> loadRams [
+Ovina1DB >> loadRams [
 	| ramRows |
 	ramRows := (self execute: 'select * from rams') rows.
-	ramRows do: [ :row | |ram|
+	ramRows do: [ :row | |ram| 
 		ram := OvinaRam new
 			id: 'R', (row at: #ramID) asString;
 			chr: (row at: #chr) asString;
@@ -116,7 +106,7 @@ OvinaDBOld >> loadRams [
 ]
 
 { #category : #migration }
-OvinaDBOld >> loadRegistrations [
+Ovina1DB >> loadRegistrations [
 	|  regRow |
 	regRow := (self execute: 'select * from descriptors') rows.
 	regRow do: [ :row | |reg|

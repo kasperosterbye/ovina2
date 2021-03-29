@@ -42,9 +42,9 @@ OvinaHistSheepSelection >> initialize [
 
 { #category : #initialization }
 OvinaHistSheepSelection >> initializeButtons [
-	 
-	actionBar   := self newButtonBar.
-	actionBar 
+
+	actionBar := self newButtonBar.
+	actionBar
 		add: (self newButton
 				 label: 'Todo';
 				 action: [ self error: 'to be implemented' ]);
@@ -52,12 +52,13 @@ OvinaHistSheepSelection >> initializeButtons [
 				 label: 'Aktuelle';
 				 whenChangedDo: [ :newValue | 
 					 filterPresent := newValue.
+					 sheeps := nil.
 					 self updatePresenter ]);
 		add: (self newCheckBox
 				 label: 'Inkluder lam';
 				 whenChangedDo: [ :newValue | 
 					 includeLambs := newValue.
-					 self updatePresenter ])
+					 self updatePresenter ]) 
 ]
 
 { #category : #initialization }
@@ -125,7 +126,8 @@ OvinaHistSheepSelection >> toggleSheepSelection: sheep [
 
 { #category : #'as yet unclassified' }
 OvinaHistSheepSelection >> updatePresenter [
-	sheeps  ifNil: [sheeps := OvinaSheep sheeps select: [ :sheep | filterPresent ==> sheep present  ]].
+	sheeps  ifNil: [
+		sheeps := OvinaSheep sheeps select: [ :sheep | filterPresent ==> sheep present  ]].
 	table items: sheeps.
 	changedAction ifNotNil: [ changedAction value ]
 	

@@ -11,6 +11,6 @@ Class {
 OvinaDBTest >> testConnectToOldDB [
 	
 	|con|	
-	con := OvinaDB openOld.
+	con := Ovina2DB openOld.
 	self assert:  con tableNames notEmpty
 ]

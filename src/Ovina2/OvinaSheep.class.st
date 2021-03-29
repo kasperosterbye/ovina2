@@ -14,10 +14,11 @@ Class {
 	#instVars : [
 		'id',
 		'chr',
-		'number'
+		'number',
+		'properties',
+		'events'
 	],
 	#classInstVars : [
-		'properties',
 		'sheeps'
 	],
 	#category : #'Ovina2-Model'
@@ -140,9 +141,11 @@ OvinaSheep >> computeRace [
 	^'todo'
 ]
 
-{ #category : #accessing }
+{ #category : #history }
 OvinaSheep >> events [
-	^ OvinaEvent events select: [ :ev | ev sheep = self ]
+	"return all events on me, last first"
+	events ifNil: [ events := (OvinaEvent events values select: [ :ev | ev sheep = self ]) reversed ].
+	^ events
 ]
 
 { #category : #accessing }
@@ -171,6 +174,12 @@ OvinaSheep >> inDate: date [
 	
 ]
 
+{ #category : #initialization }
+OvinaSheep >> initialize [
+	super initialize.
+	properties := Dictionary new.
+]
+
 { #category : #'as yet unclassified' }
 OvinaSheep >> noteField [
 	<sheepColumn:#('note ____________')>
@@ -189,6 +198,17 @@ OvinaSheep >> number: aString [
 	number := aString asInteger
 ]
 
+{ #category : #'accessing - properties' }
+OvinaSheep >> outDate [
+	<sheepColumn:#('Ud dato' outDate:)>
+	^self property: #outDate
+]
+
+{ #category : #'accessing - properties' }
+OvinaSheep >> outDate: dateString [
+	^self property: #outDate put: dateString
+]
+
 { #category : #'as yet unclassified' }
 OvinaSheep >> ovinaDBString [ 
 	^ id asString printString
@@ -196,9 +216,10 @@ OvinaSheep >> ovinaDBString [
 
 { #category : #'accessing - properties' }
 OvinaSheep >> present [
+
 	"return true if the sheep is still alive"
-	^true
-	
+
+	^ self outDate isNil and: [ self slaughterWeight isNil ]
 ]
 
 { #category : #printing }
@@ -211,19 +232,20 @@ OvinaSheep >> printOn: aStream [
 { #category : #properties }
 OvinaSheep >> properties [
 	"return a property dictionary for this sheep"
-	^self class propertiesFor: self.
+	^properties.
 ]
 
 { #category : #properties }
 OvinaSheep >> property: property [
 	"return the value for property or nil"
-	^self class get: property for: self.
+	^properties at: property ifAbsent: [nil].
 ]
 
 { #category : #properties }
 OvinaSheep >> property: property put: value [
-	"return the value for property or nil"
-	self class set: property to: value for: self.
+	"set property to value if property is not nil"
+	property ifNil: [ self error: 'Should not store with property name nil' ].
+	properties at: property put: value
 ]
 
 { #category : #'accessing - properties' }
@@ -238,4 +260,10 @@ OvinaSheep >> race [
 { #category : #'accessing - properties' }
 OvinaSheep >> race: race [
 	^self property: #race put: race
+]
+
+{ #category : #history }
+OvinaSheep >> slaughterWeight [
+	"return the weight of the meat as returned from the slaughter. If not slaughtered, return nil" 
+	^ self events detect: [ :ev | ev registration kind asLowercase = 'slagtevægt' ] ifNone: [ ^nil ]
 ]

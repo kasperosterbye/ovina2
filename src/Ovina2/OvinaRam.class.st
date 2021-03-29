@@ -13,6 +13,11 @@ OvinaRam >> addLamb: lamb [
 	offspring add: lamb
 ]
 
+{ #category : #'as yet unclassified' }
+OvinaRam >> defaultPropertyOrder [
+	#(name color inDate comment)
+]
+
 { #category : #initialization }
 OvinaRam >> initialize [ 
 	super initialize.

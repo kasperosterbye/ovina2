@@ -21,6 +21,11 @@ OvinaEwe >> antalSlagtelam [
 ]
 
 { #category : #'as yet unclassified' }
+OvinaEwe >> defaultPropertyOrder [
+	#(name color inDate comment)
+]
+
+{ #category : #'as yet unclassified' }
 OvinaEwe >> gnsSlagtevægt [
 	<sheepColumn: #('gnsSlagtevægt')>
 	|slagtede|

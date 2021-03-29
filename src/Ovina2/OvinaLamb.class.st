@@ -40,6 +40,11 @@ OvinaLamb >> dam: dam [
 	self property: #dam put: dam id
 ]
 
+{ #category : #'as yet unclassified' }
+OvinaLamb >> defaultPropertyOrder [
+	#(inDate event sex color comment usage outDate dam sire )
+]
+
 { #category : #'accessing-properties' }
 OvinaLamb >> event [
 
