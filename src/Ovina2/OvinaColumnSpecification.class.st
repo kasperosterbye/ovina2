@@ -36,7 +36,7 @@ OvinaColumnSpecification >> getter: anObject [
 { #category : #printing }
 OvinaColumnSpecification >> printOn: aStream [
 
-	aStream nextPutAll: ('OvinaColumn [{1} {2}{3}]' format:  {
+	aStream nextPutAll: ('OvinaColumnSpecification [{1} {2}{3}]' format:  {
 		self dkName printString.
 		self getter.
 		self setter ifNotNil: [ '/',setter ] ifNil:[''] } )

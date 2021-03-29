@@ -15,7 +15,7 @@ OvinaRam >> addLamb: lamb [
 
 { #category : #'as yet unclassified' }
 OvinaRam >> defaultPropertyOrder [
-	#(name color inDate comment)
+	^#(name color inDate comment)
 ]
 
 { #category : #initialization }
