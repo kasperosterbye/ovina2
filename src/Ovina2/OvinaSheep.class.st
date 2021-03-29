@@ -26,7 +26,7 @@ Class {
 
 { #category : #sheeps }
 OvinaSheep class >> addSheep: aSheep [
-	(self sheeps includesKey: aSheep id) ifTrue:[self halt].
+	(self sheeps includesKey: aSheep id) ifTrue:[self error: 'Double insert???'].
 	self sheeps at: aSheep id put: aSheep
 ]
 
@@ -49,19 +49,10 @@ OvinaSheep class >> ewes [
 	^ OvinaSheep sheeps associations select: [ :s| s key first = $E ]
 ]
 
-{ #category : #properties }
-OvinaSheep class >> get: propName for: sheep [
-	"return the property for sheep. Return nil if none exist. 
-	I return the string value from the database table properties"
-	^(self properties at: sheep id ifAbsent: [ ^nil ]) at: propName ifAbsent: [ ^nil ]
-	
-]
-
 { #category : #sheeps }
 OvinaSheep class >> initialize [
 	<script>
 	sheeps := nil.
-	properties := nil.
 	
 ]
 
@@ -83,30 +74,9 @@ OvinaSheep class >> maarumlamChr [
 	^ 112633
 ]
 
-{ #category : #properties }
-OvinaSheep class >> properties [ 
-	properties ifNil: [ properties := Dictionary new ].
-	^ properties 
-]
-
-{ #category : #properties }
-OvinaSheep class >> propertiesFor: aSheep [
-	^ self properties at: aSheep id
-]
-
 { #category : #sheeps }
 OvinaSheep class >> rams [
 	^ OvinaSheep sheeps associations select: [ :s| s key first = $R ]
-]
-
-{ #category : #properties }
-OvinaSheep class >> set: property to: value for: sheep [
-	"return the property for sheep. Return nil if none exist. 
-	I return the string value from the database table properties"
-	"set the property for sheep to value. Update in the database too"
-	(self properties at: sheep id ifAbsentPut: [ Dictionary new ]) 
-		at: property put: value
-	
 ]
 
 { #category : #sheeps }
