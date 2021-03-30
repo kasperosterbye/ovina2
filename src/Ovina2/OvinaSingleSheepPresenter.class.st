@@ -15,8 +15,8 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'sheep',
-		'presenters',
-		'properties'
+		'properties',
+		'propertyPresenters'
 	],
 	#category : #'Ovina2-GUI Sheep'
 }
@@ -25,7 +25,7 @@ Class {
 OvinaSingleSheepPresenter class >> defaultSpec [
 
 	^SpBoxLayout newVertical 
-		add: #presenters
+		add: #propertyPresenters
 		yourself
 ]
 
@@ -39,14 +39,15 @@ OvinaSingleSheepPresenter class >> openOn: sheep [
 { #category : #initialization }
 OvinaSingleSheepPresenter >> initializePresenters [ 
 	| aLayout|
-	presenters := SpPresenter new.
+	propertyPresenters := SpPresenter new.
 	aLayout := (SpBoxLayout newTopToBottom spacing: 5).
-	presenters layout: aLayout.
+	propertyPresenters layout: aLayout.
 	properties do: [ :prop |
 		aLayout add: (OvinaPropertyPresenter new
+			labelLayout: #labelTop;
 			label: prop dkName; 
 			text: (sheep perform: prop getter) asString;
-			whenTextChanged:  [ :morph :x| self todo: morph text asString. ] )].
+			whenTextChanged:  [ :newText| sheep perform: prop setter with: newText. ] ) ].
 ]
 
 { #category : #accessing }
