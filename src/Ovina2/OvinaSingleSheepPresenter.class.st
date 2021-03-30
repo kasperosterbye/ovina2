@@ -46,7 +46,7 @@ OvinaSingleSheepPresenter >> initializePresenters [
 		aLayout add: (OvinaPropertyPresenter new
 			label: prop dkName; 
 			text: (sheep perform: prop getter) asString;
-			whenSubmitDo: [ :x | self todo. ] )].
+			whenSubmitDo:  [ :morph| self todo: morph text asString. ] )].
 ]
 
 { #category : #accessing }
