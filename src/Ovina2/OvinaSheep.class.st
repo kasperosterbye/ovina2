@@ -150,6 +150,12 @@ OvinaSheep >> initialize [
 	properties := Dictionary new.
 ]
 
+{ #category : #'accessing - properties' }
+OvinaSheep >> kind [
+	"return the kind of sheep - Får, Gimmer, Vædderlam, Vædder"
+	self subclassResponsibility 
+]
+
 { #category : #'as yet unclassified' }
 OvinaSheep >> noteField [
 	<sheepColumn:#('note ____________')>

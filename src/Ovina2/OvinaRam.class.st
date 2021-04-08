@@ -25,6 +25,12 @@ OvinaRam >> initialize [
 ]
 
 { #category : #'accessing - properties' }
+OvinaRam >> kind [
+	"return the kind of sheep - Får, Gimmer, Vædderlam, Vædder"
+	^'Vædder' 
+]
+
+{ #category : #'accessing - properties' }
 OvinaRam >> name [
 	
 	<sheepColumn: #('navn' name:)>

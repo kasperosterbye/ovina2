@@ -42,6 +42,12 @@ OvinaEwe >> initialize [
 	offspring := OrderedCollection new.
 ]
 
+{ #category : #'accessing - properties' }
+OvinaEwe >> kind [
+	"return the kind of sheep - Får, Gimmer, Vædderlam, Vædder"
+	^'Får' 
+]
+
 { #category : #'as yet unclassified' }
 OvinaEwe >> lambs [
 	^ offspring 

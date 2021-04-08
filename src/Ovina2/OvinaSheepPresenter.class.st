@@ -5,6 +5,7 @@ Class {
 	#name : #OvinaSheepPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
+		'selectionChangeAction',
 		'table',
 		'buttonBar',
 		'printAll',
@@ -54,6 +55,11 @@ OvinaSheepPresenter >> allColumns: columns [
 	self updatePresenter 
 ]
 
+{ #category : #'as yet unclassified' }
+OvinaSheepPresenter >> currentSheep: sheep [
+	selectionChangeAction ifNotNil: [ selectionChangeAction value: sheep ]
+]
+
 { #category : #initialization }
 OvinaSheepPresenter >> initializeButtons [
 	 buttonBar 
@@ -75,7 +81,6 @@ OvinaSheepPresenter >> initializePresenters [
 
 { #category : #initialization }
 OvinaSheepPresenter >> initializeTable [
-	 
 	table := self instantiate: SpTablePresenter.
 	self activeColumns  do: [ :col |
 		table addColumn: (SpStringTableColumn new
@@ -85,7 +90,10 @@ OvinaSheepPresenter >> initializeTable [
 					(s1 perform: col getter)   threeWayCompareTo:  (s2 perform: col  getter)
 				] asSortFunction)
 	 ].
-	self updatePresenter.
+	table 
+		whenSelectedDo: [ :sheep | self currentSheep: sheep ];
+		whenNoneSelectedDo: [ self currentSheep: nil ].
+	"self updatePresenter."
 	
 ]
 
@@ -121,7 +129,7 @@ OvinaSheepPresenter >> printTable [
 	html := ZnHtmlOutputStream on: '' writeStream.
 	self printHeader: html body: [
 			html 
-				tag: #h1 with: 'Udskrift af væddere';
+				tag: #h1 with: 'Udskrift af ', self title;
 				tag: #table attributes: {'id'.'sheeps'}
 					do: [ self printTableHeaders: html. self printTableRows: html ]
 			 ].
@@ -154,6 +162,16 @@ OvinaSheepPresenter >> printTableRows: html [
 			tag: #tr
 			do: [ 
 			self activeColumns  do: [ :col | html tag: #td with: (sheep perform: col getter) asString ] ] ] 
+]
+
+{ #category : #'as yet unclassified' }
+OvinaSheepPresenter >> selectNextSheep [
+	"Should select next sheep in the list"
+]
+
+{ #category : #'as yet unclassified' }
+OvinaSheepPresenter >> selectPreviousSheep [
+	"Should select previous sheep in the list"
 ]
 
 { #category : #accessing }
@@ -199,4 +217,9 @@ OvinaSheepPresenter >> tableStyle [
 OvinaSheepPresenter >> updatePresenter [ 
 	super updatePresenter.
 	table items: self sheeps
+]
+
+{ #category : #enumerating }
+OvinaSheepPresenter >> whenSelectedDo: aBlock [
+	selectionChangeAction := aBlock
 ]

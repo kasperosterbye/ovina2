@@ -69,6 +69,12 @@ OvinaLamb >> growth: val [
 	self property: #growth put: val
 ]
 
+{ #category : #'accessing - properties' }
+OvinaLamb >> kind [
+	"return the kind of sheep - Får, Gimmer, Vædderlam, Vædder"
+	^ self sex capitalized ,'lam'
+]
+
 { #category : #accessing }
 OvinaLamb >> name [
 	"self number asString, ' ', self sex first asUppercase asString , ' ',self dam name."
@@ -109,7 +115,7 @@ OvinaLamb >> slagtevægt [
 	"return -1 if not slaughtered"
 	|slagt|
 	self usage ~= 'slagt' ifTrue: [ ^ -1 ].
-	slagt := self events values select: [ :ev | ev registration kind = 'slagtevægt' ].
+	slagt := self events select: [ :ev | ev registration kind = 'slagtevægt' ].
 	^ slagt ifEmpty: [ -1 ] 
 		ifNotEmpty: [ |res| 
 			res:= slagt last result.
@@ -119,7 +125,7 @@ OvinaLamb >> slagtevægt [
 
 { #category : #accessing }
 OvinaLamb >> usage [
-	^ self class get: #usage for: self.
+	^ self property: #usage
 ]
 
 { #category : #accessing }

@@ -16,7 +16,8 @@ Class {
 	#instVars : [
 		'sheep',
 		'properties',
-		'propertyPresenters'
+		'propertyPresenters',
+		'actionBar'
 	],
 	#category : #'Ovina2-GUI Sheep'
 }
@@ -37,6 +38,19 @@ OvinaSingleSheepPresenter class >> openOn: sheep [
 ]
 
 { #category : #initialization }
+OvinaSingleSheepPresenter >> initializeActionBar [ 
+
+	actionBar := self newButtonBar.
+	actionBar 
+		add: (self newButton
+				 label: 'Forrige';
+				 action: [ self previousSheep  ]);
+		add: (self newButton
+				 label: 'Næste';
+				 action: [ self nextSheep  ])
+]
+
+{ #category : #initialization }
 OvinaSingleSheepPresenter >> initializePresenters [ 
 	| aLayout|
 	propertyPresenters := SpPresenter new.
@@ -48,6 +62,36 @@ OvinaSingleSheepPresenter >> initializePresenters [
 			label: prop dkName; 
 			text: (sheep perform: prop getter) asString;
 			whenTextChanged:  [ :newText| sheep perform: prop setter with: newText. ] ) ].
+	
+	self initializeActionBar.
+	self layout: self myLayout 
+]
+
+{ #category : #initialization }
+OvinaSingleSheepPresenter >> initializeWindow: aWindowPresenter [
+
+	super initializeWindow: aWindowPresenter.
+	aWindowPresenter
+		title: 'Ret ', sheep kind;
+		initialExtent: 500 @ (properties size * 50 + 40). 
+]
+
+{ #category : #'as yet unclassified' }
+OvinaSingleSheepPresenter >> myLayout [
+	^ SpBoxLayout newVertical 
+		add: #propertyPresenters;
+		add: (SpBoxLayout newHorizontal add: #actionBar) expand: false fill: true padding: 3;
+		yourself
+]
+
+{ #category : #initialization }
+OvinaSingleSheepPresenter >> nextSheep [
+	self todo.
+]
+
+{ #category : #initialization }
+OvinaSingleSheepPresenter >> previousSheep [
+	self todo.
 ]
 
 { #category : #accessing }
