@@ -26,10 +26,12 @@ OvinaAllSheepsPresenter class >> open [
 
 { #category : #'as yet unclassified' }
 OvinaAllSheepsPresenter >> filterLambsByDam: dam [
+	lambs filterDam: dam
 ]
 
 { #category : #'as yet unclassified' }
 OvinaAllSheepsPresenter >> filterLambsBySire: sire [
+	lambs filterSire: sire
 ]
 
 { #category : #initialization }
@@ -41,7 +43,7 @@ OvinaAllSheepsPresenter >> initializePresenters [
 	lambs := self instantiate: OvinaLambPresenter .
 	
 	ewes whenSelectedDo: [ :ewe | self filterLambsByDam: ewe ].
-	rams whenSelectedDo: [ :ram | self filterLambsByDam: ram ].
+	rams whenSelectedDo: [ :ram | self filterLambsBySire: ram ].
 	
 	self setLayout
 	
@@ -57,12 +59,6 @@ OvinaAllSheepsPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter
 		title: 'Får, Lam & Væddere';
 		initialExtent: 1200 @ 950 
-]
-
-{ #category : #'as yet unclassified' }
-OvinaAllSheepsPresenter >> parentSelection: aSheep [
-	"A new parent was selected, or unselected - when aSheep is nil"
-	"Should change what is seen in the lamb presenter"
 ]
 
 { #category : #accessing }

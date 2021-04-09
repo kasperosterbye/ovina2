@@ -17,7 +17,11 @@ Class {
 		'sheep',
 		'properties',
 		'propertyPresenters',
-		'actionBar'
+		'actionBar',
+		'sheepBlock',
+		'prevBlock',
+		'nextBlock',
+		'closeBlock'
 	],
 	#category : #'Ovina2-GUI Sheep'
 }
@@ -31,40 +35,58 @@ OvinaSingleSheepPresenter class >> defaultSpec [
 ]
 
 { #category : #'instance creation' }
-OvinaSingleSheepPresenter class >> openOn: sheep [
-	|instance|
-	instance :=self basicNew sheep: sheep; initialize.
-	instance openWithSpec
+OvinaSingleSheepPresenter class >> on: sheepBlock [
+	^ self basicNew sheepBlock: sheepBlock; initialize.
+	
+]
+
+{ #category : #'initialize-release' }
+OvinaSingleSheepPresenter >> close [
+	closeBlock value.
+	self owner close.
+]
+
+{ #category : #'initialize-release' }
+OvinaSingleSheepPresenter >> closeBlock: aBlock [
+	closeBlock := aBlock
 ]
 
 { #category : #initialization }
 OvinaSingleSheepPresenter >> initializeActionBar [ 
 
 	actionBar := self newButtonBar.
-	actionBar 
+	actionBar  
 		add: (self newButton
 				 label: 'Forrige';
 				 action: [ self previousSheep  ]);
 		add: (self newButton
 				 label: 'Næste';
-				 action: [ self nextSheep  ])
+				 action: [ self nextSheep  ]);
+		add: (self newButton
+				 label: 'Luk';
+				 action: [ self close  ])
 ]
 
 { #category : #initialization }
-OvinaSingleSheepPresenter >> initializePresenters [ 
+OvinaSingleSheepPresenter >> initializePresenters [
+	self initializePropertyPresenters.
+	self initializeActionBar.
+	self layout: self myLayout 
+]
+
+{ #category : #initialization }
+OvinaSingleSheepPresenter >> initializePropertyPresenters [	
 	| aLayout|
 	propertyPresenters := SpPresenter new.
 	aLayout := (SpBoxLayout newTopToBottom spacing: 5).
-	propertyPresenters layout: aLayout.
 	properties do: [ :prop |
 		aLayout add: (OvinaPropertyPresenter new
 			labelLayout: #labelTop;
 			label: prop dkName; 
-			text: (sheep perform: prop getter) asString;
-			whenTextChanged:  [ :newText| sheep perform: prop setter with: newText. ] ) ].
+			text: (self sheep perform: prop getter) asString;
+			whenTextChanged:  [ :newText| self sheep perform: prop setter with: newText. ] ) ].
+	propertyPresenters layout: aLayout.
 	
-	self initializeActionBar.
-	self layout: self myLayout 
 ]
 
 { #category : #initialization }
@@ -80,33 +102,66 @@ OvinaSingleSheepPresenter >> initializeWindow: aWindowPresenter [
 OvinaSingleSheepPresenter >> myLayout [
 	^ SpBoxLayout newVertical 
 		add: #propertyPresenters;
-		add: (SpBoxLayout newHorizontal add: #actionBar) expand: false fill: true padding: 3;
+		add: #actionBar expand: false fill: true padding: 3;
 		yourself
+]
+
+{ #category : #accessing }
+OvinaSingleSheepPresenter >> nextBlock: anObject [
+
+	nextBlock := anObject
 ]
 
 { #category : #initialization }
 OvinaSingleSheepPresenter >> nextSheep [
-	self todo.
+	nextBlock value.
+	self updatePresenter 
+]
+
+{ #category : #accessing }
+OvinaSingleSheepPresenter >> prevBlock: anObject [
+
+	prevBlock := anObject
 ]
 
 { #category : #initialization }
 OvinaSingleSheepPresenter >> previousSheep [
-	self todo.
+	prevBlock value.
+	self updatePresenter 
 ]
 
 { #category : #accessing }
 OvinaSingleSheepPresenter >> sheep [
-
-	^ sheep
+	|order|
+	sheep ifNotNil: [ ^sheep ].
+	sheep := sheepBlock value.
+	properties := sheep class allColumns select: [ :col | col setter notNil  ].
+	"reverse the order as indexOf: return zero if not present"
+	order := sheep defaultPropertyOrder reversed.
+	properties sort: [ :p1 :p2 |  (order indexOf: p1 getter) > (order indexOf: p2 getter)].
+	^sheep
 ]
 
 { #category : #accessing }
 OvinaSingleSheepPresenter >> sheep: aSheep [
-	| order |
-	sheep := aSheep.
-	properties := aSheep class allColumns select: [ :col | col setter notNil  ].
-	"reverse the order as indexOf: return zero if not present"
-	order := sheep defaultPropertyOrder reversed.
-	properties sort: [ :p1 :p2 |  (order indexOf: p1 getter) > (order indexOf: p2 getter)].
+	self error: 'Should not be called'
+	
+]
+
+{ #category : #accessing }
+OvinaSingleSheepPresenter >> sheepBlock: aBlock [
+	sheepBlock := aBlock.
+	self sheep
+	
+]
+
+{ #category : #initialization }
+OvinaSingleSheepPresenter >> updatePresenter [
+	"I set a new sheep using sheepBlock"
+	sheep := nil.
+	self sheep.
+	self initializePropertyPresenters.
+	self layout: self myLayout.
+	self takeKeyboardFocus
 	
 ]

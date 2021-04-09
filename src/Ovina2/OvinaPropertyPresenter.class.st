@@ -14,7 +14,7 @@ OvinaPropertyPresenter >> initialize [
 	super initialize.
 	
 	self subwidget bindKeyCombination: $n meta toAction: [self singleSheepPresenter nextSheep].
-	self subwidget bindKeyCombination: $f meta toAction: [self singleSheepPresenter previousSheep]
+	self subwidget bindKeyCombination: $p meta toAction: [self singleSheepPresenter previousSheep]
 	
 ]
 

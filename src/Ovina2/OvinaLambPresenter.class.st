@@ -9,15 +9,19 @@ Class {
 }
 
 { #category : #accessing }
-OvinaLambPresenter >> filterDam: anObject [
+OvinaLambPresenter >> filterDam: dam [
 
-	filterDam := anObject
+	filterDam := dam.
+	filterSire := nil.
+	self updatePresenter
 ]
 
 { #category : #accessing }
-OvinaLambPresenter >> filterSire: anObject [
+OvinaLambPresenter >> filterSire: sire [
 
-	filterSire := anObject
+	filterSire := sire.
+	filterDam := nil.
+	self updatePresenter
 ]
 
 { #category : #initialization }
@@ -38,7 +42,8 @@ OvinaLambPresenter >> sheeps [
 	|lambs| 
 	lambs := super sheeps.
 	filterDam ifNotNil: [ ^ lambs select: [ :lamb| lamb dam = filterDam ] ].
-	filterSire ifNotNil: [ ^ lambs select: [ :lamb| lamb sire = filterSire ] ]
+	filterSire ifNotNil: [ ^ lambs select: [ :lamb| lamb sire = filterSire ] ].
+	^lambs
 ]
 
 { #category : #initialization }

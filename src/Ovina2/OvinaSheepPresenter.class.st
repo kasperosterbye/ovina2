@@ -60,12 +60,32 @@ OvinaSheepPresenter >> currentSheep: sheep [
 	selectionChangeAction ifNotNil: [ selectionChangeAction value: sheep ]
 ]
 
+{ #category : #'as yet unclassified' }
+OvinaSheepPresenter >> editSheep [
+	"OvinaSingleSheepPresenter openOn: table selection selectedItem"
+	|editor|
+	table selection isEmpty ifTrue: [ table selection selectIndexes: #(1) ].
+	editor := OvinaSingleSheepPresenter on: [ table selection selectedItem ].
+	editor
+		prevBlock: [ self selectPreviousSheep  ];
+		nextBlock: [ self selectNextSheep  ];
+		closeBlock: [ |selected| 
+			selected := table selection selectedItem.
+			self updatePresenter.
+			table selection selectItem: selected ].
+	editor openWithSpec.
+	 
+]
+
 { #category : #initialization }
 OvinaSheepPresenter >> initializeButtons [
 	 buttonBar 
 		add: (self newButton 
 			label: 'Print';
 			action: [ self printTable ]);
+		add: (self newButton 
+			label: 'Ret';
+			action: [ self editSheep ]);
 		add: ( self newButton 
 			label: 'Ret søjler';
 			action: [ OvinaColumnPresenter openOn: self ])
@@ -167,11 +187,20 @@ OvinaSheepPresenter >> printTableRows: html [
 { #category : #'as yet unclassified' }
 OvinaSheepPresenter >> selectNextSheep [
 	"Should select next sheep in the list"
+	"Should select previous sheep in the list"
+	|index|
+	index := table selection selectedIndex.
+	index = self sheeps size ifTrue: [ ^self ].
+	table selection selectIndex: index+1.
 ]
 
 { #category : #'as yet unclassified' }
 OvinaSheepPresenter >> selectPreviousSheep [
 	"Should select previous sheep in the list"
+	|index|
+	index := table selection selectedIndex.
+	index = 1 ifTrue: [ ^self ].
+	table selection selectIndex: index-1.
 ]
 
 { #category : #accessing }
