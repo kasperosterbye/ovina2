@@ -43,7 +43,6 @@ SpMorphicTableCellBuilder >> visitStringColumnEditable: aTableColumn on: content
 	presenter := SpTextInputFieldPresenter new
 		             text: content;
 		             yourself.
-
 	aTableColumn acceptAction ifNotNil: [ :valuable | 
 		presenter whenSubmitDo: [ 
 			valuable cull: self item cull: presenter text ] ].

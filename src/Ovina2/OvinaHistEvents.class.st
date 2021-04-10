@@ -8,7 +8,9 @@ Class {
 	#instVars : [
 		'histPresenter',
 		'actionBar',
-		'table'
+		'table',
+		'dateField',
+		'resultField'
 	],
 	#category : #'Ovina2-GUI History'
 }
@@ -51,7 +53,11 @@ OvinaHistEvents >> initializButtons [
 				 action: [ self error: 'to be implemented' ]);
 		add: (self newButton
 				 label: 'Print resultater';
-				 action: [ self error: 'to be implemented' ])
+				 action: [ self error: 'to be implemented' ]);
+		add: (dateField := self newTextInput 
+			whenSubmitDo: [:x :y :z | self updateDate]);
+		add: (resultField := self newTextInput 
+			whenSubmitDo: [:x :y :z | self updateResult ])
 ]
 
 { #category : #initialization }
@@ -83,7 +89,8 @@ OvinaHistEvents >> initializeTable [
 			evaluated: [:reg | reg result asString truncateTo: 40];
 			sortFunction: [ :e1 :e2 | (e1 result) threeWayCompareTo:  (e2 result)] asSortFunction);
 		sortingBlock: [ :e1 :e2 | (e2 sheep number) threeWayCompareTo:  (e1 sheep number)] asSortFunction;
-		beResizable   
+		beResizable;
+		whenSelectionChangedDo: [ self setDateAndResult  ]
 	
 ]
 
@@ -96,6 +103,14 @@ OvinaHistEvents >> initializeWindow: aWindowPresenter [
 		initialExtent: 600 @ 950 
 ]
 
+{ #category : #'as yet unclassified' }
+OvinaHistEvents >> selectNextRow [
+	|index|
+	index := table selection selectedIndex.
+	index = self events size ifTrue: [ index := 0 ].
+	table selection selectIndex: index+1.
+]
+
 { #category : #api }
 OvinaHistEvents >> selectedRegistration [
 	"pick up currently selected registration from HistoryPresenter"
@@ -103,6 +118,40 @@ OvinaHistEvents >> selectedRegistration [
 ]
 
 { #category : #initialization }
+OvinaHistEvents >> setDateAndResult [
+	"Set the date and result field from current event"
+	table selection isEmpty 
+		ifTrue: [ dateField text: ''. resultField text: '' ]
+		ifFalse: [ 
+			dateField text: (table selection selectedItem date);
+				selectionInterval: (dateField text size + 1 to: dateField text size).
+			resultField 
+				text: (table selection selectedItem result asString);
+				selectionInterval: (1 to: resultField text size)
+			 ]
+	
+]
+
+{ #category : #'as yet unclassified' }
+OvinaHistEvents >> updateDate [
+	"cr was pressed in the date field - update the selected Event, and move to next event if any"
+	table selection selectedItem date: dateField text.
+	self selectNextRow
+]
+
+{ #category : #initialization }
 OvinaHistEvents >> updatePresenter [
-	table items: self events
+	|index|
+	index := table selection selectedIndex.
+	table items: self events.
+	table items ifNotEmpty: [ 
+		table selection selectIndexes: { index beBetween: 1 and: table items size }].
+	self setDateAndResult.
+]
+
+{ #category : #'as yet unclassified' }
+OvinaHistEvents >> updateResult [
+	"cr was pressed in the result field - update the selected Event, and move to next event if any"
+	table selection selectedItem result: resultField text.
+	self selectNextRow
 ]
