@@ -1,5 +1,7 @@
 "
 I implement the table of sheeps to select for a registration.
+
+the sheepSelected iv is a dictionary indicating if a sheep is in the current registration
 "
 Class {
 	#name : #OvinaHistSheepSelection,
@@ -10,8 +12,7 @@ Class {
 		'filterPresent',
 		'includeLambs',
 		'sheeps',
-		'sheepSelected',
-		'changedAction'
+		'sheepSelected'
 	],
 	#category : #'Ovina2-GUI History'
 }
@@ -104,6 +105,7 @@ OvinaHistSheepSelection >> initializeWindow: aWindowPresenter [
 
 { #category : #initialization }
 OvinaHistSheepSelection >> selected: someSheeps [
+	"sendt from history presenter (my owner)"
 	sheepSelected := Dictionary new.
 	someSheeps do: [ :s | sheepSelected at: s put: true ].
 	self updatePresenter.
@@ -120,8 +122,13 @@ OvinaHistSheepSelection >> selectedSheeps [
 OvinaHistSheepSelection >> toggleSheepSelection: sheep [
 	sheepSelected at: sheep put: (sheepSelected at: sheep ifAbsent:[false] ) not.
 	(sheepSelected at: sheep)
-		ifTrue: [ table selection selectItem: sheep ] 
-		ifFalse: [ table selection unselectItem: sheep ]
+		ifTrue: [ 
+			table selection selectItem: sheep.
+			self announce: (OvinaGUISheepSelectorAdded new sheep: sheep)] 
+		ifFalse: [ 
+			table selection unselectItem: sheep.
+			self announce: (OvinaGUISheepSelectorRemoved new sheep: sheep) ].
+	
 ]
 
 { #category : #'as yet unclassified' }
@@ -129,15 +136,9 @@ OvinaHistSheepSelection >> updatePresenter [
 	sheeps  ifNil: [
 		sheeps := OvinaSheep sheeps select: [ :sheep | filterPresent ==> sheep present  ]].
 	table items: sheeps.
-	changedAction ifNotNil: [ changedAction value ]
 	
 	
 	
 	 
 	
-]
-
-{ #category : #'as yet unclassified' }
-OvinaHistSheepSelection >> whenChangedDo: aBlock [
-	changedAction := aBlock
 ]

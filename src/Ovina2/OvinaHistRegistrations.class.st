@@ -11,7 +11,8 @@ Class {
 		'filterKind',
 		'filterPastYear',
 		'table',
-		'changedAction'
+		'changedAction',
+		'newAction'
 	],
 	#category : #'Ovina2-GUI History'
 }
@@ -42,7 +43,7 @@ OvinaHistRegistrations >> currentRegistration: reg [
 	ifNil: [
 		commentText text: ''; beNotEditable; disable.
 		defaultText text: ''; beNotEditable; disable.].
-	self updatePresenter 
+	self announce: (OvinaGUIRegistrationsChanged new registration: self)
 ]
 
 { #category : #private }
@@ -98,6 +99,9 @@ OvinaHistRegistrations >> initializeRegButtons [
 	actionBar := self newButtonBar.
 	actionBar 
 		add: (self newButton
+				 label: 'Ny registrering';
+				 action: [ self newRegistration ]);
+		add: (self newButton
 				 label: 'Print';
 				 action: [ self error: 'to be implemented' ]);
 		add: (self newCheckBox
@@ -146,11 +150,28 @@ OvinaHistRegistrations >> initializeWindow: aWindowPresenter [
 { #category : #private }
 OvinaHistRegistrations >> kinds [
 	"return a list of the existing kinds, sorted by most used first"
-	|allKinds countDict|
-	allKinds := OvinaRegistration registrations values collect: [ :reg| reg kind ].
-	countDict := Dictionary new.
-	allKinds do: [ :k| countDict at: k update: [:i|i+1] initial:1].
-	^ (countDict associations asArray sort:[:a :b| a value > b value]) collect: #key
+	^ OvinaRegistration kinds
+]
+
+{ #category : #'instance creation' }
+OvinaHistRegistrations >> newRegistration [
+	|editor|
+	editor := OvinaHistRegistrationEditor new.
+	editor openDialogWithSpec 
+		cancelAction: [  ];
+		okAction: [ self newRegistrationFromEditor: editor ].
+]
+
+{ #category : #private }
+OvinaHistRegistrations >> newRegistrationFromEditor: editor [
+	|reg|
+	reg := OvinaRegistration new
+			kind: editor kind;
+			date: editor date;
+			default: editor default;
+			comment: editor comment.
+	OvinaRegistration addNewRegistration: reg.
+	self updatePresenter.
 ]
 
 { #category : #private }
@@ -175,10 +196,6 @@ OvinaHistRegistrations >> updatePresenter [
 	
 	super updatePresenter.
 	table items: self registrations.
-	changedAction ifNotNil: [changedAction value].
-]
-
-{ #category : #api }
-OvinaHistRegistrations >> whenChangedDo: aBlock [
-	changedAction := aBlock
+	table selectIndexes: {1} scrollToSelection: true.
+	self announce: (OvinaGUIRegistrationsChanged new registration: self)
 ]

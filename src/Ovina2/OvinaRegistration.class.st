@@ -15,6 +15,13 @@ Class {
 }
 
 { #category : #accessing }
+OvinaRegistration class >> addNewRegistration: reg [
+	"get the new ID as the max of existing"
+	reg id: ((self registrations values collect: [:r | r id asInteger]) max +1) asString.
+	self addRegistration: reg
+]
+
+{ #category : #accessing }
 OvinaRegistration class >> addRegistration: reg [
 	self registrations at: reg id put: reg
 ]
@@ -23,6 +30,16 @@ OvinaRegistration class >> addRegistration: reg [
 OvinaRegistration class >> initialize [
 	<script>
 	registrations  := nil.
+]
+
+{ #category : #private }
+OvinaRegistration class >> kinds [
+	"return a list of the existing kinds, sorted by most used first"
+	|allKinds countDict|
+	allKinds := OvinaRegistration registrations values collect: [ :reg| reg kind ].
+	countDict := Dictionary new.
+	allKinds do: [ :k| countDict at: k update: [:i|i+1] initial:1].
+	^ (countDict associations asArray sort:[:a :b| a value > b value]) collect: #key
 ]
 
 { #category : #accessing }

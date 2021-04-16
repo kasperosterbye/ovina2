@@ -6,7 +6,7 @@ Class {
 	#name : #OvinaHistEvents,
 	#superclass : #SpPresenter,
 	#instVars : [
-		'histPresenter',
+		'registration',
 		'actionBar',
 		'table',
 		'dateField',
@@ -25,22 +25,8 @@ OvinaHistEvents class >> defaultSpec [
 
 { #category : #accessing }
 OvinaHistEvents >> events [
-	|reg|
-	reg := self selectedRegistration.
-	reg ifNil: [ ^#() ].
-	^ OvinaEvent events values select: [ :ev | ev registration = reg ]
-]
-
-{ #category : #accessing }
-OvinaHistEvents >> histPresenter [
-
-	^ histPresenter
-]
-
-{ #category : #accessing }
-OvinaHistEvents >> histPresenter: anObject [
-
-	histPresenter := anObject
+	registration  ifNil: [ ^#() ].
+	^ OvinaEvent events values select: [ :ev | ev registration = registration  ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -103,18 +89,25 @@ OvinaHistEvents >> initializeWindow: aWindowPresenter [
 		initialExtent: 600 @ 950 
 ]
 
+{ #category : #accessing }
+OvinaHistEvents >> registration [
+
+	^ registration
+]
+
+{ #category : #accessing }
+OvinaHistEvents >> registration: newRegistration [
+
+	registration := newRegistration.
+	self updatePresenter 
+]
+
 { #category : #'as yet unclassified' }
 OvinaHistEvents >> selectNextRow [
 	|index|
 	index := table selection selectedIndex.
 	index = self events size ifTrue: [ index := 0 ].
 	table selection selectIndex: index+1.
-]
-
-{ #category : #api }
-OvinaHistEvents >> selectedRegistration [
-	"pick up currently selected registration from HistoryPresenter"
-	^ histPresenter ifNotNil: [ histPresenter selectedRegistration  ]
 ]
 
 { #category : #initialization }
@@ -129,6 +122,26 @@ OvinaHistEvents >> setDateAndResult [
 				text: (table selection selectedItem result asString);
 				selectionInterval: (1 to: resultField text size)
 			 ]
+	
+]
+
+{ #category : #'as yet unclassified' }
+OvinaHistEvents >> sheepAdded: sheep [
+	"Add an event for sheep in the current registration"
+	|newEvent|
+	newEvent := OvinaEvent new
+		registration: registration ;
+		sheep: sheep.
+	OvinaEvent addNewEvent: newEvent.
+	self updatePresenter.
+	
+]
+
+{ #category : #'as yet unclassified' }
+OvinaHistEvents >> sheepRemoved: sheep [
+	"Remove an event for sheep in the current registration"
+	OvinaEvent removeEvent:  (table items detect: [:ev | ev sheep = sheep  ]).
+	self updatePresenter.
 	
 ]
 

@@ -33,16 +33,25 @@ OvinaHistoryPresenter class >> open [
 ]
 
 { #category : #initialization }
+OvinaHistoryPresenter >> connectPresenters [ 
+	
+	registrations announcer when: OvinaGUIRegistrationsChanged do: [ self registrationChanged   ].
+	selections announcer 
+		when: OvinaGUISheepSelectorAdded 
+		do: [:add | events sheepAdded: add sheep].
+	selections announcer 
+		when: OvinaGUISheepSelectorRemoved 
+		do: [ :rem | events sheepRemoved: rem sheep ].
+	events registration:  registrations selectedRegistration . 
+]
+
+{ #category : #initialization }
 OvinaHistoryPresenter >> initializePresenters [
-	
+	 
 	super initializePresenters.
-	
-	selections := self instantiate: OvinaHistSheepSelection.
 	registrations := self instantiate: OvinaHistRegistrations.
 	events := self instantiate: OvinaHistEvents.
-	
-	registrations whenChangedDo: [ self registrationChanged  ].
-	events histPresenter: self.
+	selections := self instantiate: OvinaHistSheepSelection.
 	
 	
 
@@ -61,14 +70,9 @@ OvinaHistoryPresenter >> initializeWindow: aWindowPresenter [
 { #category : #'as yet unclassified' }
 OvinaHistoryPresenter >> registrationChanged [
 	"callback from registrations"
-	events updatePresenter.
+	events registration: registrations selectedRegistration.
 	selections selected: (events events collect: #sheep)
 	
-]
-
-{ #category : #'as yet unclassified' }
-OvinaHistoryPresenter >> selectedRegistration [ 
-	^ registrations selectedRegistration 
 ]
 
 { #category : #'as yet unclassified' }

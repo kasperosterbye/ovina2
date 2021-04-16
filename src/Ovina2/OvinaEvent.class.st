@@ -20,6 +20,13 @@ OvinaEvent class >> addEvent: event [
 	self events at: event id put: event
 ]
 
+{ #category : #initialization }
+OvinaEvent class >> addNewEvent: event [
+	"get the new ID as the max of existing"
+	event id: ((self events values collect: [:r | r id asInteger]) max +1) asString.
+	self addEvent: event
+]
+
 { #category : #accessing }
 OvinaEvent class >> events [
 	events ifNil: [ events := Dictionary new ].
@@ -32,9 +39,15 @@ OvinaEvent class >> initialize [
 	events  := nil.
 ]
 
+{ #category : #initialization }
+OvinaEvent class >> removeEvent: event [
+
+	self events removeKey: event id
+]
+
 { #category : #accessing }
 OvinaEvent >> date [
-
+	date ifNil: [ ^ registration date ].
 	^ date
 ]
 
@@ -80,7 +93,7 @@ OvinaEvent >> registration: anObject [
 
 { #category : #accessing }
 OvinaEvent >> result [
-
+	result ifNil: [ ^ registration default ].
 	^ result
 ]
 
