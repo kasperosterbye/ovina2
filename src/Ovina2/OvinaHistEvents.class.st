@@ -36,10 +36,10 @@ OvinaHistEvents >> initializButtons [
 	actionBar 
 		add: (self newButton
 				 label: 'Print tom';
-				 action: [ self error: 'to be implemented' ]);
+				 action: [ self printPageForNotes ]);
 		add: (self newButton
 				 label: 'Print resultater';
-				 action: [ self error: 'to be implemented' ]);
+				 action: [ self printResults]);
 		add: (dateField := self newTextInput 
 			whenSubmitDo: [:x :y :z | self updateDate]);
 		add: (resultField := self newTextInput 
@@ -87,6 +87,29 @@ OvinaHistEvents >> initializeWindow: aWindowPresenter [
 	aWindowPresenter
 		title: 'Hændelser';
 		initialExtent: 600 @ 950 
+]
+
+{ #category : #printing }
+OvinaHistEvents >> printPageForNotes [
+	|specialTable tablePrinter|
+	specialTable := SpTablePresenter new 
+		columns: (table columns copyFrom: 1 to: 2), 
+			{SpStringTableColumn new title: 'værdi' ; evaluated: [ :d| '' ]};
+		sortingBlock: [ :e1 :e2 | (e2 sheep number) threeWayCompareTo:  (e1 sheep number)] asSortFunction;
+		items: table items.
+	tablePrinter := OvinaTablePrinter new
+		title: 'Notering af ', registration kind, ' - ', registration date asString;
+		table: specialTable .
+	tablePrinter printTable
+]
+
+{ #category : #printing }
+OvinaHistEvents >> printResults [
+	|tablePrinter|
+	tablePrinter := OvinaTablePrinter new
+		title: registration kind, ' - ', registration date asString;
+		table: table .
+	tablePrinter printTable
 ]
 
 { #category : #accessing }
