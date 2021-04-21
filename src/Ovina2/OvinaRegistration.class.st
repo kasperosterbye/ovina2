@@ -48,6 +48,12 @@ OvinaRegistration class >> registrations [
 	^registrations 
 ]
 
+{ #category : #removing }
+OvinaRegistration class >> removeRegistration: reg [
+	self registrations removeKey: reg id
+	
+]
+
 { #category : #accessing }
 OvinaRegistration >> comment [
 

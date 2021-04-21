@@ -40,14 +40,32 @@ OvinaHistRegistrationEditor >> comment [
 	^ comment text
 ]
 
+{ #category : #accessing }
+OvinaHistRegistrationEditor >> comment: string [
+
+	comment text: string
+]
+
 { #category : #description }
 OvinaHistRegistrationEditor >> date [
 	^ date text
 ]
 
+{ #category : #accessing }
+OvinaHistRegistrationEditor >> date: string [
+
+	date text: string
+]
+
 { #category : #description }
 OvinaHistRegistrationEditor >> default [
 	^ default text
+]
+
+{ #category : #accessing }
+OvinaHistRegistrationEditor >> default: string [
+
+	default text: string
 ]
 
 { #category : #'as yet unclassified' }
@@ -81,4 +99,16 @@ OvinaHistRegistrationEditor >> kind [
 	kindExisting selectedItem = '-- ny --'
 		ifTrue: [ ^ kindNew text asString ].
 	^ kindExisting selectedItem 
+]
+
+{ #category : #accessing }
+OvinaHistRegistrationEditor >> kindExisting [
+
+	^ kindExisting
+]
+
+{ #category : #accessing }
+OvinaHistRegistrationEditor >> kindExisting: item [
+
+	kindExisting selectItem: item
 ]

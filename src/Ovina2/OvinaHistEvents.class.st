@@ -92,6 +92,7 @@ OvinaHistEvents >> initializeWindow: aWindowPresenter [
 { #category : #printing }
 OvinaHistEvents >> printPageForNotes [
 	|specialTable tablePrinter|
+	"Create a new table to be printed, now we have a table printer"
 	specialTable := SpTablePresenter new 
 		columns: (table columns copyFrom: 1 to: 2), 
 			{SpStringTableColumn new title: 'værdi' ; evaluated: [ :d| '' ]};

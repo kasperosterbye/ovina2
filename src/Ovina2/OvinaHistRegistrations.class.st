@@ -21,12 +21,20 @@ Class {
 OvinaHistRegistrations class >> defaultSpec [
 
 	^ SpBoxLayout newVertical
-			add: #table;
-			add: (SpBoxLayout newHorizontal 
-				add: #commentText ;
-				add: #defaultText width: 75) 
-				withConstraints: [:c| c height: 60; expand: false; fill: false; padding: 3];
-			add: #actionBar expand: false fill: true padding: 3
+		  add: #table;
+		  add: (SpBoxLayout newHorizontal
+				   add: #commentText expand: true fill: true padding: 3;
+				   add: #defaultText width: 85)
+		  withConstraints: [ :c | 
+			  c
+				  height: 60;
+				  expand: false;
+				  fill: false;
+				  padding: 3 ];
+		  add: #actionBar
+		  expand: false
+		  fill: true
+		  padding: 3
 ]
 
 { #category : #examples }
@@ -39,11 +47,25 @@ OvinaHistRegistrations class >> open [
 OvinaHistRegistrations >> currentRegistration: reg [
 	reg ifNotNil: [
 		commentText beEditable; enable; text: reg comment.
-		defaultText beEditable; enable; text: (reg default ifEmpty: [ 'default' ] )]
+		defaultText beEditable; enable; text: reg default]
 	ifNil: [
 		commentText text: ''; beNotEditable; disable.
 		defaultText text: ''; beNotEditable; disable.].
 	self announce: (OvinaGUIRegistrationsChanged new registration: self)
+]
+
+{ #category : #'as yet unclassified' }
+OvinaHistRegistrations >> editRegistration [
+	|reg editor|
+	reg := self selectedRegistration.
+	editor := OvinaHistRegistrationEditor new
+		kindExisting: reg kind;
+		date: reg date;
+		comment: reg comment;	
+		default: reg default.
+	editor openDialogWithSpec 
+		cancelAction: [  ];
+		okAction: [ self updateRegistrationFromEditor: editor ].
 ]
 
 { #category : #private }
@@ -64,23 +86,25 @@ OvinaHistRegistrations >> initialize [
 
 { #category : #initialization }
 OvinaHistRegistrations >> initializeEditor [
-	|lastReg| 
+
+	| lastReg |
 	commentText := self newText.
-	commentText 
+	commentText
 		disable;
 		whenTextChangedDo: [ :new | 
-			lastReg := self selectedRegistration .
-			lastReg ifNotNil: [ lastReg comment: commentText text asString. ].
-	].
-	
-	defaultText := self newText text: 'default'.
+			lastReg := self selectedRegistration.
+			lastReg ifNotNil: [ lastReg comment: commentText text asString ] ].
+
+	defaultText := self newText text: ''.
 	defaultText
 		disable;
 		whenTextChangedDo: [ :new | 
-			lastReg := self selectedRegistration .
-			lastReg ifNotNil: [ lastReg default: defaultText text asString. ].
-	].
-		
+			lastReg := self selectedRegistration.
+			lastReg ifNotNil: [ 
+				lastReg default: defaultText text asString.
+				self announce: (OvinaGUIRegistrationsChanged new registration: lastReg)
+				 ].
+			 ]
 ]
 
 { #category : #initialization }
@@ -99,8 +123,14 @@ OvinaHistRegistrations >> initializeRegButtons [
 	actionBar := self newButtonBar.
 	actionBar 
 		add: (self newButton
+				 label: 'Ret registrering';
+				 action: [ self editRegistration ]);
+		add: (self newButton
 				 label: 'Ny registrering';
 				 action: [ self newRegistration ]);
+		add: (self newButton
+				 label: 'Slet registrering';
+				 action: [ self removeRegistration ]);
 		add: (self newButton
 				 label: 'Print';
 				 action: [ self error: 'to be implemented' ]);
@@ -110,7 +140,7 @@ OvinaHistRegistrations >> initializeRegButtons [
 					 filterPastYear := newValue.
 					 self updatePresenter ]);
 		add: (self newDropList
-				 items: #( 'all' ) , self kinds;
+				 items: #( 'alle' ) , self kinds;
 				 whenSelectedItemChangedDo: [ :filter | 
 					 filterKind := filter.
 					 self updatePresenter ])
@@ -134,7 +164,9 @@ OvinaHistRegistrations >> initializeRegisterTable [
 		whenSelectedDo: [ :foo | self currentRegistration: foo ];
 		whenNoneSelectedDo: [ self currentRegistration: nil ];
 		sortingBlock: [ :s1 :s2 | (s2 date) threeWayCompareTo:  (s1 date)] asSortFunction;
-		beResizable   
+		beResizable;
+		bindKeyCombination: KeyboardKey keypadUp toAction: [self selectPreviousOrFirst];
+		bindKeyCombination: KeyboardKey keypadDown  toAction: [self selectNextOrLast] 
 	
 ]
 
@@ -186,6 +218,35 @@ OvinaHistRegistrations >> registrations [
 	^registrations 
 ]
 
+{ #category : #removing }
+OvinaHistRegistrations >> removeRegistration [
+	
+	| index |
+	index := table selection selectedIndex.
+	OvinaRegistration removeRegistration: self selectedRegistration.
+	index := index-1 beBetween: 1  and: OvinaRegistration registrations size.
+	self updatePresenter.
+	table selectIndex: index scrollToSelection: true
+]
+
+{ #category : #'as yet unclassified' }
+OvinaHistRegistrations >> selectNextOrLast [
+
+	| index |
+	index := table selection selectedIndex.
+	index = table items size ifTrue: [ ^ self ].
+	table selectIndex: index + 1 scrollToSelection: true
+]
+
+{ #category : #'as yet unclassified' }
+OvinaHistRegistrations >> selectPreviousOrFirst [
+
+	| index |
+	index := table selection selectedIndex.
+	index = 1 ifTrue: [ ^ self ].
+	table selectIndex: index - 1 scrollToSelection: true
+]
+
 { #category : #api }
 OvinaHistRegistrations >> selectedRegistration [
 	^ table selection selectedItem 
@@ -198,4 +259,14 @@ OvinaHistRegistrations >> updatePresenter [
 	table items: self registrations.
 	table selectIndexes: {1} scrollToSelection: true.
 	self announce: (OvinaGUIRegistrationsChanged new registration: self)
+]
+
+{ #category : #private }
+OvinaHistRegistrations >> updateRegistrationFromEditor: editor [
+	self selectedRegistration 
+			kind: editor kind;
+			date: editor date;
+			default: editor default;
+			comment: editor comment.
+	self updatePresenter.
 ]
