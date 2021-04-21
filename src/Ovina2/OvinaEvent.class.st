@@ -93,7 +93,9 @@ OvinaEvent >> registration: anObject [
 
 { #category : #accessing }
 OvinaEvent >> result [
+
 	result ifNil: [ ^ registration default ].
+	result ifEmpty: [ ^ registration default ].
 	^ result
 ]
 

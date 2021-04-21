@@ -9,6 +9,31 @@ Ovina1DB class >> dbPath [
 	^'/Users/kasper/tmp/ovina3a.db'
 ]
 
+{ #category : #'as yet unclassified' }
+Ovina1DB class >> kindReductionDictionary [
+
+	^ Dictionary new
+		  at: 'slagtevægt' put: 'slagtevægt';
+		  at: 'flytning' put: 'flytning';
+		  at: 'veje lam' put: 'vejning';
+		  at: 'fødsel' put: 'fødsel';
+		  at: '---' put: '---';
+		  at: 'vaccination' put: 'vaccination';
+		  at: 'noromectin' put: 'vaccination';
+		  at: 'ormekur' put: 'vaccination';
+		  at: 'vaccine' put: 'vaccination';
+		  at: 'flytte får' put: 'flytning';
+		  at: 'ormemiddel' put: 'vaccination';
+		  at: 'yverbetændelse' put: 'syg';
+		  at: 'coccidier' put: 'vaccination';
+		  at: 'alle lam' put: '---';
+		  at: 'syg' put: 'syg';
+		  at: 'vaccinere' put: 'vaccination';
+		  at: 'vaccinere ' put: 'vaccination ';
+		  at: 'vaccinere ogormekur' put: 'vaccination';
+		  yourself
+]
+
 { #category : #connecting }
 Ovina1DB class >> open [
 	"return a connection object for the old databasedatabase"
@@ -60,7 +85,7 @@ Ovina1DB >> loadEwes [
 			chr: (row at: #chr) asString;
 			number: (row at: #number) asString;
 			name: (row at: #name);
-			race: (row at: #race ) asLowercase ;
+			race: ((row at: #race ) ifNotNil: [ :r | r asLowercase]) ;
 			inDate: (row at: #inDate) yyyymmdd;
 			outDate: (row at: #outDate). "Oddly stored as text"
 		OvinaSheep addSheep: ewe.
@@ -107,15 +132,17 @@ Ovina1DB >> loadRams [
 
 { #category : #migration }
 Ovina1DB >> loadRegistrations [
-	|  regRow |
+
+	| kinds regRow |
+	kinds := self class kindReductionDictionary. 
 	regRow := (self execute: 'select * from descriptors') rows.
-	regRow do: [ :row | |reg|
-		reg := OvinaRegistration  new
-			id: (row at: #descID) asString;
-			kind: (row at: #descTag) asLowercase ;
-			date: (row at: #descDate);
-			comment: (row at: #descComment);
-			default: ''.
-		OvinaRegistration addRegistration: reg
-		].
+	regRow do: [ :row | 
+		| reg |
+		reg := OvinaRegistration new
+			       id: (row at: #descID) asString;
+			       kind: (kinds at: (row at: #descTag) asLowercase);
+			       date: (row at: #descDate);
+			       comment: (row at: #descComment);
+			       default: ''.
+		OvinaRegistration addRegistration: reg ]
 ]
