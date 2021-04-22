@@ -18,7 +18,7 @@ OvinaLamb >> color: val [
 
 { #category : #'accessing-properties' }
 OvinaLamb >> comment [
-
+	<sheepColumn: #('kommentar' comment:)>
 	^ (self property: #comment)
 ]
 
@@ -38,6 +38,12 @@ OvinaLamb >> dam [
 OvinaLamb >> dam: dam [
 
 	self property: #dam put: dam id
+]
+
+{ #category : #'accessing-properties' }
+OvinaLamb >> damName [
+	<sheepColumn: #('mor')>
+	^ self dam name
 ]
 
 { #category : #'as yet unclassified' }
@@ -111,6 +117,12 @@ OvinaLamb >> sire: ram [
 ]
 
 { #category : #'accessing-properties' }
+OvinaLamb >> sireName [
+	<sheepColumn: #('far')>
+	^ self sire name
+]
+
+{ #category : #'accessing-properties' }
 OvinaLamb >> slagtevægt [
 	"return -1 if not slaughtered"
 	|slagt|
@@ -125,6 +137,7 @@ OvinaLamb >> slagtevægt [
 
 { #category : #accessing }
 OvinaLamb >> usage [
+	<sheepColumn: #('brug' usage:)>
 	^ self property: #usage
 ]
 

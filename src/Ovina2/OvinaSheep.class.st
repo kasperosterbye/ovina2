@@ -76,7 +76,7 @@ OvinaSheep class >> maarumlamChr [
 
 { #category : #sheeps }
 OvinaSheep class >> rams [
-	^ OvinaSheep sheeps associations select: [ :s| s key first = $R ]
+	^ OvinaSheep sheeps select: [ :s| s id first = $R ]
 ]
 
 { #category : #sheeps }

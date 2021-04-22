@@ -7,6 +7,14 @@ Class {
 	#category : #'Ovina2-Model'
 }
 
+{ #category : #'as yet unclassified' }
+OvinaRam class >> ramForDate: aDate [
+	| rams |
+	"last first"
+	rams := self rams values sort: [ :r1 :r2 | r1 inDate > r2 inDate ].
+	^ rams detect: [ :r | r inDate < aDate ].
+]
+
 { #category : #adding }
 OvinaRam >> addLamb: lamb [
 	Transcript nextPutAll: self id, ' ', offspring size asString;cr;endEntry.
