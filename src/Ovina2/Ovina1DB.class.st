@@ -70,7 +70,7 @@ Ovina1DB >> loadEvents [
 			         sheep: (OvinaSheep sheeps at:
 						          (row at: #sheepKind) first asString
 						          , (row at: #sheepFK) asString);
-			         date: (row at: #eventDate);
+			         date: (row at: #eventDate) parseISO8601  ;
 			         result: (row at: #value).
 		OvinaEvent addEvent: event ].
 ]
@@ -86,8 +86,8 @@ Ovina1DB >> loadEwes [
 			number: (row at: #number) asString;
 			name: (row at: #name);
 			race: ((row at: #race ) ifNotNil: [ :r | r asLowercase]) ;
-			inDate: (row at: #inDate) yyyymmdd;
-			outDate: (row at: #outDate). "Oddly stored as text"
+			inDate: (row at: #inDate);
+			outDate: ((row at: #outDate) ifNotNil: [:d | d parseISO8601]). "Oddly stored as text"
 		OvinaSheep addSheep: ewe.
 		].
 ]
@@ -103,7 +103,7 @@ Ovina1DB >> loadLambs [
 			number: (row at: #number) asString;
 			dam: (OvinaSheep sheeps at: ('E', (row at: #momFK) asString));
 			sire: (OvinaSheep sheeps at: ('R', (row at: #dadFK) asString));
-			inDate: (row at: #inDate) yyyymmdd;
+			inDate: (row at: #inDate);
 			event: (row at: #event);
 			sex: (row at: #sex);
 			growth: (row at: #growth) asString;
@@ -125,7 +125,7 @@ Ovina1DB >> loadRams [
 			number: (row at: #number) asString;
 			name: (row at: #name);
 			race: (row at: #race ) asLowercase ;
-			inDate: (row at: #inDate) yyyymmdd .
+			inDate: (row at: #inDate).
 		OvinaSheep addSheep: ram.
 		].
 ]
@@ -141,7 +141,7 @@ Ovina1DB >> loadRegistrations [
 		reg := OvinaRegistration new
 			       id: (row at: #descID) asString;
 			       kind: (kinds at: (row at: #descTag) asLowercase);
-			       date: (row at: #descDate);
+			       date: (row at: #descDate) parseISO8601;
 			       comment: (row at: #descComment);
 			       default: ''.
 		OvinaRegistration addRegistration: reg ]

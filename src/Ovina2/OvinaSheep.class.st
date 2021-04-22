@@ -133,14 +133,14 @@ OvinaSheep >> id: aString [
 { #category : #'accessing - properties' }
 OvinaSheep >> inDate [
 	<sheepColumn:#('Inddato' inDate:)>
-	^(self property: #inDate) asISO8601Date 
+	^(self property: #inDate) 
 ]
 
 { #category : #'accessing - properties' }
 OvinaSheep >> inDate: date [
 	date isString 
-		ifTrue: [ ^self property: #inDate put: date ]
-	 	ifFalse: [ ^self property: #inDate put: date yyyymmdd  ]
+		ifTrue: [ ^self property: #inDate put: date parseDKDate  ]
+	 	ifFalse: [ ^self property: #inDate put: date   ]
 	
 ]
 
@@ -181,8 +181,10 @@ OvinaSheep >> outDate [
 ]
 
 { #category : #'accessing - properties' }
-OvinaSheep >> outDate: dateString [
-	^self property: #outDate put: dateString
+OvinaSheep >> outDate: date [
+	date isString 
+		ifTrue: [ ^self property: #outDate put: date parseDKDate  ]
+	 	ifFalse: [ ^self property: #outDate put: date]
 ]
 
 { #category : #'as yet unclassified' }

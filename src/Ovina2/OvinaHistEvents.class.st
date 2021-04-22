@@ -69,7 +69,7 @@ OvinaHistEvents >> initializeTable [
 		addColumn: (SpStringTableColumn new
 			title: 'dato' ;
 			evaluated: #date ;
-			sortFunction: [ :e1 :e2 | (e1 date) threeWayCompareTo:  (e2 date)] asSortFunction);
+			sortFunction: [ :e1 :e2 | (e1 date yyyymmdd ) threeWayCompareTo:  (e2 date yyyymmdd )] asSortFunction);
 	   addColumn: (SpStringTableColumn new
 			title: 'værdi' ;
 			evaluated: [:reg | reg result asString truncateTo: 40];
@@ -140,7 +140,7 @@ OvinaHistEvents >> setDateAndResult [
 	table selection isEmpty 
 		ifTrue: [ dateField text: ''. resultField text: '' ]
 		ifFalse: [ 
-			dateField text: (table selection selectedItem date);
+			dateField text: (table selection selectedItem date) asDKDateString ;
 				selectionInterval: (dateField text size + 1 to: dateField text size).
 			resultField 
 				text: (table selection selectedItem result asString);
