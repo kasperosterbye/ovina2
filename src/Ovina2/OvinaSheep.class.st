@@ -46,7 +46,7 @@ OvinaSheep class >> allColumns [
 
 { #category : #sheeps }
 OvinaSheep class >> ewes [
-	^ OvinaSheep sheeps associations select: [ :s| s key first = $E ]
+	^ OvinaSheep sheeps select: [ :s| s id first = $E ]
 ]
 
 { #category : #sheeps }

@@ -20,6 +20,13 @@ OvinaEwe >> antalSlagtelam [
 	^ (offspring select: [ :lamb | lamb usage = 'slagt' ]) size
 ]
 
+{ #category : #converting }
+OvinaEwe >> asLamb [
+	"If chr is our farm, we should be able find this ewe as lamb. If chr or not found, return nil"
+	self chr = OvinaSheep maarumlamChr ifFalse: [ ^nil ].
+	^ OvinaSheep lambs values detect: [ :l | l number = self number ] ifNone: [ nil]
+]
+
 { #category : #'as yet unclassified' }
 OvinaEwe >> defaultPropertyOrder [
 	^#(chr number name color inDate comment)
