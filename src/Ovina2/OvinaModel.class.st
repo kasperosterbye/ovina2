@@ -12,6 +12,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 OvinaModel class >> initialize [
+	"Remove all cached information in Ovina"
 	<script>
 	OvinaSheep initialize.
 	OvinaEvent initialize.
