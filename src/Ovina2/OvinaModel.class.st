@@ -1,3 +1,9 @@
+"
+I am holding a few global methods to handle the Ovina model as a whole.
+In particular initialize before loading a new model from database.
+
+
+"
 Class {
 	#name : #OvinaModel,
 	#superclass : #Object,

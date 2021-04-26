@@ -8,7 +8,6 @@ Class {
 OvinaDB class >> loadAll [
 
 	| conn |
-	
 	OvinaModel initialize.
 	conn := self open.
 	conn loadAll.

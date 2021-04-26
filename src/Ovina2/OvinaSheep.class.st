@@ -203,7 +203,7 @@ OvinaSheep >> present [
 { #category : #printing }
 OvinaSheep >> printOn: aStream [
 	aStream nextPutAll: '[';
-	print: ({ id. chr. number } , self properties values );
+	print: ({ id. chr. number } , (self properties ifNotNil: [ :p | p values ] ifNil: [ #() ]) );
 	nextPut: $]
 ]
 

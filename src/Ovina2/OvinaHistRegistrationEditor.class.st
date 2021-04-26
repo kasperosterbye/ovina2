@@ -73,12 +73,12 @@ OvinaHistRegistrationEditor >> initializePresenters [
 	"actionBar kindExisting kindNew date comment default"
 	kindExisting := (self instantiate: SpDropListPresenter )
 		items: OvinaRegistration  kinds, #('-- ny --').
-	kindNew := (self instantiate: SpLabelledTextInput )
+	kindNew := (self instantiate: OvinaLabelledTextInput )
 		layout: SpLabelledContainer labelTop;
 		label: 'Ny type'.
 	date := self newTextInput 
 		text: (Date today yyyymmdd).
-	default := (self instantiate: SpLabelledTextInput )
+	default := (self instantiate: OvinaLabelledTextInput )
 		layout: SpLabelledContainer labelTop;
 		label: 'Default værdi'.
 	comment := (self instantiate: SpTextPresenter )
