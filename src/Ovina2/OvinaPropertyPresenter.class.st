@@ -1,6 +1,6 @@
 Class {
 	#name : #OvinaPropertyPresenter,
-	#superclass : #SpLabelledTextInput,
+	#superclass : #OvinaLabelledTextInput,
 	#category : #'Ovina2-GUI Sheep'
 }
 
