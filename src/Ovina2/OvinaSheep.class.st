@@ -16,8 +16,7 @@ Class {
 		'chr',
 		'number',
 		'properties',
-		'cachings',
-		'events'
+		'cachings'
 	],
 	#classInstVars : [
 		'sheeps'
@@ -121,8 +120,8 @@ OvinaSheep >> computeRace [
 { #category : #history }
 OvinaSheep >> events [
 	"return all events on me, last first"
-	events ifNil: [ events := (OvinaEvent events values select: [ :ev | ev sheep = self ]) reversed ].
-	^ events
+	^ self cache: #events 
+		compute: [(OvinaEvent events values select: [ :ev | ev sheep = self ]) reversed ].
 ]
 
 { #category : #accessing }
@@ -256,5 +255,9 @@ OvinaSheep >> race: race [
 { #category : #history }
 OvinaSheep >> slaughterWeight [
 	"return the weight of the meat as returned from the slaughter. If not slaughtered, return nil" 
-	^ self events detect: [ :ev | ev registration kind asLowercase = 'slagtevægt' ] ifNone: [ ^nil ]
+	|event| 
+	event := self events 
+		detect: [ :ev | ev registration kind asLowercase = 'slagtevægt' ] 
+		ifNone: [ ^nil ].
+	^ OvinaModel dkNumberFrom: event result
 ]

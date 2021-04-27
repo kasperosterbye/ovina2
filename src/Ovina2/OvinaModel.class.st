@@ -10,6 +10,14 @@ Class {
 	#category : #'Ovina2-Model'
 }
 
+{ #category : #'as yet unclassified' }
+OvinaModel class >> dkNumberFrom: aStringOrNil [
+	aStringOrNil ifNil: [ ^0 ].
+	aStringOrNil ifEmpty: [ ^0 ].
+	^ (aStringOrNil copyReplaceAll: ',' with: '.' ) asNumber 
+
+]
+
 { #category : #'class initialization' }
 OvinaModel class >> initialize [
 	"Remove all cached information in Ovina"
