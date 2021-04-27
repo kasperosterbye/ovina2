@@ -10,7 +10,7 @@ Class {
 	#category : #'Ovina2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'class initialization' }
 OvinaModel class >> initialize [
 	"Remove all cached information in Ovina"
 	<script>

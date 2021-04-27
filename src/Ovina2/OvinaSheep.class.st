@@ -10,12 +10,13 @@ All sheeps are stored in a sheeps table - Dictionary<ID,Sheep>
 "
 Class {
 	#name : #OvinaSheep,
-	#superclass : #Object,
+	#superclass : #Model,
 	#instVars : [
 		'id',
 		'chr',
 		'number',
 		'properties',
+		'cachings',
 		'events'
 	],
 	#classInstVars : [
@@ -93,6 +94,12 @@ OvinaSheep class >> sheeps [
 	^sheeps
 ]
 
+{ #category : #caching }
+OvinaSheep >> cache: symbol compute: block [
+	^ cachings at: symbol ifAbsentPut: block
+	
+]
+
 { #category : #accessing }
 OvinaSheep >> chr [
 	<sheepColumn: #('chr' chr:)>
@@ -148,6 +155,12 @@ OvinaSheep >> inDate: date [
 OvinaSheep >> initialize [
 	super initialize.
 	properties := Dictionary new.
+	cachings := Dictionary new.
+]
+
+{ #category : #caching }
+OvinaSheep >> invalidateCache [
+	cachings := Dictionary new.
 ]
 
 { #category : #'accessing - properties' }

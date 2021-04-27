@@ -14,12 +14,7 @@ OvinaDB class >> loadAll [
 	conn close
 ]
 
-{ #category : #initialization }
-OvinaDB >> setOutDatesFromHistory [
-	self todo.
-]
-
-{ #category : #initialization }
-OvinaDB >> setSheepPropertiesFromHistory [
-	self setOutDatesFromHistory
+{ #category : #'as yet unclassified' }
+OvinaDB >> connectEventsToSheeps [
+	"estblish the event history for each sheep"
 ]

@@ -1,23 +1,20 @@
 Class {
 	#name : #OvinaEwe,
 	#superclass : #OvinaSheep,
-	#instVars : [
-		'offspring'
-	],
 	#category : #'Ovina2-Model'
 }
 
 { #category : #adding }
 OvinaEwe >> addLamb: lamb [
 	
-	offspring add: lamb
+	self invalidateCache 
 ]
 
 { #category : #'as yet unclassified' }
 OvinaEwe >> antalSlagtelam [
 	<sheepColumn: #('# slagtelam')>
 	
-	^ (offspring select: [ :lamb | lamb usage = 'slagt' ]) size
+	^ (self lambs select: [ :lamb | lamb usage = 'slagt' ]) size
 ]
 
 { #category : #converting }
@@ -46,7 +43,6 @@ OvinaEwe >> gnsSlagtevægt [
 { #category : #adding }
 OvinaEwe >> initialize [ 
 	super initialize.
-	offspring := OrderedCollection new.
 ]
 
 { #category : #'accessing - properties' }
@@ -57,7 +53,9 @@ OvinaEwe >> kind [
 
 { #category : #'as yet unclassified' }
 OvinaEwe >> lambs [
-	^ offspring 
+	"^ offspring "
+	^ self cache: #offspring
+		 compute: [ OvinaSheep lambs values select:[:lamb | lamb dam = self ]]
 ]
 
 { #category : #'accessing - properties' }
@@ -75,7 +73,7 @@ OvinaEwe >> name: name [
 { #category : #'as yet unclassified' }
 OvinaEwe >> noLambs [
 	<sheepColumn: #('Antal lam')>
-	^ offspring ifNil: [0] ifNotNil: [ offspring size] 
+	^ self lambs size
 ]
 
 { #category : #printing }

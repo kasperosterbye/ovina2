@@ -1,5 +1,12 @@
 "
-I store metadata for this package. These meta data are used by other tools such as the SmalllintManifestChecker and the critics Browser
+Ovina is our sheep administration system.
+
+Deployment is this:
+
+* Database & csv files in imageDirectory.
+* To deploy, 
+	- **copy** imageDirectory to icloud 
+	- drag image to dock
 "
 Class {
 	#name : #ManifestOvina2,
