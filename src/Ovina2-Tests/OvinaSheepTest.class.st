@@ -1,7 +1,7 @@
 Class {
 	#name : #OvinaSheepTest,
 	#superclass : #TestCase,
-	#category : #'Ovina2-Tests'
+	#category : #'Ovina2-Tests-Model'
 }
 
 { #category : #tests }
