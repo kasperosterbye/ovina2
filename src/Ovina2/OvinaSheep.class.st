@@ -111,12 +111,6 @@ OvinaSheep >> chr: aString [
 	chr := aString asInteger
 ]
 
-{ #category : #'accessing - properties' }
-OvinaSheep >> computeRace [
-
-	^'todo'
-]
-
 { #category : #history }
 OvinaSheep >> events [
 	"return all events on me, last first"
@@ -126,7 +120,7 @@ OvinaSheep >> events [
 
 { #category : #accessing }
 OvinaSheep >> id [
-
+	<sheepColumn: #('ID')>
 	^ id
 ]
 
@@ -240,9 +234,8 @@ OvinaSheep >> property: property put: value [
 OvinaSheep >> race [
 	|race|
 	<sheepColumn: #('race' race:)>
-	race := self property: #race.
-	race ifNil: [ ^ self computeRace ].
-	^ race
+	^self cache: #race 
+		compute: [ self raceCompute  ]
 ]
 
 { #category : #'accessing - properties' }
@@ -252,6 +245,14 @@ OvinaSheep >> race: race [
 
 { #category : #history }
 OvinaSheep >> slaughterWeight [
+	"return the weight of the meat as returned from the slaughter. If not slaughtered, return nil" 
+	^ self 
+		cache: #slaughterWeight
+	 	compute: [ self slaughterWeightCompute  ]
+]
+
+{ #category : #history }
+OvinaSheep >> slaughterWeightCompute [
 	"return the weight of the meat as returned from the slaughter. If not slaughtered, return nil" 
 	|event| 
 	event := self events 

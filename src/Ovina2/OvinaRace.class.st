@@ -15,13 +15,19 @@ Class {
 
 { #category : #'instance creation' }
 OvinaRace class >> fromString: string [
-	"Format of string is '3#Såne/1#Textel'"
+	"Format of string is '3Såne1Texel' or 'Texel'"
+	"\d is digits, \D is not-digits"
 	|race parts|
-	parts := string substrings: '/'.
+	parts := string allRegexMatches: '(\d+\D+)|\D+'.
+	"check if we are in the single unnumbered case"
+	(parts size = 1 and: [ parts first first isDigit not ]) 
+		ifTrue: [ ^ self new race: parts first capitalized count: 1 ].
+	"parts is now a number of 1Såne 2Lüne 5Texel"
 	race := self new.
-	parts do:[:p| |split|
-		split := p substrings: '#'.
-		race race: split second asSymbol count: split first asNumber].
+	parts do:[:match| |p|
+		p := match allRegexMatches: '\d+|\D+'.
+		race race: p second capitalized asSymbol count: p first asNumber].
+	race normalize.
 	^race
 	
 ]
@@ -66,16 +72,12 @@ OvinaRace >> normalize [
 
 { #category : #printing }
 OvinaRace >> printOn: stream [
-	|first sorted|
-	first := true.
+	| sorted|
 	sorted := races associations sort: [ :a1 :a2 | a1 key < a2 key ].
 	sorted do: [ :assoc |
-		first ifFalse: [ stream nextPut: $/].
 		stream 
 			nextPutAll: assoc value asString;
-			nextPut: $#;
-			nextPutAll: assoc key.
-		first := false ]
+			nextPutAll: assoc key]
 ]
 
 { #category : #initialization }

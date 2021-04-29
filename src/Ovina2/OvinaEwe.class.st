@@ -87,3 +87,14 @@ OvinaEwe >> printOn: aStream [
 	aStream nextPutAll: 'Ewe '.
 	super printOn: aStream
 ]
+
+{ #category : #'accessing - properties' }
+OvinaEwe >> raceCompute [ 
+	self chr = OvinaSheep maarumlamChr 
+		ifFalse: [ ^ OvinaRace fromString: (self property: #race) ].
+	"This hardcoded list are those ewes born here, but where the lamb is not in the database"
+	(#('E22' 'E23' 'E12' 'E4' 'E5' 'E7' 'E8' 'E20') includes: self id) 
+		ifTrue: [  ^ OvinaRace fromString: ((self property: #race) copyReplaceAll: 'st' with: '1Såne1Texel' )].
+	^ self asLamb race
+	
+]

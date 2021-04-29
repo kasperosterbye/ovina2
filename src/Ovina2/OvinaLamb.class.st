@@ -103,6 +103,11 @@ OvinaLamb >> printOn: aStream [
 ]
 
 { #category : #'accessing - properties' }
+OvinaLamb >> raceCompute [
+	^ self dam race + self sire race
+]
+
+{ #category : #'accessing - properties' }
 OvinaLamb >> sex [
 
 	^ (self property: #sex)

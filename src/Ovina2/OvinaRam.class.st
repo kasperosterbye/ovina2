@@ -75,3 +75,9 @@ OvinaRam >> printOn: aStream [
 	aStream nextPutAll: 'Ram '.
 	super printOn: aStream
 ]
+
+{ #category : #'accessing - properties' }
+OvinaRam >> raceCompute [
+	^ OvinaRace fromString: (self property: #race)
+	
+]
