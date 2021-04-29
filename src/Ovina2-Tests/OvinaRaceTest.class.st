@@ -25,14 +25,17 @@ OvinaRaceTest >> testMixedRace [
 	self assert: (OvinaRace fromString: '1såne1texel') printString equals: '1Såne1Texel'.
 	self assert: (OvinaRace fromString: '2Såne2Texel') printString equals: '1Såne1Texel'.
 	self assert: (OvinaRace fromString: '3Såne6Texel') printString equals: '1Såne2Texel'.
+	"Test that output is ordered alphabetically"
 	self assert: (OvinaRace fromString: '5Såne2Texel1Lüne') printString equals: '1Lüne5Såne2Texel'.
 ]
 
 { #category : #tests }
 OvinaRaceTest >> testPureRace [
+	"test of different ways to write a single race"
 	self assert: (OvinaRace fromString: 'såne') printString equals: '1Såne'.
 	self assert: (OvinaRace fromString: 'Såne') printString equals: '1Såne'.
 	self assert: (OvinaRace fromString: 'Såne') printString equals: '1Såne'.
 	self assert: (OvinaRace fromString: '1såne') printString equals: '1Såne'.	
+	"The next is hardcore normalization"
 	self assert: (OvinaRace fromString: '17såne') printString equals: '1Såne'.	
 ]
