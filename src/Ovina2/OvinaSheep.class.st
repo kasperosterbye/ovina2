@@ -204,12 +204,10 @@ OvinaSheep >> ovinaDBString [
 	^ id asString printString
 ]
 
-{ #category : #'accessing - properties' }
+{ #category : #rendering }
 OvinaSheep >> present [
-
-	"return true if the sheep is still alive"
-
-	^ self outDate isNil and: [ self slaughterWeight isNil ]
+	"should return true if the sheep is alive"
+	self subclassResponsibility 
 ]
 
 { #category : #printing }

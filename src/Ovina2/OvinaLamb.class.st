@@ -88,6 +88,14 @@ OvinaLamb >> name [
 	^ self dam name, ' ', self sex first asUppercase asString , ' ',self number asString.
 ]
 
+{ #category : #rendering }
+OvinaLamb >> present [
+	"return true if the lamb is still alive. Last years lambs picked for breeding are alive only as ewes"
+	self inDate year = Date today year ifFalse: [ ^false ].
+	self slaughterWeight ifNil: [ ^false ].
+	^true
+]
+
 { #category : #printing }
 OvinaLamb >> printOn: aStream [
 	aStream nextPutAll: 'Lamb '.

@@ -57,6 +57,13 @@ OvinaRam >> noLambs [
 	^ offspring ifNil: [0] ifNotNil: [ offspring size ] 
 ]
 
+{ #category : #'accessing - properties' }
+OvinaRam >> present [
+	"return true if the ram is still alive - only the last ram is kept"
+
+	^ self = (OvinaSheep rams values detectMax: [ :r | r inDate  ])
+]
+
 { #category : #printing }
 OvinaRam >> printOn: aStream [
 	aStream nextPutAll: 'Ram '.

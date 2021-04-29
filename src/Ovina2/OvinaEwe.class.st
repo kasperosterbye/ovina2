@@ -76,6 +76,12 @@ OvinaEwe >> noLambs [
 	^ self lambs size
 ]
 
+{ #category : #'accessing - properties' }
+OvinaEwe >> present [
+	"return true if the ewe is still alive"
+	^ self outDate isNil and: [ self slaughterWeight isNil ]
+]
+
 { #category : #printing }
 OvinaEwe >> printOn: aStream [
 	aStream nextPutAll: 'Ewe '.
