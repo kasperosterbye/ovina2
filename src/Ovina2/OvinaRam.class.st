@@ -17,8 +17,8 @@ OvinaRam class >> ramForDate: aDate [
 
 { #category : #adding }
 OvinaRam >> addLamb: lamb [
-	Transcript nextPutAll: self id, ' ', offspring size asString;cr;endEntry.
-	offspring add: lamb
+	
+	self invalidateCache 
 ]
 
 { #category : #'as yet unclassified' }
@@ -38,6 +38,13 @@ OvinaRam >> kind [
 	^'Vædder' 
 ]
 
+{ #category : #sheeps }
+OvinaRam >> lambs [
+	"^ offspring "
+	^ self cache: #offspring
+		 compute: [ OvinaSheep lambs values select:[:lamb | lamb sire = self ]]
+]
+
 { #category : #'accessing - properties' }
 OvinaRam >> name [
 	
@@ -53,8 +60,7 @@ OvinaRam >> name: name [
 { #category : #'as yet unclassified' }
 OvinaRam >> noLambs [
 	<sheepColumn: #('Antal lam')>
-	
-	^ offspring ifNil: [0] ifNotNil: [ offspring size ] 
+	^ self lambs size
 ]
 
 { #category : #'accessing - properties' }
