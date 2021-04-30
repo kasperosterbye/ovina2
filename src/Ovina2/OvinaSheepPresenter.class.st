@@ -133,8 +133,7 @@ OvinaSheepPresenter >> initializeTable [
 		whenSelectedDo: [ :sheep | self currentSheep: sheep];
 		whenNoneSelectedDo: [ self currentSheep: nil ];
 		beResizable.
-	table announcer when: SpWidgetBuilt do: [ :ann | ann widget allowsDeselection: true ].
-	"self updatePresenter."
+	table announcer when: SpWidgetBuilt do: [ :ann | ann widget allowsDeselection: true ]
 	
 ]
 
