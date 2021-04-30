@@ -45,7 +45,7 @@ OvinaAllSheepsPresenter >> initializePresenters [
 	ewes whenSelectedDo: [ :ewe | self filterLambsByDam: ewe ].
 	rams whenSelectedDo: [ :ram | self filterLambsBySire: ram ].
 	
-	self setLayout
+	self setLayout.
 	
 	
 
