@@ -10,11 +10,25 @@ Class {
 		'buttonBar',
 		'printAll',
 		'newRam',
-		'editColumns',
+		'editColumns'
+	],
+	#classInstVars : [
 		'allColumns'
 	],
 	#category : #'Ovina2-GUI Sheep'
 }
+
+{ #category : #accessing }
+OvinaSheepPresenter class >> allColumns [
+	allColumns ifNil: [ allColumns := self sheepClass allColumns  collect:[:c| c->true ]].
+	^ allColumns
+]
+
+{ #category : #accessing }
+OvinaSheepPresenter class >> allColumns: anObject [
+
+	allColumns := anObject
+]
 
 { #category : #specs }
 OvinaSheepPresenter class >> defaultSpec [
@@ -31,6 +45,11 @@ OvinaSheepPresenter class >> open [
 	self new openWithSpec 
 ]
 
+{ #category : #accessing }
+OvinaSheepPresenter class >> sheepClass [
+	^self subclassResponsibility 
+]
+
 { #category : #initialization }
 OvinaSheepPresenter >> activeColumns [
 	"return the column names which are active"
@@ -40,8 +59,7 @@ OvinaSheepPresenter >> activeColumns [
 
 { #category : #initialization }
 OvinaSheepPresenter >> allColumns [
-	allColumns ifNil: [ allColumns := self sheepClass allColumns  collect:[:c| c->true ]].
-	^allColumns 
+	^ self class allColumns 
 
 ]
 
@@ -49,7 +67,7 @@ OvinaSheepPresenter >> allColumns [
 OvinaSheepPresenter >> allColumns: columns [
 	" columns is {colName->bool. colName->bool...} 
 	where the booleans indicate if should be included in presentation"
-	allColumns := columns.
+	self class allColumns: columns.
 	self initializeTable.
 	self rebuildLayout.
 	self updatePresenter 
@@ -156,14 +174,9 @@ OvinaSheepPresenter >> selectPreviousSheep [
 ]
 
 { #category : #accessing }
-OvinaSheepPresenter >> sheepClass [
-	^self subclassResponsibility 
-]
-
-{ #category : #accessing }
 OvinaSheepPresenter >> sheeps [
 	"Get the list of all sheeps"
-	^ (OvinaSheep sheeps values select: [ :sheep | sheep class = self sheepClass  ]) 
+	^ (OvinaSheep sheeps values select: [ :sheep | sheep class = self class sheepClass  ]) 
 		sort: [ :r1 :r2 | r1 id < r2 id]
 ]
 

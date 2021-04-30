@@ -88,6 +88,14 @@ OvinaLamb >> name [
 	^ self dam name, ' ', self sex first asUppercase asString , ' ',self number asString.
 ]
 
+{ #category : #'accessing - properties' }
+OvinaLamb >> outDate [
+	| d |
+	d := super outDate.
+	^d
+	
+]
+
 { #category : #rendering }
 OvinaLamb >> present [
 	"return true if the lamb is still alive. Last years lambs picked for breeding are alive only as ewes"

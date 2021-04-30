@@ -8,6 +8,11 @@ Class {
 	#category : #'Ovina2-GUI Sheep'
 }
 
+{ #category : #acccessing }
+OvinaLambPresenter class >> sheepClass [
+	^ OvinaLamb
+]
+
 { #category : #accessing }
 OvinaLambPresenter >> filterDam: dam [
 
@@ -28,11 +33,6 @@ OvinaLambPresenter >> filterSire: sire [
 OvinaLambPresenter >> initializeButtons [ 
 	super initializeButtons.
 	
-]
-
-{ #category : #acccessing }
-OvinaLambPresenter >> sheepClass [
-	^ OvinaLamb
 ]
 
 { #category : #accessing }
