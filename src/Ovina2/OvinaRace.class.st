@@ -94,3 +94,9 @@ OvinaRace >> races [
 OvinaRace >> sum [
 	^ races values sum
 ]
+
+{ #category : #'as yet unclassified' }
+OvinaRace >> threeWayCompareTo: b [
+	"must implement, but there is no reasonable definition"
+	^0
+]

@@ -1,8 +1,28 @@
 Class {
 	#name : #Ovina2DB,
 	#superclass : #OvinaDB,
+	#classInstVars : [
+		'current'
+	],
 	#category : #'Ovina2-Database'
 }
+
+{ #category : #'as yet unclassified' }
+Ovina2DB class >> currentClose [
+	<script>
+	current ifNotNil: [
+		current unsubscribeFromChangeAnnouncers.
+		current close.
+		current := nil ]
+]
+
+{ #category : #'as yet unclassified' }
+Ovina2DB class >> currentOpen [
+	<script>
+	current ifNil: [ current := self open ].
+	current subscribeToChangeAnnouncers.
+	^current
+]
 
 { #category : #connecting }
 Ovina2DB class >> dbPath [
@@ -11,33 +31,21 @@ Ovina2DB class >> dbPath [
 
 { #category : #migration }
 Ovina2DB class >> loadAll [
-	| conn |
-	OvinaModel initialize.
-	conn := self open.
-	conn loadAll.
-	conn close
+	<script>
+	super loadAll 
 ]
 
 { #category : #connecting }
 Ovina2DB class >> migrateAll [
-
+	<script>
+	OvinaModel initialize.
+	self reset.
 	Ovina1DB loadAll.
 	self storeAll
 ]
 
-{ #category : #connecting }
-Ovina2DB class >> open [
-	"return a connection object for the old databasedatabase"
-	|path| 
-	path := self dbPath.
-	path asFileReference exists ifFalse: [ OvinaError signal: 'database ',path, ' not found' ].
-	^self openOn: path
-	
-]
-
 { #category : #migration }
 Ovina2DB class >> reset [
-
 	| conn |
 	conn := self open.
 	conn resetDB .
@@ -53,23 +61,14 @@ Ovina2DB class >> storeAll [
 	conn close
 ]
 
-{ #category : #'as yet unclassified' }
-Ovina2DB >> connectLineage [
-
-	"tie connection from lamb to ewe and ram"
-	"assumes all sheeps to be loaded"
-	OvinaSheep lambs do: [ :lamb | 
-		lamb dam addLamb: lamb.
-		lamb sire addLamb: lamb]
-]
-
 { #category : #migration }
 Ovina2DB >> loadAll [
 
 	self
 		loadSheeps ;
 		loadRegistrations;
-		loadEvents 
+		loadEvents.
+	
 ]
 
 { #category : #migration }
@@ -85,7 +84,7 @@ Ovina2DB >> loadEvents [
 				         (OvinaRegistration registrations at:
 						          (row at: #registration) asString);
 			         sheep: (OvinaSheep sheeps at: (row at: #sheep));
-			         date: (row at: #date);
+			         date: (row at: #date) asDate;
 			         result: (row at: #result).
 		OvinaEvent addEvent: event.
 		 ]
@@ -99,7 +98,7 @@ Ovina2DB >> loadRegistrations [
 		reg := OvinaRegistration  new
 			id: (row at: #id) asString;
 			kind: (row at: #kind) asLowercase ;
-			date: (row at: #date);
+			date: (row at: #date) asDate;
 			default: (row at: #defaultResult);
 			comment: (row at: #comment).
 		OvinaRegistration addRegistration: reg
@@ -123,7 +122,6 @@ Ovina2DB >> loadSheeps [
 		sheep := OvinaSheep sheep: (row at: #sheep).
 		sheep property: (row at: #name) asSymbol  put: (row at: #value).
 		].
-	self connectLineage
 ]
 
 { #category : #migration }
@@ -178,7 +176,7 @@ Ovina2DB >> storeRegistration: reg [
 Ovina2DB >> storeSheep: sheep [
 
 	| stmt properties |
-	stmt := 'replace into Sheeps (id, chr, number) values ({1},	{2},{3});' 
+	stmt := 'replace into Sheeps (id, chr, number) values ({1}, {2}, {3});' 
 		        format: { 
 				        sheep id printString.
 				        sheep chr.
@@ -188,9 +186,25 @@ Ovina2DB >> storeSheep: sheep [
 		              '({1},	{2},{3})' format: { 
 				              sheep id printString.
 				              a key asString printString.
-				              a value ovinaDBString } ].
+				              a value ovinaDBString   } ].
 
 	stmt := 'replace into Properties (sheep, name, value) values {1};' 
 		        format: { (properties joinUsing: ',') }.
 	self execute: stmt
+]
+
+{ #category : #'as yet unclassified' }
+Ovina2DB >> subscribeToChangeAnnouncers [
+	Transcript nextPutAll: 'Subscribing';cr;endEntry.
+	OvinaModel announcer
+		when: OvinaSheepChanged do: [:ann | self storeSheep: ann sheep];
+		when: OvinaEventChanged do: [:ann | self storeEvent: ann event];
+		when: OvinaRegistrationChanged do: [:ann | self storeRegistration: ann registration]
+]
+
+{ #category : #'as yet unclassified' }
+Ovina2DB >> unsubscribeFromChangeAnnouncers [
+	"This is called when the image close down, and as such is a good idea"
+	OvinaModel announcer subscriptions reset.
+	
 ]

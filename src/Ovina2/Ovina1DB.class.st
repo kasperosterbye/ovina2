@@ -34,16 +34,6 @@ Ovina1DB class >> kindReductionDictionary [
 		  yourself
 ]
 
-{ #category : #connecting }
-Ovina1DB class >> open [
-	"return a connection object for the old databasedatabase"
-	|path| 
-	path := self dbPath.
-	path asFileReference exists ifFalse: [ OvinaError signal: 'database ',path, ' not found' ].
-	^self openOn: path
-	
-]
-
 { #category : #'as yet unclassified' }
 Ovina1DB >> loadAll [
 

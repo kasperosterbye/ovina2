@@ -50,6 +50,14 @@ OvinaSheepPresenter class >> sheepClass [
 	^self subclassResponsibility 
 ]
 
+{ #category : #'as yet unclassified' }
+OvinaSheepPresenter class >> threeWayCompare: a to: b [
+	a ifNil: [ ^ -1 ].
+	b ifNil: [ ^ 1 ].
+	a class = b class ifFalse: [ self error: 'Should not compere those' ].
+	^ a threeWayCompareTo: b
+]
+
 { #category : #initialization }
 OvinaSheepPresenter >> activeColumns [
 	"return the column names which are active"
@@ -126,7 +134,7 @@ OvinaSheepPresenter >> initializeTable [
 				 title: col dkName ;
 				 evaluated: col getter ;
 				 sortFunction: [ :s1 :s2 | 
-					(s1 perform: col getter)   threeWayCompareTo:  (s2 perform: col  getter)
+					self class threeWayCompare: (s1 perform: col getter) to: (s2 perform: col  getter)
 				] asSortFunction)
 	 ].
 	table 

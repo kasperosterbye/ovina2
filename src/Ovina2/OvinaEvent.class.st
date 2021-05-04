@@ -45,6 +45,11 @@ OvinaEvent class >> removeEvent: event [
 	self events removeKey: event id
 ]
 
+{ #category : #updating }
+OvinaEvent >> changed [
+	OvinaModel announcer announce: (OvinaEventChanged new event: self)
+]
+
 { #category : #accessing }
 OvinaEvent >> date [
 	date ifNil: [ ^ registration date ].
@@ -54,7 +59,8 @@ OvinaEvent >> date [
 { #category : #accessing }
 OvinaEvent >> date: anObject [
 
-	date := anObject
+	date := anObject.
+	self changed
 ]
 
 { #category : #accessing }
@@ -88,7 +94,8 @@ OvinaEvent >> registration [
 
 { #category : #accessing }
 OvinaEvent >> registration: anObject [
-	registration := anObject
+	registration := anObject.
+	"Registrations do not change - hence no announcement"
 ]
 
 { #category : #accessing }
@@ -102,7 +109,8 @@ OvinaEvent >> result [
 { #category : #accessing }
 OvinaEvent >> result: anObject [
 
-	result := anObject
+	result := anObject.
+	self changed
 ]
 
 { #category : #accessing }
@@ -114,5 +122,6 @@ OvinaEvent >> sheep [
 { #category : #accessing }
 OvinaEvent >> sheep: anObject [
 
-	sheep := anObject
+	sheep := anObject.
+	"Sheep does not change, no announcement"
 ]

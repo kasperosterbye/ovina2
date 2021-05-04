@@ -37,18 +37,18 @@ OvinaHistRegistrationEditor class >> defaultSpec [
 
 { #category : #description }
 OvinaHistRegistrationEditor >> comment [
-	^ comment text
+	^ comment text asString
 ]
 
 { #category : #accessing }
-OvinaHistRegistrationEditor >> comment: string [
+OvinaHistRegistrationEditor >> comment: aStringOrText [
 
-	comment text: string
+	comment text: aStringOrText asString
 ]
 
 { #category : #description }
 OvinaHistRegistrationEditor >> date [
-	^ date text
+	^ date text parseDKDate 
 ]
 
 { #category : #accessing }
@@ -59,13 +59,13 @@ OvinaHistRegistrationEditor >> date: string [
 
 { #category : #description }
 OvinaHistRegistrationEditor >> default [
-	^ default text
+	^ default text asString
 ]
 
 { #category : #accessing }
-OvinaHistRegistrationEditor >> default: string [
+OvinaHistRegistrationEditor >> default: aStringOrText [
 
-	default text: string
+	default text: aStringOrText asString
 ]
 
 { #category : #'as yet unclassified' }
@@ -74,12 +74,12 @@ OvinaHistRegistrationEditor >> initializePresenters [
 	kindExisting := (self instantiate: SpDropListPresenter )
 		items: OvinaRegistration  kinds, #('-- ny --').
 	kindNew := (self instantiate: OvinaLabelledTextInput )
-		layout: SpLabelledContainer labelTop;
+		layout: OvinaLabelledContainer labelTop;
 		label: 'Ny type'.
 	date := self newTextInput 
-		text: (Date today yyyymmdd).
+		text: (Date today printString).
 	default := (self instantiate: OvinaLabelledTextInput )
-		layout: SpLabelledContainer labelTop;
+		layout: OvinaLabelledContainer labelTop;
 		label: 'Default værdi'.
 	comment := (self instantiate: SpTextPresenter )
 ]
@@ -98,13 +98,13 @@ OvinaHistRegistrationEditor >> kind [
 	"return the result from kindExisting, or if '-- ny --', the input from the kindNew"
 	kindExisting selectedItem = '-- ny --'
 		ifTrue: [ ^ kindNew text asString ].
-	^ kindExisting selectedItem 
+	^ kindExisting selectedItem asString
 ]
 
 { #category : #accessing }
 OvinaHistRegistrationEditor >> kindExisting [
 
-	^ kindExisting
+	^ kindExisting asString
 ]
 
 { #category : #accessing }

@@ -15,12 +15,6 @@ OvinaRam class >> ramForDate: aDate [
 	^ rams detect: [ :r | r inDate < aDate ].
 ]
 
-{ #category : #adding }
-OvinaRam >> addLamb: lamb [
-	
-	self invalidateCache 
-]
-
 { #category : #'as yet unclassified' }
 OvinaRam >> defaultPropertyOrder [
 	^#(name color inDate comment)

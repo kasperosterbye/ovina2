@@ -99,6 +99,13 @@ OvinaSheep >> cache: symbol compute: block [
 	
 ]
 
+{ #category : #updating }
+OvinaSheep >> changed [
+	"I have changed, notify my dependents"
+	self invalidateCache.
+	OvinaModel announcer announce: (OvinaSheepChanged new sheep: self).
+]
+
 { #category : #accessing }
 OvinaSheep >> chr [
 	<sheepColumn: #('chr' chr:)>
@@ -108,7 +115,8 @@ OvinaSheep >> chr [
 { #category : #accessing }
 OvinaSheep >> chr: aString [
 
-	chr := aString asInteger
+	chr := aString asInteger.
+	self changed
 ]
 
 { #category : #history }
@@ -126,21 +134,21 @@ OvinaSheep >> id [
 
 { #category : #accessing }
 OvinaSheep >> id: aString [
-
+	"Do not notify about change to id - it should only happen once"
 	id := aString
 ]
 
 { #category : #'accessing - properties' }
 OvinaSheep >> inDate [
 	<sheepColumn:#('Inddato' inDate:)>
-	^(self property: #inDate) 
+	^(self property: #inDate) asDate
 ]
 
 { #category : #'accessing - properties' }
 OvinaSheep >> inDate: date [
 	date isString 
-		ifTrue: [ ^self property: #inDate put: date parseDKDate  ]
-	 	ifFalse: [ ^self property: #inDate put: date   ]
+		ifTrue: [ ^self property: #inDate put: date parseDKDate yyyymmdd   ]
+	 	ifFalse: [ ^self property: #inDate put: date yyyymmdd   ]
 	
 ]
 
@@ -177,20 +185,22 @@ OvinaSheep >> number [
 { #category : #accessing }
 OvinaSheep >> number: aString [
 
-	number := aString asInteger
+	number := aString asInteger.
+	self changed
 ]
 
 { #category : #'accessing - properties' }
 OvinaSheep >> outDate [
 	<sheepColumn:#('Ud dato' outDate:)>
-	^self property: #outDate
+	^(self property: #outDate) ifNotNil: [ :d| d asDate ] ifNil: [ nil ]
 ]
 
 { #category : #'accessing - properties' }
 OvinaSheep >> outDate: date [
+	date ifNil: [ ^self ].
 	date isString 
-		ifTrue: [ ^self property: #outDate put: date parseDKDate  ]
-	 	ifFalse: [ ^self property: #outDate put: date]
+		ifTrue: [ ^self property: #outDate put: date parseDKDate yyyymmdd  ]
+	 	ifFalse: [ ^self property: #outDate put: date yyyymmdd ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -227,7 +237,8 @@ OvinaSheep >> property: property [
 OvinaSheep >> property: property put: value [
 	"set property to value if property is not nil"
 	property ifNil: [ self error: 'Should not store with property name nil' ].
-	properties at: property put: value
+	properties at: property put: value.
+	self changed
 ]
 
 { #category : #'accessing - properties' }

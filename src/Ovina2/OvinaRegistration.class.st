@@ -54,6 +54,11 @@ OvinaRegistration class >> removeRegistration: reg [
 	
 ]
 
+{ #category : #updating }
+OvinaRegistration >> changed [
+	OvinaModel announcer announce: (OvinaRegistrationChanged new registration: self)
+]
+
 { #category : #accessing }
 OvinaRegistration >> comment [
 
@@ -63,7 +68,8 @@ OvinaRegistration >> comment [
 { #category : #accessing }
 OvinaRegistration >> comment: anObject [
 
-	comment := anObject
+	comment := anObject.
+	self changed
 ]
 
 { #category : #accessing }
@@ -75,7 +81,8 @@ OvinaRegistration >> date [
 { #category : #accessing }
 OvinaRegistration >> date: anObject [
 
-	date := anObject
+	date := anObject.
+	self changed
 ]
 
 { #category : #accessing }
@@ -87,7 +94,8 @@ OvinaRegistration >> default [
 { #category : #accessing }
 OvinaRegistration >> default: anObject [
 
-	default := anObject
+	default := anObject.
+	self changed
 ]
 
 { #category : #accessing }
@@ -111,7 +119,8 @@ OvinaRegistration >> kind [
 { #category : #accessing }
 OvinaRegistration >> kind: anObject [
 
-	kind := anObject
+	kind := anObject.
+	self changed
 ]
 
 { #category : #printing }

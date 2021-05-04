@@ -4,12 +4,6 @@ Class {
 	#category : #'Ovina2-Model'
 }
 
-{ #category : #adding }
-OvinaEwe >> addLamb: lamb [
-	
-	self invalidateCache 
-]
-
 { #category : #'as yet unclassified' }
 OvinaEwe >> antalSlagtelam [
 	<sheepColumn: #('# slagtelam')>

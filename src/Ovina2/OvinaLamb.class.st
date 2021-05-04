@@ -66,13 +66,20 @@ OvinaLamb >> event: val [
 { #category : #'accessing - properties' }
 OvinaLamb >> growth [
 
-	^ (self property: #growth)
+	^ (self property: #growth)  
 ]
 
 { #category : #'accessing - properties' }
 OvinaLamb >> growth: val [
 	(val isNil or: [ val isEmpty ]) ifTrue: [ ^self ].
 	self property: #growth put: val
+]
+
+{ #category : #caching }
+OvinaLamb >> invalidateCache [ 
+	super invalidateCache.
+	self dam ifNotNil: [ :d | d invalidateCache].
+	self sire ifNotNil: [ :s | s invalidateCache].
 ]
 
 { #category : #'accessing - properties' }

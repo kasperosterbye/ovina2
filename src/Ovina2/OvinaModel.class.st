@@ -7,8 +7,17 @@ In particular initialize before loading a new model from database.
 Class {
 	#name : #OvinaModel,
 	#superclass : #Object,
+	#classInstVars : [
+		'announcer'
+	],
 	#category : #'Ovina2-Model'
 }
+
+{ #category : #accessing }
+OvinaModel class >> announcer [
+	announcer ifNil: [ announcer := Announcer new ].
+	^ announcer
+]
 
 { #category : #'as yet unclassified' }
 OvinaModel class >> dkNumberFrom: aStringOrNil [

@@ -13,6 +13,11 @@ Date >> asDKDateString [
 ]
 
 { #category : #'*Ovina2' }
+Date >> ovinaDBString [ 
+	^ self yyyymmdd printString
+]
+
+{ #category : #'*Ovina2' }
 Date >> printOn: aStream [
  	"Change default date print to Danish"
  	self printOn: aStream format: #(1 2 3 $.  1 1 2 )
