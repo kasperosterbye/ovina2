@@ -8,6 +8,18 @@ Class {
 	#category : #'Ovina2-GUI General'
 }
 
+{ #category : #'ui requests' }
+OvinaApp class >> confirm: question [
+	^ UIManager default 
+		confirm: question 
+		label: 'Bekræft' 
+		trueChoice: 'Ja' 
+		falseChoice: 'Nej' 
+		cancelChoice: nil 
+		default: false
+	
+]
+
 { #category : #'instance creation' }
 OvinaApp class >> open [
 	self todo

@@ -32,6 +32,22 @@ OvinaLambPresenter >> filterSire: sire [
 { #category : #initialization }
 OvinaLambPresenter >> initializeButtons [ 
 	super initializeButtons.
+	buttonBar  add: ( self newButton 
+			label: 'Slet lam';
+			action: [ self removeLamb ])
+	
+]
+
+{ #category : #removing }
+OvinaLambPresenter >> removeLamb [
+	"Remove the selected lamb"
+	|lamb |
+	lamb := table selection selectedItem.
+	lamb ifNil: [ ^self ].
+	(OvinaApp confirm: 'Slet lam ', lamb name, '?') ifFalse: [ ^self ].
+	lamb remove.
+	self updatePresenter.
+	
 	
 ]
 

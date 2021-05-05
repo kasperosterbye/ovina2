@@ -122,6 +122,15 @@ OvinaLamb >> raceCompute [
 	^ self dam race + self sire race
 ]
 
+{ #category : #removing }
+OvinaLamb >> remove [
+	"remove this lamb from the model, and in the database"
+	OvinaSheep sheeps removeKey: self id.
+	OvinaModel announcer announce: (OvinaSheepRemoved new sheep: self).
+	self invalidateCache.
+	
+]
+
 { #category : #'accessing - properties' }
 OvinaLamb >> sex [
 

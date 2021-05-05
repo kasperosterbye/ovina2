@@ -124,6 +124,36 @@ Ovina2DB >> loadSheeps [
 		].
 ]
 
+{ #category : #store }
+Ovina2DB >> removeEvent: event [
+
+	| stmt |
+	stmt := 'delete from Events where id = {1};' 
+		        format: { event id }.
+	self execute: stmt
+]
+
+{ #category : #store }
+Ovina2DB >> removeRegistration: reg [
+
+	| stmt |
+	stmt := 'delete from Registrations where id = {1};' 
+		        format: { reg id }.
+	self execute: stmt
+]
+
+{ #category : #store }
+Ovina2DB >> removeSheep: sheep [
+
+	| stmt|
+	stmt := 'delete from Sheeps where id = {1};' 
+		        format: { sheep id printString}.
+	self execute: stmt.
+	stmt := 'delete from Properties where sheep = {1};' 
+		        format: { sheep id printString }.
+	self execute: stmt
+]
+
 { #category : #migration }
 Ovina2DB >> resetDB [
 	self 
@@ -199,7 +229,9 @@ Ovina2DB >> subscribeToChangeAnnouncers [
 	OvinaModel announcer
 		when: OvinaSheepChanged do: [:ann | self storeSheep: ann sheep];
 		when: OvinaEventChanged do: [:ann | self storeEvent: ann event];
-		when: OvinaRegistrationChanged do: [:ann | self storeRegistration: ann registration]
+		when: OvinaRegistrationChanged do: [:ann | self storeRegistration: ann registration];
+		when: OvinaSheepRemoved do: [ :ann | self removeSheep: ann sheep ]
+		
 ]
 
 { #category : #'as yet unclassified' }
