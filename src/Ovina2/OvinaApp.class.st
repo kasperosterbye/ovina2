@@ -8,6 +8,11 @@ Class {
 	#category : #'Ovina2-GUI General'
 }
 
+{ #category : #beep }
+OvinaApp class >> beep [
+	SoundSystem current beep
+]
+
 { #category : #'ui requests' }
 OvinaApp class >> confirm: question [
 	^ UIManager default 

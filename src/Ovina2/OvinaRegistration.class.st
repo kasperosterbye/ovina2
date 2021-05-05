@@ -56,7 +56,7 @@ OvinaRegistration class >> removeRegistration: reg [
 
 { #category : #updating }
 OvinaRegistration >> changed [
-	OvinaModel announcer announce: (OvinaRegistrationChanged new registration: self)
+	OvinaModel announcer announce: (OvinaModelRegistrationChanged new registration: self)
 ]
 
 { #category : #accessing }

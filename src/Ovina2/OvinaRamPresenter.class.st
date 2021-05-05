@@ -1,3 +1,6 @@
+"
+I add a few Ram specific buttons to the general sheep presenter
+"
 Class {
 	#name : #OvinaRamPresenter,
 	#superclass : #OvinaSheepPresenter,

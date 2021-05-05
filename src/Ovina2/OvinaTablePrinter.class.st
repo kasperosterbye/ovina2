@@ -1,3 +1,6 @@
+"
+I am a somewhat generic html printer for sheep tables.
+"
 Class {
 	#name : #OvinaTablePrinter,
 	#superclass : #Object,

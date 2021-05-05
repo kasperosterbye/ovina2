@@ -64,10 +64,42 @@ OvinaEwe >> name: name [
 	^self property: #name put: name
 ]
 
+{ #category : #'instance creation' }
+OvinaEwe >> newLamb [
+	|sire newLamb newLambId nextNumber|
+	sire := OvinaRam ramForDate: Date today.
+	newLambId := (OvinaSheep lambs keys collect: [ :key | key extractNumber ]) max +1.
+	nextNumber := (OvinaSheep lambs values collect: [ :lamb | lamb number ]) max +1.
+	newLamb := OvinaLamb new
+		id: 'L', newLambId asString;
+		chr: OvinaSheep maarumlamChr;
+		number: nextNumber;
+		inDate: Date today;
+		dam: self;
+		sire: sire.
+	OvinaSheep addSheep: newLamb.
+	OvinaModel announcer announce: (OvinaModelSheepChanged new sheep: newLamb ).
+	^ newLamb 
+]
+
 { #category : #'as yet unclassified' }
 OvinaEwe >> noLambs [
 	<sheepColumn: #('Antal lam')>
 	^ self lambs size
+]
+
+{ #category : #'accessing - properties' }
+OvinaEwe >> outDate [
+	<sheepColumn:#('Ud dato' outDate:)>
+	^(self property: #outDate) ifNotNil: [ :d| d asDate ] ifNil: [ nil ]
+]
+
+{ #category : #'accessing - properties' }
+OvinaEwe >> outDate: date [
+	date ifNil: [ ^self ].
+	date isString 
+		ifTrue: [ ^self property: #outDate put: date parseDKDate yyyymmdd  ]
+	 	ifFalse: [ ^self property: #outDate put: date yyyymmdd ]
 ]
 
 { #category : #'accessing - properties' }

@@ -1,3 +1,6 @@
+"
+I am a class to hold a datastructure used by the column presenter
+"
 Class {
 	#name : #OvinaColumnSpecification,
 	#superclass : #Object,

@@ -1,5 +1,5 @@
 Class {
-	#name : #OvinaRegistrationChanged,
+	#name : #OvinaModelRegistrationChanged,
 	#superclass : #OvinaAnnouncement,
 	#instVars : [
 		'registration'
@@ -8,13 +8,13 @@ Class {
 }
 
 { #category : #accessing }
-OvinaRegistrationChanged >> registration [
+OvinaModelRegistrationChanged >> registration [
 
 	^ registration
 ]
 
 { #category : #accessing }
-OvinaRegistrationChanged >> registration: anObject [
+OvinaModelRegistrationChanged >> registration: anObject [
 
 	registration := anObject
 ]

@@ -124,10 +124,10 @@ OvinaHistSheepSelection >> toggleSheepSelection: sheep [
 	(sheepSelected at: sheep)
 		ifTrue: [ 
 			table selection selectItem: sheep.
-			self announce: (OvinaGUISheepSelectorAdded new sheep: sheep)] 
+			self announce: (OvinaGUIHistSelectorAdded new sheep: sheep)] 
 		ifFalse: [ 
 			table selection unselectItem: sheep.
-			self announce: (OvinaGUISheepSelectorRemoved new sheep: sheep) ].
+			self announce: (OvinaGUIHistSelectorRemoved new sheep: sheep) ].
 	
 ]
 

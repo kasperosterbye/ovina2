@@ -1,5 +1,5 @@
 Class {
-	#name : #OvinaSheepRemoved,
+	#name : #OvinaGUIHistSelectorAdded,
 	#superclass : #OvinaAnnouncement,
 	#instVars : [
 		'sheep'
@@ -8,13 +8,13 @@ Class {
 }
 
 { #category : #accessing }
-OvinaSheepRemoved >> sheep [
+OvinaGUIHistSelectorAdded >> sheep [
 
 	^ sheep
 ]
 
 { #category : #accessing }
-OvinaSheepRemoved >> sheep: anObject [
+OvinaGUIHistSelectorAdded >> sheep: anObject [
 
 	sheep := anObject
 ]

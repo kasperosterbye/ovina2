@@ -34,4 +34,5 @@ OvinaModel class >> initialize [
 	OvinaSheep initialize.
 	OvinaEvent initialize.
 	OvinaRegistration initialize.
+	announcer := nil.
 ]

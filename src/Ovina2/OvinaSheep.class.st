@@ -103,7 +103,7 @@ OvinaSheep >> cache: symbol compute: block [
 OvinaSheep >> changed [
 	"I have changed, notify my dependents"
 	self invalidateCache.
-	OvinaModel announcer announce: (OvinaSheepChanged new sheep: self).
+	OvinaModel announcer announce: (OvinaModelSheepChanged new sheep: self).
 ]
 
 { #category : #accessing }
@@ -187,20 +187,6 @@ OvinaSheep >> number: aString [
 
 	number := aString asInteger.
 	self changed
-]
-
-{ #category : #'accessing - properties' }
-OvinaSheep >> outDate [
-	<sheepColumn:#('Ud dato' outDate:)>
-	^(self property: #outDate) ifNotNil: [ :d| d asDate ] ifNil: [ nil ]
-]
-
-{ #category : #'accessing - properties' }
-OvinaSheep >> outDate: date [
-	date ifNil: [ ^self ].
-	date isString 
-		ifTrue: [ ^self property: #outDate put: date parseDKDate yyyymmdd  ]
-	 	ifFalse: [ ^self property: #outDate put: date yyyymmdd ]
 ]
 
 { #category : #'as yet unclassified' }

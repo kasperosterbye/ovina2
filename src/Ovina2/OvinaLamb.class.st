@@ -6,8 +6,8 @@ Class {
 
 { #category : #'accessing - properties' }
 OvinaLamb >> color [
-
-	^ (self property: #color)
+	<sheepColumn:#('Farve' color:)>
+	^ (self property: #color) ifNil: [ '' ]
 ]
 
 { #category : #'accessing - properties' }
@@ -85,7 +85,7 @@ OvinaLamb >> invalidateCache [
 { #category : #'accessing - properties' }
 OvinaLamb >> kind [
 	"return the kind of sheep - Får, Gimmer, Vædderlam, Vædder"
-	^ self sex capitalized ,'lam'
+	^ self sex ifNotNil: [self sex ,'lam'] ifNil: 'lam'
 ]
 
 { #category : #accessing }
@@ -93,14 +93,6 @@ OvinaLamb >> name [
 	"self number asString, ' ', self sex first asUppercase asString , ' ',self dam name."
 	
 	^ self dam name, ' ', self sex first asUppercase asString , ' ',self number asString.
-]
-
-{ #category : #'accessing - properties' }
-OvinaLamb >> outDate [
-	| d |
-	d := super outDate.
-	^d
-	
 ]
 
 { #category : #rendering }
@@ -117,6 +109,22 @@ OvinaLamb >> printOn: aStream [
 	super printOn: aStream
 ]
 
+{ #category : #'as yet unclassified' }
+OvinaLamb >> promoteToEwe [
+	"Assumes the conditions for promotions is in place"
+	|nextEweId newEwe|
+	nextEweId := (OvinaSheep ewes keys collect: [ :key | key extractNumber ]) max +1.
+	newEwe := OvinaEwe new
+		id: 'E', nextEweId asString;
+		chr: self chr;
+		number: self number;
+		inDate: self inDate;
+		name: ' Unavngivet '.
+	OvinaSheep addSheep: newEwe.
+	OvinaModel announcer announce: (OvinaModelSheepChanged new sheep: newEwe ).
+	^ newEwe 	
+]
+
 { #category : #'accessing - properties' }
 OvinaLamb >> raceCompute [
 	^ self dam race + self sire race
@@ -126,15 +134,15 @@ OvinaLamb >> raceCompute [
 OvinaLamb >> remove [
 	"remove this lamb from the model, and in the database"
 	OvinaSheep sheeps removeKey: self id.
-	OvinaModel announcer announce: (OvinaSheepRemoved new sheep: self).
+	OvinaModel announcer announce: (OvinaModelSheepRemoved new sheep: self).
 	self invalidateCache.
 	
 ]
 
 { #category : #'accessing - properties' }
 OvinaLamb >> sex [
-
-	^ (self property: #sex)
+	<sheepColumn:#('køn' sex:)>
+	^ (self property: #sex) ifNil: [ '' ]
 ]
 
 { #category : #'accessing - properties' }

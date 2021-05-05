@@ -1,20 +1,20 @@
 Class {
-	#name : #OvinaEventChanged,
+	#name : #OvinaGUILampPromotion,
 	#superclass : #OvinaAnnouncement,
 	#instVars : [
-		'event'
+		'sheep'
 	],
 	#category : #'Ovina2-Announcements'
 }
 
 { #category : #accessing }
-OvinaEventChanged >> event [
+OvinaGUILampPromotion >> sheep [
 
-	^ event
+	^ sheep
 ]
 
 { #category : #accessing }
-OvinaEventChanged >> event: anObject [
+OvinaGUILampPromotion >> sheep: anObject [
 
-	event := anObject
+	sheep := anObject
 ]

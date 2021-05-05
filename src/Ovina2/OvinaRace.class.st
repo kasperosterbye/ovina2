@@ -74,6 +74,7 @@ OvinaRace >> normalize [
 OvinaRace >> printOn: stream [
 	| sorted|
 	sorted := races associations sort: [ :a1 :a2 | a1 key < a2 key ].
+	sorted size = 1 ifTrue: [ stream nextPutAll: sorted first key. ^self ].
 	sorted do: [ :assoc |
 		stream 
 			nextPutAll: assoc value asString;

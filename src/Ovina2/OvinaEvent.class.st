@@ -47,7 +47,7 @@ OvinaEvent class >> removeEvent: event [
 
 { #category : #updating }
 OvinaEvent >> changed [
-	OvinaModel announcer announce: (OvinaEventChanged new event: self)
+	OvinaModel announcer announce: (OvinaModelEventChanged new event: self)
 ]
 
 { #category : #accessing }

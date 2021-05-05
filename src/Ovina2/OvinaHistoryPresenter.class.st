@@ -37,10 +37,10 @@ OvinaHistoryPresenter >> connectPresenters [
 	
 	registrations announcer when: OvinaGUIRegistrationsChanged do: [ self registrationChanged   ].
 	selections announcer 
-		when: OvinaGUISheepSelectorAdded 
+		when: OvinaGUIHistSelectorAdded 
 		do: [:add | events sheepAdded: add sheep].
 	selections announcer 
-		when: OvinaGUISheepSelectorRemoved 
+		when: OvinaGUIHistSelectorRemoved 
 		do: [ :rem | events sheepRemoved: rem sheep ].
 	events registration:  registrations selectedRegistration . 
 ]

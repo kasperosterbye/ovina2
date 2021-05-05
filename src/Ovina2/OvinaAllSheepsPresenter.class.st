@@ -1,3 +1,18 @@
+"
+I am the toplevel presenter to show sheep.
+
+I have two primary panes
+
+- Ewe/Ram (OvinaEwePresenter and (OvinaRamPresenter)
+- Lambs (OvinaLambPresenter)
+
+Selecting an Ewe or Ram limits the Lambs view to only the offspring of that selected sheep.
+
+I make use of a number of pop-up presentes as well:
+
+- OvinaColumnPresenter which is used to select which columns to show for the three kinds of sheeps.
+- OvinaSingleSheepPresenter which is used to edit the properties of a selected sheep.
+"
 Class {
 	#name : #OvinaAllSheepsPresenter,
 	#superclass : #SpPresenter,
@@ -24,16 +39,6 @@ OvinaAllSheepsPresenter class >> open [
 	self new openWithSpec 
 ]
 
-{ #category : #'as yet unclassified' }
-OvinaAllSheepsPresenter >> filterLambsByDam: dam [
-	lambs filterDam: dam
-]
-
-{ #category : #'as yet unclassified' }
-OvinaAllSheepsPresenter >> filterLambsBySire: sire [
-	lambs filterSire: sire
-]
-
 { #category : #initialization }
 OvinaAllSheepsPresenter >> initializePresenters [
 
@@ -42,8 +47,17 @@ OvinaAllSheepsPresenter >> initializePresenters [
 	rams := self instantiate: OvinaRamPresenter .
 	lambs := self instantiate: OvinaLambPresenter .
 	
-	ewes whenSelectedDo: [ :ewe | self filterLambsByDam: ewe ].
-	rams whenSelectedDo: [ :ram | self filterLambsBySire: ram ].
+	ewes announcer 
+		when: OvinaGUISheepSelectionChanged 
+		do: [ :ann | lambs filterDam: ann sheep ];
+		when: OvinaGUILampBorn 
+		do: [:ann | lambs setSelected: ann sheep].
+	rams announcer 
+		when: OvinaGUISheepSelectionChanged 
+		do: [ :ann | lambs filterSire: ann sheep ].
+	lambs announcer
+		when: OvinaGUILampPromotion 
+		do: [ :ann | ewes setSelected: ann sheep ].
 	
 	self setLayout.
 	
@@ -58,7 +72,7 @@ OvinaAllSheepsPresenter >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		title: 'Får, Lam & Væddere';
-		initialExtent: 1200 @ 950 
+		initialExtent: 1300 @ 950 
 ]
 
 { #category : #accessing }

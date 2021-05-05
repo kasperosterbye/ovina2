@@ -227,10 +227,10 @@ Ovina2DB >> storeSheep: sheep [
 Ovina2DB >> subscribeToChangeAnnouncers [
 	Transcript nextPutAll: 'Subscribing';cr;endEntry.
 	OvinaModel announcer
-		when: OvinaSheepChanged do: [:ann | self storeSheep: ann sheep];
-		when: OvinaEventChanged do: [:ann | self storeEvent: ann event];
-		when: OvinaRegistrationChanged do: [:ann | self storeRegistration: ann registration];
-		when: OvinaSheepRemoved do: [ :ann | self removeSheep: ann sheep ]
+		when: OvinaModelSheepChanged do: [:ann | self storeSheep: ann sheep];
+		when: OvinaModelEventChanged do: [:ann | self storeEvent: ann event];
+		when: OvinaModelRegistrationChanged do: [:ann | self storeRegistration: ann registration];
+		when: OvinaModelSheepRemoved do: [ :ann | self removeSheep: ann sheep ]
 		
 ]
 

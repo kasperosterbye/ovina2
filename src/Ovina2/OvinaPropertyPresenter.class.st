@@ -1,3 +1,6 @@
+"
+I exist only to rebind some keys used in OvinaSingleSheepPresenter
+"
 Class {
 	#name : #OvinaPropertyPresenter,
 	#superclass : #OvinaLabelledTextInput,

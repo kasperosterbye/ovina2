@@ -1,3 +1,6 @@
+"
+I provide filtering of lambs based on dam or sire, and add lamb specific buttons to the general sheep presenter.
+"
 Class {
 	#name : #OvinaLambPresenter,
 	#superclass : #OvinaSheepPresenter,
@@ -33,21 +36,19 @@ OvinaLambPresenter >> filterSire: sire [
 OvinaLambPresenter >> initializeButtons [ 
 	super initializeButtons.
 	buttonBar  add: ( self newButton 
-			label: 'Slet lam';
-			action: [ self removeLamb ])
+			label: 'Bliv får';
+			action: [ self promoteToEwe  ])
 	
 ]
 
-{ #category : #removing }
-OvinaLambPresenter >> removeLamb [
-	"Remove the selected lamb"
-	|lamb |
+{ #category : #'as yet unclassified' }
+OvinaLambPresenter >> promoteToEwe [
+	|lamb newEwe|
 	lamb := table selection selectedItem.
 	lamb ifNil: [ ^self ].
-	(OvinaApp confirm: 'Slet lam ', lamb name, '?') ifFalse: [ ^self ].
-	lamb remove.
-	self updatePresenter.
-	
+	lamb usage = 'avl' ifFalse: [ OvinaApp beep. ^self ].
+	newEwe := lamb promoteToEwe.
+	self announcer announce: (OvinaGUILampPromotion new sheep: newEwe )
 	
 ]
 

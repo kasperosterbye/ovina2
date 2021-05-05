@@ -5,7 +5,6 @@ Class {
 	#name : #OvinaSheepPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
-		'selectionChangeAction',
 		'table',
 		'buttonBar',
 		'printAll',
@@ -82,9 +81,10 @@ OvinaSheepPresenter >> allColumns: columns [
 ]
 
 { #category : #'as yet unclassified' }
-OvinaSheepPresenter >> currentSheep: sheep [
-
-	selectionChangeAction ifNotNil: [ selectionChangeAction value: sheep ]
+OvinaSheepPresenter >> announceNewSelection: sheep [
+	"Currently selected sheep changed"
+	
+	self announcer announce: (OvinaGUISheepSelectionChanged new sheep: sheep)
 ]
 
 { #category : #'as yet unclassified' }
@@ -95,11 +95,11 @@ OvinaSheepPresenter >> editSheep [
 	editor := OvinaSingleSheepPresenter on: [ table selection selectedItem ].
 	editor
 		prevBlock: [ self selectPreviousSheep  ];
-		nextBlock: [ self selectNextSheep  ];
+		nextBlock: [ self selectNextSheep  ]";
 		closeBlock: [ |selected| 
 			selected := table selection selectedItem.
 			self updatePresenter.
-			table selection selectItem: selected ].
+			table selection selectItem: selected ]".
 	editor openWithSpec.
 	 
 ]
@@ -138,10 +138,14 @@ OvinaSheepPresenter >> initializeTable [
 				] asSortFunction)
 	 ].
 	table 
-		whenSelectedDo: [ :sheep | self currentSheep: sheep];
-		whenNoneSelectedDo: [ self currentSheep: nil ];
+		whenSelectedDo: [ :sheep | self announceNewSelection: sheep];
+		whenNoneSelectedDo: [ self announceNewSelection: nil ];
 		beResizable.
-	table announcer when: SpWidgetBuilt do: [ :ann | ann widget allowsDeselection: true ]
+	table announcer when: SpWidgetBuilt do: [ :ann | ann widget allowsDeselection: true ].
+	OvinaModel announcer 
+		when: OvinaModelSheepChanged do: [ :ann |
+			(ann sheep class = self class sheepClass) ifTrue: [self updatePresenter] ];
+		when: OvinaModelSheepRemoved do: [ self updatePresenter ]
 	
 ]
 
@@ -172,6 +176,7 @@ OvinaSheepPresenter >> selectNextSheep [
 	index := table selection selectedIndex.
 	index = self sheeps size ifTrue: [ ^self ].
 	table selection selectIndex: index+1.
+	self announcer announce: (OvinaGUISheepSelectionChanged new sheep: table selection selectedItem )
 ]
 
 { #category : #'as yet unclassified' }
@@ -181,6 +186,15 @@ OvinaSheepPresenter >> selectPreviousSheep [
 	index := table selection selectedIndex.
 	index = 1 ifTrue: [ ^self ].
 	table selection selectIndex: index-1.
+	self announcer announce: (OvinaGUISheepSelectionChanged new sheep: table selection selectedItem )
+]
+
+{ #category : #'as yet unclassified' }
+OvinaSheepPresenter >> setSelected: sheep [
+	"Currently selected sheep changed"
+	table selection selectItem: sheep.
+	table verticalAlignment desiredVisibleRow: table selection selectedIndex.
+	self announceNewSelection: sheep
 ]
 
 { #category : #accessing }
@@ -191,12 +205,13 @@ OvinaSheepPresenter >> sheeps [
 ]
 
 { #category : #accessing }
-OvinaSheepPresenter >> updatePresenter [ 
+OvinaSheepPresenter >> updatePresenter [
+	|selected|
 	super updatePresenter.
-	table items: self sheeps
-]
-
-{ #category : #enumerating }
-OvinaSheepPresenter >> whenSelectedDo: aBlock [
-	selectionChangeAction := aBlock
+	selected := table selection selectedItem.
+	table items: self sheeps.
+	(selected notNil and: [ table items includes: selected ]) 
+		ifTrue: [ 
+			table selection selectItem: selected.
+			self announceNewSelection: selected ]
 ]
