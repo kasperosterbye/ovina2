@@ -30,7 +30,7 @@ Class {
 OvinaSingleSheepPresenter class >> defaultSpec [
 
 	^SpBoxLayout newVertical 
-		add: #propertyPresenters
+		add: #propertyPresenters;
 		yourself
 ]
 

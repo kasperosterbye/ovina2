@@ -53,7 +53,7 @@ OvinaLamb >> defaultPropertyOrder [
 
 { #category : #'accessing - properties' }
 OvinaLamb >> event [
-
+	<sheepColumn: #('Fødsel' event:)>
 	^ (self property: #event)
 ]
 

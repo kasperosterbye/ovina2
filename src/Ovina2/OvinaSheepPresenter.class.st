@@ -114,7 +114,7 @@ OvinaSheepPresenter >> initializeButtons [
 			label: 'Ret';
 			action: [ self editSheep ]);
 		add: ( self newButton 
-			label: 'Ret søjler';
+			label: 'Vælg søjler';
 			action: [ OvinaColumnPresenter openOn: self ])
 ]
 
