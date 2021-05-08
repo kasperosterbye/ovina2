@@ -24,10 +24,17 @@ OvinaOverviewPresenter class >> open [
 ]
 
 { #category : #'as yet unclassified' }
+OvinaOverviewPresenter >> eventsForYear: year [
+	^ (self sheep events select: [ :ev | ev date year = year ]) size
+]
+
+{ #category : #'as yet unclassified' }
 OvinaOverviewPresenter >> eventsTableForYear: year [
 	| events table |
 	events := self sheep events select: [ :ev | ev date year = year ].
-	table := self instantiate: SpTablePresenter.
+	table := (self instantiate: SpTablePresenter)
+		propagateNaturalHeight: true;
+		withoutScrollBars.
 	table 
 		addColumn: (SpStringTableColumn new
 			title: 'type' ; evaluated: [:event | event registration kind]);
@@ -42,18 +49,39 @@ OvinaOverviewPresenter >> eventsTableForYear: year [
 
 { #category : #initialization }
 OvinaOverviewPresenter >> initializePresenters [
-	| years aLayout stuff|
+	| years details t r|
+	self sheep ifNil: [ ^ overview := self newLabel label: '' ].
+	t :=20.
+	r:=21.
 	years := self sheep events collect: [ :ev | ev date year ].
-	years := (years , (self sheep lambs collect: [ :lamb | lamb inDate year ])) asSet asArray sort.
-	aLayout := SpBoxLayout  newTopToBottom spacing: 5.
+	years := (years , (self sheep lambs collect: [ :lamb | lamb inDate year ])) asSet asArray sort reversed.
+	details := SpBoxLayout  newTopToBottom spacing: 5.
 	years do: [ :year |
-		aLayout 
-			add: year asString expand: false;
-			add: (self lambsTableForYear: year) ;
-			add: (self eventsTableForYear: year)
-		 ].
-	stuff := SpPresenter new layout: aLayout.
-	overview := SpPresenter new layout: (SpScrollableLayout with: stuff ).
+		details 
+			add: (SpBoxLayout newVertical spacing: 3;
+						add: year asString expand: false;
+						add: (self lambsTableForYear: year) height: r * (self lambsForYear: year ) + t ;
+						add: (self eventsTableForYear: year) height: r * (self eventsForYear: year) + t)
+			expand: true
+	].
+
+	overview := SpPresenter new 
+		layout: (SpScrollableLayout with: (SpPresenter new 
+		layout: details) ).
+]
+
+{ #category : #initialization }
+OvinaOverviewPresenter >> initializeWindow: aWindowPresenter [
+
+	super initializeWindow: aWindowPresenter.
+	aWindowPresenter
+		title: 'Oversigt';
+		initialExtent: 500@600. 
+]
+
+{ #category : #'as yet unclassified' }
+OvinaOverviewPresenter >> lambsForYear: year [
+	^ (self sheep lambs select: [ :l | l inDate year = year ]) size
 ]
 
 { #category : #'as yet unclassified' }
@@ -61,7 +89,9 @@ OvinaOverviewPresenter >> lambsTableForYear: year [
 	"Columns: nummer, inDato, køn, event, farve"
 	| lambs table |
 	lambs := self sheep lambs select: [ :l | l inDate year = year ].
-	table := self instantiate: SpTablePresenter.
+	table := (self instantiate: SpTablePresenter)
+		propagateNaturalHeight: true;
+		withoutScrollBars.
 	table 
 		addColumn: (SpStringTableColumn new
 			title: 'nummer' ; evaluated: #number);
@@ -81,11 +111,13 @@ OvinaOverviewPresenter >> lambsTableForYear: year [
 { #category : #accessing }
 OvinaOverviewPresenter >> sheep [
 
-	^ OvinaSheep ewes at: 'E41'
+	^ sheep
 ]
 
 { #category : #accessing }
-OvinaOverviewPresenter >> sheep: anObject [
+OvinaOverviewPresenter >> sheep: anEwe [
 
-	sheep := anObject
+	sheep := anEwe.
+	self initializePresenters.
+	self rebuildLayout 
 ]
