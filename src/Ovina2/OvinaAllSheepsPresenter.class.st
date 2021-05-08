@@ -20,6 +20,7 @@ Class {
 		'ewes',
 		'rams',
 		'lambs',
+		'overview',
 		'selectedParent',
 		'selectedLamb'
 	],
@@ -46,15 +47,19 @@ OvinaAllSheepsPresenter >> initializePresenters [
 	ewes := self instantiate: OvinaEwePresenter .
 	rams := self instantiate: OvinaRamPresenter .
 	lambs := self instantiate: OvinaLambPresenter .
+	overview := self instantiate: OvinaOverviewPresenter.
 	
 	ewes announcer 
 		when: OvinaGUISheepSelectionChanged 
-		do: [ :ann | lambs filterDam: ann sheep ];
+		do: [ :ann |
+			lambs filterDam: ann sheep.
+		 	overview sheep: ann sheep];
 		when: OvinaGUILampBorn 
 		do: [:ann | lambs setSelected: ann sheep].
 	rams announcer 
 		when: OvinaGUISheepSelectionChanged 
-		do: [ :ann | lambs filterSire: ann sheep ].
+		do: [ :ann | lambs filterSire: ann sheep.
+		 	overview sheep: ann sheep ].
 	lambs announcer
 		when: OvinaGUILampPromotion 
 		do: [ :ann | ewes setSelected: ann sheep ].
@@ -82,5 +87,6 @@ OvinaAllSheepsPresenter >> setLayout [
 			addPageTitle: 'Får' provider: [ewes];
 			addPageTitle: 'Væddere' provider: [rams] );
 		addSecond: (SpNotebookPresenter new 
-			addPageTitle: 'Lam' provider: [lambs]))
+			addPageTitle: 'Lam' provider: [lambs];
+			addPageTitle: 'Oversigt' provider: [overview] ))
 ]

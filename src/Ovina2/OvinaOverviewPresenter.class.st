@@ -49,22 +49,26 @@ OvinaOverviewPresenter >> eventsTableForYear: year [
 
 { #category : #initialization }
 OvinaOverviewPresenter >> initializePresenters [
-	| years details t r|
-	self sheep ifNil: [ ^ overview := self newLabel label: '' ].
-	t :=20.
-	r:=21.
-	years := self sheep events collect: [ :ev | ev date year ].
-	years := (years , (self sheep lambs collect: [ :lamb | lamb inDate year ])) asSet asArray sort reversed.
+	| years details titleHeight rowHeight|
+	titleHeight :=22.
+	rowHeight:=20.
+	years := #().
+	self sheep ifNotNil: [
+			years := self sheep events collect: [ :ev | ev date year ].
+			years := (years , (self sheep lambs collect: [ :lamb | lamb inDate year ])) 
+					asSet asArray sort reversed].
 	details := SpBoxLayout  newTopToBottom spacing: 5.
 	years do: [ :year |
 		details 
 			add: (SpBoxLayout newVertical spacing: 3;
 						add: year asString expand: false;
-						add: (self lambsTableForYear: year) height: r * (self lambsForYear: year ) + t ;
-						add: (self eventsTableForYear: year) height: r * (self eventsForYear: year) + t)
-			expand: true
+						add: (self lambsTableForYear: year) 
+							height: rowHeight * (self lambsForYear: year ) + titleHeight ;
+						add: (self eventsTableForYear: year) 
+							height: rowHeight * (self eventsForYear: year) + titleHeight) 
+			expand: false
 	].
-
+	details add: ' ' expand: false.
 	overview := SpPresenter new 
 		layout: (SpScrollableLayout with: (SpPresenter new 
 		layout: details) ).
@@ -102,7 +106,7 @@ OvinaOverviewPresenter >> lambsTableForYear: year [
 		addColumn: (SpStringTableColumn new
 			title: 'fødsel' ; evaluated: #event);
 		addColumn: (SpStringTableColumn new
-			title: 'farve' ; evaluated: #color);
+			title: 'brug' ; evaluated: #usage);
 		sortingBlock: [ :e1 :e2 | (e2 number) threeWayCompareTo: (e1 number)] asSortFunction.
 	table items: lambs.
 	^table
@@ -119,5 +123,5 @@ OvinaOverviewPresenter >> sheep: anEwe [
 
 	sheep := anEwe.
 	self initializePresenters.
-	self rebuildLayout 
+	self  rebuildLayout 
 ]
