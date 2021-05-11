@@ -1,43 +1,49 @@
-"
-I implement the table of sheeps to select for a registration.
-
-the sheepSelected iv is a dictionary indicating if a sheep is in the current registration
-"
 Class {
-	#name : #OvinaHistSheepSelection,
-	#superclass : #OvinaSheepPresenter,
+	#name : #OvinaHistSheepSelectionBackup,
+	#superclass : #SpPresenter,
 	#instVars : [
+		'actionBar',
+		'table',
+		'filterPresent',
 		'includeLambs',
+		'sheeps',
 		'sheepSelected'
 	],
 	#category : #'Ovina2-GUI History'
 }
 
+{ #category : #specs }
+OvinaHistSheepSelectionBackup class >> defaultSpec [
+
+	^ SpBoxLayout newVertical
+		add: #table;
+		add: (SpBoxLayout newHorizontal add: #actionBar) expand: false fill: true padding: 3;
+		yourself
+]
+
 { #category : #examples }
-OvinaHistSheepSelection class >> open [
+OvinaHistSheepSelectionBackup class >> open [
 	<example>
 	self new openWithSpec 
 ]
 
 { #category : #accessing }
-OvinaHistSheepSelection class >> sheepClass [
-	^OvinaSheep 
-]
-
-{ #category : #accessing }
-OvinaHistSheepSelection >> filter: sheepCollection [
-	^ sheepCollection select: [ :sheep | sheep present ]
+OvinaHistSheepSelectionBackup >> filter: sheepCollection [
+	filterPresent 
+		ifTrue: [ ^ sheepCollection select: [ :sheep | sheep present ] ] 
+		ifFalse: [ ^ sheepCollection  ]
 	
 ]
 
 { #category : #'as yet unclassified' }
-OvinaHistSheepSelection >> filteredLambsOf: anEwe [
+OvinaHistSheepSelectionBackup >> filteredLambsOf: anEwe [
 	anEwe isEwe ifFalse: [ ^#() ].
 	^ self filter: anEwe lambs
 ]
 
 { #category : #initialization }
-OvinaHistSheepSelection >> initialize [
+OvinaHistSheepSelectionBackup >> initialize [
+	filterPresent := true.
 	includeLambs := true.
 	sheepSelected := Dictionary new.
 	
@@ -45,15 +51,27 @@ OvinaHistSheepSelection >> initialize [
 ]
 
 { #category : #initialization }
-OvinaHistSheepSelection >> initializeButtons [
-	super initializeButtons.
-	buttonBar
+OvinaHistSheepSelectionBackup >> initializeButtons [
+
+	actionBar := self newButtonBar
+		add: (self newButton 
+				 label: 'Fold ud';
+				 action: [self expandAll ]);
+		add: (self newButton 
+				 label: 'Fold sammen';
+				 action: [self collapseAll ]);
 		add: (self newButton 
 				 label: 'Afvælg alle';
 				 action: [self deselectAll]);
 		add: (self newButton 
 				 label: 'Vælg alle';
 				 action: [self selectAll]);
+		add: (self newCheckBox
+				 label: 'Aktuelle';
+				 state: filterPresent ;
+				 whenChangedDo: [ :newValue | 
+					 filterPresent := newValue.
+					 self updatePresenter ]);
 		add: (self newCheckBox
 				 label: 'Inkluder lam';
 				 state: includeLambs ;
@@ -64,29 +82,17 @@ OvinaHistSheepSelection >> initializeButtons [
 ]
 
 { #category : #initialization }
-OvinaHistSheepSelection >> initializePresenters [
+OvinaHistSheepSelectionBackup >> initializePresenters [
 	
 	super initializePresenters.
 	
 	self initializeButtons.
-	"self initializeTable."
+	self initializeTable.
 	self updatePresenter 
 ]
 
 { #category : #initialization }
-OvinaHistSheepSelection >> initializeTable [
-	|selectionColumn|
-	super initializeTable.
-	selectionColumn := SpCheckBoxTableColumn new
-			title: 'vælg' ;
-			evaluated: [ :sheep | sheepSelected at: sheep ifAbsent: [ false ] ] ;
-			onActivation: [ :sheep | self selectSheep: sheep];
-			onDeactivation: [ :sheep | self unselectSheep: sheep ].
-	table columns: { selectionColumn  }, table columns
-]
-
-{ #category : #initialization }
-OvinaHistSheepSelection >> initializeTableOld [
+OvinaHistSheepSelectionBackup >> initializeTable [
 	table := self instantiate: SpTablePresenter.
 	table addColumn: (SpCheckBoxTableColumn new
 			title: 'vælg' ;
@@ -106,7 +112,7 @@ OvinaHistSheepSelection >> initializeTableOld [
 ]
 
 { #category : #initialization }
-OvinaHistSheepSelection >> initializeWindow: aWindowPresenter [
+OvinaHistSheepSelectionBackup >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
@@ -115,12 +121,12 @@ OvinaHistSheepSelection >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : #selection }
-OvinaHistSheepSelection >> selectAll [
+OvinaHistSheepSelectionBackup >> selectAll [
 	self roots do: [ :sheep | self selectSheep: sheep ] 
 ]
 
 { #category : #'as yet unclassified' }
-OvinaHistSheepSelection >> selectSheep: sheep [
+OvinaHistSheepSelectionBackup >> selectSheep: sheep [
 	sheepSelected at: sheep put: true.
 	table selection selectItem: sheep.
 	self announce: (OvinaGUIHistSelectorAdded new sheep: sheep).
@@ -130,7 +136,7 @@ OvinaHistSheepSelection >> selectSheep: sheep [
 ]
 
 { #category : #initialization }
-OvinaHistSheepSelection >> selected: someSheeps [
+OvinaHistSheepSelectionBackup >> selected: someSheeps [
 	"sendt from history presenter (my owner)"
 	sheepSelected := Dictionary new.
 	someSheeps do: [ :s | sheepSelected at: s put: true ].
@@ -139,24 +145,24 @@ OvinaHistSheepSelection >> selected: someSheeps [
 ]
 
 { #category : #'as yet unclassified' }
-OvinaHistSheepSelection >> selectedSheeps [
+OvinaHistSheepSelectionBackup >> selectedSheeps [
 	"return which sheeps are currently selected"
 	^(sheepSelected select: [ :bool | bool ]) keys
 ]
 
 { #category : #accessing }
-OvinaHistSheepSelection >> sheeps [
+OvinaHistSheepSelectionBackup >> sheeps [
 	^ self filter: OvinaSheep sheeps values
 	
 ]
 
 { #category : #selection }
-OvinaHistSheepSelection >> unselectAll [
+OvinaHistSheepSelectionBackup >> unselectAll [
 	self roots do: [ :sheep | self unselectSheep: sheep ] 
 ]
 
 { #category : #'as yet unclassified' }
-OvinaHistSheepSelection >> unselectSheep: sheep [
+OvinaHistSheepSelectionBackup >> unselectSheep: sheep [
 	sheepSelected at: sheep put: false.
 	table selection unselectItem: sheep.
 	self announce: (OvinaGUIHistSelectorRemoved new sheep: sheep).
@@ -166,7 +172,7 @@ OvinaHistSheepSelection >> unselectSheep: sheep [
 ]
 
 { #category : #'as yet unclassified' }
-OvinaHistSheepSelection >> updatePresenter [
+OvinaHistSheepSelectionBackup >> updatePresenter [
 	table items: self sheeps.
 	
 	

@@ -30,6 +30,11 @@ OvinaSheep class >> addSheep: aSheep [
 	self sheeps at: aSheep id put: aSheep
 ]
 
+{ #category : #accessing }
+OvinaSheep class >> all [
+	^ self sheeps values
+]
+
 { #category : #columns }
 OvinaSheep class >> allColumns [
 	"return a list of all columns. A column is specified using pragma 
@@ -164,10 +169,36 @@ OvinaSheep >> invalidateCache [
 	cachings := Dictionary new.
 ]
 
+{ #category : #testing }
+OvinaSheep >> isEwe [
+	^false
+]
+
+{ #category : #testing }
+OvinaSheep >> isLamb [
+	^false
+]
+
+{ #category : #testing }
+OvinaSheep >> isRam [
+	^false
+]
+
 { #category : #'accessing - properties' }
 OvinaSheep >> kind [
 	"return the kind of sheep - Får, Gimmer, Vædderlam, Vædder"
 	self subclassResponsibility 
+]
+
+{ #category : #accessing }
+OvinaSheep >> location [
+	<sheepColumn:#('placering')>
+	^ self cache: #location
+		compute: [ 
+			(self events detect: [ :ev | ev kind = 'flytning' ] ifNone: [ nil ])
+				ifNotNil: [ :event | event result ] 
+				ifNil: [ 'hjemme' ]
+			 ]
 ]
 
 { #category : #'as yet unclassified' }

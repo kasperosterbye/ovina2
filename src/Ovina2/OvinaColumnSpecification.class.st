@@ -12,6 +12,11 @@ Class {
 	#category : #'Ovina2-GUI Sheep'
 }
 
+{ #category : #comparing }
+OvinaColumnSpecification >> = other [
+	^ self dkName = other dkName
+]
+
 { #category : #accessing }
 OvinaColumnSpecification >> dkName [
 
@@ -34,6 +39,11 @@ OvinaColumnSpecification >> getter [
 OvinaColumnSpecification >> getter: anObject [
 
 	getter := anObject
+]
+
+{ #category : #comparing }
+OvinaColumnSpecification >> hash [
+	^ dkName hash
 ]
 
 { #category : #printing }

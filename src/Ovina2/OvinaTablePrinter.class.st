@@ -106,7 +106,7 @@ OvinaTablePrinter >> printTableRowsOld: html [
 		html
 			tag: #tr
 			do: [ 
-			self activeColumns  do: [ :col | html tag: #td with: (sheep perform: col getter) asString ] ] ] 
+			columnsSelector activeColumns  do: [ :col | html tag: #td with: (sheep perform: col getter) asString ] ] ] 
 ]
 
 { #category : #accessing }

@@ -10,10 +10,10 @@ Class {
 	#instVars : [
 		'table',
 		'columns',
-		'sheepPresenter',
 		'backup',
 		'up',
-		'down'
+		'down',
+		'columnSelection'
 	],
 	#category : #'Ovina2-GUI Sheep'
 }
@@ -38,13 +38,13 @@ OvinaColumnPresenter class >> openOn: sheepPresenter [
 
 { #category : #actions }
 OvinaColumnPresenter >> cancel [
-	sheepPresenter allColumns: backup 
+	columnSelection allColumns: backup 
 ]
 
 { #category : #'instance creation' }
 OvinaColumnPresenter >> columns [
-	sheepPresenter  ifNil: [ ^#() ].
-	columns ifNil: [columns := sheepPresenter  allColumns].
+	columnSelection  ifNil: [ ^#() ].
+	columns ifNil: [columns := columnSelection  allColumns].
 	^columns 
 ]
 
@@ -143,9 +143,9 @@ OvinaColumnPresenter >> moveSelectedColumnRight [
 ]
 
 { #category : #'instance creation' }
-OvinaColumnPresenter >> on: presenter [
-	sheepPresenter := presenter. 
-	backup := sheepPresenter allColumns deepCopy.
+OvinaColumnPresenter >> on: selection [
+	columnSelection := selection. 
+	backup := columnSelection allColumns deepCopy.
 	self updatePresenter 
 ]
 
@@ -158,6 +158,6 @@ OvinaColumnPresenter >> selectedColumn [
 OvinaColumnPresenter >> updatePresenter [ 
 	super updatePresenter.
 	table items: self columns.
-	sheepPresenter ifNotNil:	[sheepPresenter allColumns: self columns].
+	columnSelection ifNotNil:	[columnSelection allColumns: self columns].
 	
 ]

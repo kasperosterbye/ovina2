@@ -75,6 +75,11 @@ OvinaEvent >> id: anObject [
 	id := anObject
 ]
 
+{ #category : #description }
+OvinaEvent >> kind [
+	^ self registration kind
+]
+
 { #category : #printing }
 OvinaEvent >> printOn: aStream [
 

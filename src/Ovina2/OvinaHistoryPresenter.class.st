@@ -35,7 +35,9 @@ OvinaHistoryPresenter class >> open [
 { #category : #initialization }
 OvinaHistoryPresenter >> connectPresenters [ 
 	
-	registrations announcer when: OvinaGUIRegistrationsChanged do: [ self registrationChanged   ].
+	registrations announcer 
+		when: OvinaGUIRegistrationsChanged 
+		do: [ self registrationChanged   ].
 	selections announcer 
 		when: OvinaGUIHistSelectorAdded 
 		do: [:add | events sheepAdded: add sheep].

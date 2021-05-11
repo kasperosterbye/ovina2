@@ -7,21 +7,13 @@ Class {
 	#instVars : [
 		'table',
 		'buttonBar',
-		'printAll',
-		'newRam',
-		'editColumns'
+		'columnSelector'
 	],
 	#classInstVars : [
 		'allColumns'
 	],
 	#category : #'Ovina2-GUI Sheep'
 }
-
-{ #category : #accessing }
-OvinaSheepPresenter class >> allColumns [
-	allColumns ifNil: [ allColumns := self sheepClass allColumns  collect:[:c| c->true ]].
-	^ allColumns
-]
 
 { #category : #accessing }
 OvinaSheepPresenter class >> allColumns: anObject [
@@ -57,29 +49,6 @@ OvinaSheepPresenter class >> threeWayCompare: a to: b [
 	^ a threeWayCompareTo: b
 ]
 
-{ #category : #initialization }
-OvinaSheepPresenter >> activeColumns [
-	"return the column names which are active"
-	^ (self allColumns  select: #value) collect: #key
-
-]
-
-{ #category : #initialization }
-OvinaSheepPresenter >> allColumns [
-	^ self class allColumns 
-
-]
-
-{ #category : #initialization }
-OvinaSheepPresenter >> allColumns: columns [
-	" columns is {colName->bool. colName->bool...} 
-	where the booleans indicate if should be included in presentation"
-	self class allColumns: columns.
-	self initializeTable.
-	self rebuildLayout.
-	self updatePresenter 
-]
-
 { #category : #'as yet unclassified' }
 OvinaSheepPresenter >> announceNewSelection: sheep [
 	"Currently selected sheep changed"
@@ -105,6 +74,16 @@ OvinaSheepPresenter >> editSheep [
 ]
 
 { #category : #initialization }
+OvinaSheepPresenter >> initialize [
+	columnSelector := OvinaColumnSelection 
+		for: self class sheepClass name.
+	columnSelector announcer
+		when: OvinaGUIColumnSelectionChanged 
+		do: [ self updateColumns  ].
+	super initialize.
+]
+
+{ #category : #initialization }
 OvinaSheepPresenter >> initializeButtons [
 	 buttonBar 
 		add: (self newButton 
@@ -115,7 +94,7 @@ OvinaSheepPresenter >> initializeButtons [
 			action: [ self editSheep ]);
 		add: ( self newButton 
 			label: 'Vælg søjler';
-			action: [ OvinaColumnPresenter openOn: self ])
+			action: [ self selectColumns ])
 ]
 
 { #category : #initialization }
@@ -129,7 +108,7 @@ OvinaSheepPresenter >> initializePresenters [
 { #category : #initialization }
 OvinaSheepPresenter >> initializeTable [
 	table := self instantiate: SpTablePresenter.
-	self activeColumns  do: [ :col |
+	columnSelector activeColumns  do: [ :col |
 		table addColumn: (SpStringTableColumn new
 				 title: col dkName ;
 				 evaluated: col getter ;
@@ -141,7 +120,9 @@ OvinaSheepPresenter >> initializeTable [
 		whenSelectedDo: [ :sheep | self announceNewSelection: sheep];
 		whenNoneSelectedDo: [ self announceNewSelection: nil ];
 		beResizable.
-	table announcer when: SpWidgetBuilt do: [ :ann | ann widget allowsDeselection: true ].
+	table announcer when: SpWidgetBuilt do: [ :ann | 
+		ann widget allowsDeselection: true.
+		ann widget beResizable].
 	OvinaModel announcer 
 		when: OvinaModelSheepChanged do: [ :ann |
 			(ann sheep class = self class sheepClass) ifTrue: [self updatePresenter] ];
@@ -166,6 +147,14 @@ OvinaSheepPresenter >> printTable [
 		table: table.
 	tablePrinter printTable
 		
+]
+
+{ #category : #'as yet unclassified' }
+OvinaSheepPresenter >> selectColumns [
+	|colSelPresenter|
+	colSelPresenter := OvinaColumnPresenter new on: columnSelector.
+	colSelPresenter openDialogWithSpec 
+		cancelAction: [ colSelPresenter cancel ] 
 ]
 
 { #category : #'as yet unclassified' }
@@ -200,8 +189,15 @@ OvinaSheepPresenter >> setSelected: sheep [
 { #category : #accessing }
 OvinaSheepPresenter >> sheeps [
 	"Get the list of all sheeps"
-	^ (OvinaSheep sheeps values select: [ :sheep | sheep class = self class sheepClass  ]) 
-		sort: [ :r1 :r2 | r1 id < r2 id]
+	^ "(OvinaSheep sheeps values select: [ :sheep | sheep class = self class sheepClass  ]) "
+		self class sheepClass all sort: [ :r1 :r2 | r1 id < r2 id]
+]
+
+{ #category : #initialization }
+OvinaSheepPresenter >> updateColumns [
+	self initializeTable.
+	self rebuildLayout.
+	self updatePresenter 
 ]
 
 { #category : #accessing }

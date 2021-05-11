@@ -4,6 +4,11 @@ Class {
 	#category : #'Ovina2-Model'
 }
 
+{ #category : #accessing }
+OvinaEwe class >> all [
+	^ self ewes values
+]
+
 { #category : #'as yet unclassified' }
 OvinaEwe >> antalSlagtelam [
 	<sheepColumn: #('# slagtelam')>
@@ -37,6 +42,11 @@ OvinaEwe >> gnsSlagtevægt [
 { #category : #adding }
 OvinaEwe >> initialize [ 
 	super initialize.
+]
+
+{ #category : #testing }
+OvinaEwe >> isEwe [
+	^true
 ]
 
 { #category : #'accessing - properties' }

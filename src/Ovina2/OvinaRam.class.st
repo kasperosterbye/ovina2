@@ -7,6 +7,11 @@ Class {
 	#category : #'Ovina2-Model'
 }
 
+{ #category : #accessing }
+OvinaRam class >> all [
+	^ self rams values
+]
+
 { #category : #'as yet unclassified' }
 OvinaRam class >> ramForDate: aDate [
 	| rams |
@@ -24,6 +29,11 @@ OvinaRam >> defaultPropertyOrder [
 OvinaRam >> initialize [ 
 	super initialize.
 	offspring := OrderedCollection new.
+]
+
+{ #category : #testing }
+OvinaRam >> isRam [
+	^true
 ]
 
 { #category : #'accessing - properties' }

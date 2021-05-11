@@ -60,7 +60,7 @@ OvinaHistRegistrations >> editRegistration [
 	reg := self selectedRegistration.
 	editor := OvinaHistRegistrationEditor new
 		kindExisting: reg kind;
-		date: reg date;
+		date: reg date printString;
 		comment: reg comment;	
 		default: reg default.
 	editor openDialogWithSpec 
@@ -257,7 +257,7 @@ OvinaHistRegistrations >> updatePresenter [
 	
 	super updatePresenter.
 	table items: self registrations.
-	table selectIndexes: {1} scrollToSelection: true.
+	"table selectIndexes: {1} scrollToSelection: true."
 	self announce: (OvinaGUIRegistrationsChanged new registration: self)
 ]
 
@@ -265,7 +265,7 @@ OvinaHistRegistrations >> updatePresenter [
 OvinaHistRegistrations >> updateRegistrationFromEditor: editor [
 	self selectedRegistration 
 			kind: editor kind;
-			date: editor date;
+			date: editor date parseDKDate ;
 			default: editor default;
 			comment: editor comment.
 	self updatePresenter.

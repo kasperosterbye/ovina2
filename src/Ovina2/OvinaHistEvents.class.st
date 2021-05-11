@@ -153,6 +153,8 @@ OvinaHistEvents >> setDateAndResult [
 OvinaHistEvents >> sheepAdded: sheep [
 	"Add an event for sheep in the current registration"
 	|newEvent|
+	
+	registration  ifNil: [ ^self ].
 	newEvent := OvinaEvent new
 		registration: registration ;
 		sheep: sheep.
@@ -164,6 +166,8 @@ OvinaHistEvents >> sheepAdded: sheep [
 { #category : #'as yet unclassified' }
 OvinaHistEvents >> sheepRemoved: sheep [
 	"Remove an event for sheep in the current registration"
+	
+	registration  ifNil: [ ^self ].
 	OvinaEvent removeEvent:  (table items detect: [:ev | ev sheep = sheep  ]).
 	self updatePresenter.
 	

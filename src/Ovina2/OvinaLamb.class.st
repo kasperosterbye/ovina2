@@ -4,6 +4,11 @@ Class {
 	#category : #'Ovina2-Model'
 }
 
+{ #category : #accessing }
+OvinaLamb class >> all [
+	^ self lambs values
+]
+
 { #category : #'accessing - properties' }
 OvinaLamb >> color [
 	<sheepColumn:#('Farve' color:)>
@@ -82,6 +87,11 @@ OvinaLamb >> invalidateCache [
 	self sire ifNotNil: [ :s | s invalidateCache].
 ]
 
+{ #category : #testing }
+OvinaLamb >> isLamb [
+	^true
+]
+
 { #category : #'accessing - properties' }
 OvinaLamb >> kind [
 	"return the kind of sheep - Får, Gimmer, Vædderlam, Vædder"
@@ -99,8 +109,7 @@ OvinaLamb >> name [
 OvinaLamb >> present [
 	"return true if the lamb is still alive. Last years lambs picked for breeding are alive only as ewes"
 	self inDate year = Date today year ifFalse: [ ^false ].
-	self slaughterWeight ifNil: [ ^false ].
-	^true
+	^self slaughterWeight isNil
 ]
 
 { #category : #printing }

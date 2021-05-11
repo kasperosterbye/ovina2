@@ -2,7 +2,6 @@ Class {
 	#name : #OvinaHistRegistrationEditor,
 	#superclass : #SpPresenter,
 	#instVars : [
-		'actionBar',
 		'kindExisting',
 		'kindNew',
 		'date',
@@ -48,7 +47,7 @@ OvinaHistRegistrationEditor >> comment: aStringOrText [
 
 { #category : #description }
 OvinaHistRegistrationEditor >> date [
-	^ date text parseDKDate 
+	^ date text 
 ]
 
 { #category : #accessing }
