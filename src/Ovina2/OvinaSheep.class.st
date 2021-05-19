@@ -201,7 +201,7 @@ OvinaSheep >> location [
 			 ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #printing }
 OvinaSheep >> noteField [
 	<sheepColumn:#('note ____________')>
 	^''
@@ -220,7 +220,7 @@ OvinaSheep >> number: aString [
 	self changed
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #printing }
 OvinaSheep >> ovinaDBString [ 
 	^ id asString printString
 ]
@@ -281,10 +281,10 @@ OvinaSheep >> slaughterWeight [
 
 { #category : #history }
 OvinaSheep >> slaughterWeightCompute [
-	"return the weight of the meat as returned from the slaughter. If not slaughtered, return nil" 
+	"return the weight of the meat as returned from the slaughter. If not slaughtered, return -1" 
 	|event| 
 	event := self events 
-		detect: [ :ev | ev registration kind asLowercase = 'slagtevægt' ] 
-		ifNone: [ ^nil ].
-	^ OvinaModel dkNumberFrom: event result
+		detect: [ :ev | ev kind asLowercase = 'slagtevægt' ] 
+		ifNone: [ ^-1 ].
+	^ event result asDKNumber 
 ]

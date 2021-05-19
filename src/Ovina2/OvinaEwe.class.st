@@ -9,7 +9,7 @@ OvinaEwe class >> all [
 	^ self ewes values
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #columns }
 OvinaEwe >> antalSlagtelam [
 	<sheepColumn: #('# slagtelam')>
 	
@@ -23,20 +23,21 @@ OvinaEwe >> asLamb [
 	^ OvinaSheep lambs values detect: [ :l | l number = self number ] ifNone: [ nil]
 ]
 
-{ #category : #'as yet unclassified' }
-OvinaEwe >> defaultPropertyOrder [
-	^#(chr number name color inDate comment)
+{ #category : #columns }
+OvinaEwe >> avgSlaughterWeight [
+	<sheepColumn: #('gnsSlagtevægt')>
+	self 
+		cache: #avgSlaughterWeight
+		compute: [ |slaughtered|
+			slaughtered := (self lambs select: [:lamb| lamb slaughterWeight > -1]).
+			slaughtered ifEmpty: [ ^ '-1' ].
+			((slaughtered collect: #slaughterWeight) sum / slaughtered size) printShowingDecimalPlaces: 2 .]
+	
 ]
 
-{ #category : #'as yet unclassified' }
-OvinaEwe >> gnsSlagtevægt [
-	<sheepColumn: #('gnsSlagtevægt')>
-	|slagtede|
-	slagtede := (self lambs 
-		select: [:lamb| lamb slagtevægt > -1]).
-	slagtede ifEmpty: [ ^ '-1' ].
-	^((slagtede collect: #slagtevægt) sum / slagtede size) printShowingDecimalPlaces: 2 .
-	
+{ #category : #'accessing - properties' }
+OvinaEwe >> defaultPropertyOrder [
+	^#(chr number name color inDate comment)
 ]
 
 { #category : #adding }
@@ -55,7 +56,7 @@ OvinaEwe >> kind [
 	^'Får' 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #relations }
 OvinaEwe >> lambs [
 	"^ offspring "
 	^ self cache: #offspring
@@ -92,7 +93,7 @@ OvinaEwe >> newLamb [
 	^ newLamb 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #columns }
 OvinaEwe >> noLambs [
 	<sheepColumn: #('Antal lam')>
 	^ self lambs size

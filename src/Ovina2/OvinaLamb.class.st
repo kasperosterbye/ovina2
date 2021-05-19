@@ -51,7 +51,7 @@ OvinaLamb >> damName [
 	^ self dam name
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - properties' }
 OvinaLamb >> defaultPropertyOrder [
 	^#(inDate event sex color comment usage outDate dam sire )
 ]
@@ -68,6 +68,28 @@ OvinaLamb >> event: val [
 	self property: #event put: val
 ]
 
+{ #category : #columns }
+OvinaLamb >> finalWeight [
+	"Estimated live weight in kg on the day it was slaughtered, -1 if not slaughtered"
+	<sheepColumn: 'slutvægt'>
+	^ self cache: #finalWeight compute: [ self finalWeightCompute  ]
+]
+
+{ #category : #columns }
+OvinaLamb >> finalWeightCompute [
+	"Estimated live weight in kg on the day it was slaughtered"
+	| growthPerDay slaughterDay weightning ageAtLastWeightning weightAtLastWeightning daysSinceLastWeight |
+	growthPerDay := self growthPrognosis.
+	growthPerDay = 0 ifTrue: [ ^-1 ].
+	slaughterDay := self slaughterAge.
+	slaughterDay = -1 ifTrue: [ ^-1 ].
+	weightning := self events detect: [ :ev | ev kind = 'vejning' ] ifNone: [ ^-1 ].
+	ageAtLastWeightning := (weightning date - self inDate) days.
+	weightAtLastWeightning := weightning result asDKNumber.
+	daysSinceLastWeight := slaughterDay - ageAtLastWeightning.
+	^ (weightAtLastWeightning + daysSinceLastWeight * growthPerDay / 1000).
+]
+
 { #category : #'accessing - properties' }
 OvinaLamb >> growth [
 
@@ -78,6 +100,45 @@ OvinaLamb >> growth [
 OvinaLamb >> growth: val [
 	(val isNil or: [ val isEmpty ]) ifTrue: [ ^self ].
 	self property: #growth put: val
+]
+
+{ #category : #columns }
+OvinaLamb >> growthPrognosis [
+	"return projected gram per day based on weight measurements"
+	<sheepColumn: #('prognose')>
+	^self cache: #growthPrognosis compute: [ self growthPrognosisCompute  ] 
+	
+	
+	
+	
+]
+
+{ #category : #columns }
+OvinaLamb >> growthPrognosisCompute [
+	"return projected gram per day based on weight measurements"
+	| weightnings lastWeight secondLastWeight lastDate secondLastDate deltaDay|
+	weightnings := self events select: [ :ev | ev kind = 'vejning' ].
+	"Some old lambs do not have events, but might store growth in a property"
+	weightnings ifEmpty: [ ^ self growthProperty ].
+	secondLastWeight := 5.0.
+	secondLastDate := self inDate.
+	weightnings size > 1 ifTrue: [ 
+		secondLastWeight := weightnings second result asDKNumber.
+		secondLastDate := weightnings second date].
+	lastDate := weightnings first date.
+	lastWeight := weightnings first result asDKNumber.
+	deltaDay := (lastDate - secondLastDate ) days.
+	^ ((lastWeight - secondLastWeight) * 1000 / deltaDay ) asFloat.
+	
+	
+	
+	
+]
+
+{ #category : #'accessing - properties' }
+OvinaLamb >> growthProperty [
+	"read growth property, or return -1"
+	^ (self property: #growth) ifNil: [ ^ -1.0 ] 
 ]
 
 { #category : #caching }
@@ -96,6 +157,18 @@ OvinaLamb >> isLamb [
 OvinaLamb >> kind [
 	"return the kind of sheep - Får, Gimmer, Vædderlam, Vædder"
 	^ self sex ifNotNil: [self sex ,'lam'] ifNil: 'lam'
+]
+
+{ #category : #columns }
+OvinaLamb >> meatPercent [
+]
+
+{ #category : #columns }
+OvinaLamb >> meatPercentCompute [
+	"return the ratio (in %) of meat to final weight, -1 if not slaughtered"
+	self slaughterWeight = -1 ifTrue: [ -1 ].
+	^ (self slaughterWeight / self finalWeight) * 100
+	
 ]
 
 { #category : #accessing }
@@ -118,7 +191,7 @@ OvinaLamb >> printOn: aStream [
 	super printOn: aStream
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 OvinaLamb >> promoteToEwe [
 	"Assumes the conditions for promotions is in place"
 	|nextEweId newEwe|
@@ -176,17 +249,20 @@ OvinaLamb >> sireName [
 	^ self sire name
 ]
 
-{ #category : #'accessing - properties' }
-OvinaLamb >> slagtevægt [
-	"return -1 if not slaughtered"
-	|slagt|
-	self usage ~= 'slagt' ifTrue: [ ^ -1 ].
-	slagt := self events select: [ :ev | ev registration kind = 'slagtevægt' ].
-	^ slagt ifEmpty: [ -1 ] 
-		ifNotEmpty: [ |res| 
-			res:= slagt last result.
-			res ifEmpty: [ -1 ] 
-				ifNotEmpty: [ res asNumber ] ]
+{ #category : #columns }
+OvinaLamb >> slaughterAge [
+	"return the age of the lamb when it was slaughtered (in days)"
+	<sheepColumn: 'slagtealder'>
+	^ self cache: #slaughterAge compute: [ self slaughterAgeCompute  ]
+]
+
+{ #category : #columns }
+OvinaLamb >> slaughterAgeCompute [
+	"return the age of the lamb when it was slaughtered (in days)"
+	<sheepColumn: 'slagtealder'>
+	| slaughtered | 
+	slaughtered := self events detect: [ :ev | ev kind = 'slagtevægt' ] ifNone: [ ^ -1 ].
+	^ (slaughtered date - self inDate ) days
 ]
 
 { #category : #accessing }

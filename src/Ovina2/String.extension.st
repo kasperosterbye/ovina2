@@ -1,6 +1,11 @@
 Extension { #name : #String }
 
 { #category : #'*Ovina2' }
+String >> asDKNumber [
+	^ OvinaModel dkNumberFrom: self
+]
+
+{ #category : #'*Ovina2' }
 String >> ovinaDBString [
 	^ self printString
 ]

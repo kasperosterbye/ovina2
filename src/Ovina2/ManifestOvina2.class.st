@@ -15,6 +15,11 @@ Class {
 }
 
 { #category : #'code-critics' }
+ManifestOvina2 class >> ruleAnySatisfyRuleV1FalsePositive [
+	^ #(#(#(#RGPackageDefinition #(#Ovina2)) #'2021-05-19T06:51:18.921869+02:00') )
+]
+
+{ #category : #'code-critics' }
 ManifestOvina2 class >> ruleReAsClassRuleV1FalsePositive [
 	^ #(#(#(#RGPackageDefinition #(#Ovina2)) #'2021-05-11T10:00:34.756476+02:00') )
 ]
