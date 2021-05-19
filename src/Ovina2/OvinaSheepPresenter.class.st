@@ -77,23 +77,23 @@ OvinaSheepPresenter >> editSheep [
 OvinaSheepPresenter >> initialize [
 	columnSelector := OvinaColumnSelection 
 		for: self class sheepClass name.
-	columnSelector announcer
-		when: OvinaGUIColumnSelectionChanged 
-		do: [ self updateColumns  ].
 	super initialize.
 ]
 
 { #category : #initialization }
 OvinaSheepPresenter >> initializeButtons [
 	 buttonBar 
-		add: (self newButton 
+		add: (self newButton  
+			icon: (ThemeIcons current iconNamed: #smallPrint) ;
 			label: 'Print';
 			action: [ self printTable ]);
-		add: (self newButton 
+		add: (self newButton
+			icon: (ThemeIcons current iconNamed: #edit) ;
 			label: 'Ret';
 			action: [ self editSheep ]);
 		add: ( self newButton 
-			label: 'Vælg søjler';
+			label: 'Vælg';
+			icon: (ThemeIcons current iconNamed: #smallBarcode) ;
 			action: [ self selectColumns ])
 ]
 
@@ -151,10 +151,14 @@ OvinaSheepPresenter >> printTable [
 
 { #category : #'as yet unclassified' }
 OvinaSheepPresenter >> selectColumns [
-	|colSelPresenter|
+	|colSelPresenter subscription|
 	colSelPresenter := OvinaColumnPresenter new on: columnSelector.
+	subscription := columnSelector announcer
+		when: OvinaGUIColumnSelectionChanged 
+		do: [ self updateColumns  ].
 	colSelPresenter openDialogWithSpec 
-		cancelAction: [ colSelPresenter cancel ] 
+		okAction: [ columnSelector announcer initialize ];
+		cancelAction: [ colSelPresenter cancel. columnSelector announcer initialize ] 
 ]
 
 { #category : #'as yet unclassified' }

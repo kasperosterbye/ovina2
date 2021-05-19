@@ -49,10 +49,12 @@ OvinaHistSheepSelection >> initializeButtons [
 	super initializeButtons.
 	buttonBar
 		add: (self newButton 
-				 label: 'Afvælg alle';
-				 action: [self deselectAll]);
+				 icon: (ThemeIcons current iconNamed: #checkboxUnselected) ;
+				 label: 'alle';
+				 action: [self unselectAll]);
 		add: (self newButton 
-				 label: 'Vælg alle';
+				 icon: (ThemeIcons current iconNamed: #checkboxSelected) ;
+				 label: 'alle';
 				 action: [self selectAll]);
 		add: (self newCheckBox
 				 label: 'Inkluder lam';
@@ -61,16 +63,6 @@ OvinaHistSheepSelection >> initializeButtons [
 					 includeLambs := newValue.
 					 self updatePresenter ]);
 		yourself 
-]
-
-{ #category : #initialization }
-OvinaHistSheepSelection >> initializePresenters [
-	
-	super initializePresenters.
-	
-	self initializeButtons.
-	"self initializeTable."
-	self updatePresenter 
 ]
 
 { #category : #initialization }
@@ -85,38 +77,9 @@ OvinaHistSheepSelection >> initializeTable [
 	table columns: { selectionColumn  }, table columns
 ]
 
-{ #category : #initialization }
-OvinaHistSheepSelection >> initializeTableOld [
-	table := self instantiate: SpTablePresenter.
-	table addColumn: (SpCheckBoxTableColumn new
-			title: 'vælg' ;
-			evaluated: [ :sheep | sheepSelected at: sheep ifAbsent: [ false ] ] ;
-			onActivation: [ :sheep | self selectSheep: sheep];
-			onDeactivation: [ :sheep | self unselectSheep: sheep ]);
-		addColumn: (SpStringTableColumn new
-			title: 'nummer' ;
-			evaluated: [ :sheep | sheep number ] ;
-			sortFunction: [ :s1 :s2 | 
-				(s1 number asNumber) threeWayCompareTo:  (s2 number)] asSortFunction);
-	   addColumn: (SpStringTableColumn new
-			title: 'navn' ;
-			evaluated: [:sheep | sheep name];
-			sortFunction: [ :s1 :s2 | (s1 name) threeWayCompareTo:  (s2 name)] asSortFunction);
-		beMultipleSelection.
-]
-
-{ #category : #initialization }
-OvinaHistSheepSelection >> initializeWindow: aWindowPresenter [
-
-	super initializeWindow: aWindowPresenter.
-	aWindowPresenter
-		title: 'Udvælgelse';
-		initialExtent: 600 @ 950 
-]
-
 { #category : #selection }
 OvinaHistSheepSelection >> selectAll [
-	self roots do: [ :sheep | self selectSheep: sheep ] 
+	self sheeps do: [ :sheep | self selectSheep: sheep ] 
 ]
 
 { #category : #'as yet unclassified' }
@@ -152,7 +115,7 @@ OvinaHistSheepSelection >> sheeps [
 
 { #category : #selection }
 OvinaHistSheepSelection >> unselectAll [
-	self roots do: [ :sheep | self unselectSheep: sheep ] 
+	self sheeps do: [ :sheep | self unselectSheep: sheep ] 
 ]
 
 { #category : #'as yet unclassified' }

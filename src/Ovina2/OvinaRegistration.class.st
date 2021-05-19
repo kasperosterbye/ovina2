@@ -80,8 +80,9 @@ OvinaRegistration >> date [
 
 { #category : #accessing }
 OvinaRegistration >> date: anObject [
-
-	date := anObject.
+	anObject isString
+		ifTrue: [ date := anObject parseDKDate  ]
+		ifFalse: [ date := anObject. ].
 	self changed
 ]
 

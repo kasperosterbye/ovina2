@@ -22,3 +22,9 @@ Date >> printOn: aStream [
  	"Change default date print to Danish"
  	self printOn: aStream format: #(1 2 3 $.  1 1 2 )
 ]
+
+{ #category : #'*Ovina2' }
+Date >> threeWayCompareTo: other [
+	self = other ifTrue: [ ^0 ].
+	self < other ifTrue: [ ^-1 ] ifFalse: [ ^1 ]
+]
