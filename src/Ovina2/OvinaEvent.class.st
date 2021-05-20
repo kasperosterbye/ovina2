@@ -47,7 +47,9 @@ OvinaEvent class >> removeEvent: event [
 
 { #category : #updating }
 OvinaEvent >> changed [
-	OvinaModel announcer announce: (OvinaModelEventChanged new event: self)
+	
+	self sheep invalidateCache.
+	OvinaModel announcer announce: (OvinaModelEventChanged new event: self).
 ]
 
 { #category : #accessing }

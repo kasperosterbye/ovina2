@@ -17,7 +17,7 @@ Ovina1DB class >> kindReductionDictionary [
 		  at: 'flytning' put: 'flytning';
 		  at: 'veje lam' put: 'vejning';
 		  at: 'fødsel' put: 'fødsel';
-		  at: '---' put: '---';
+		  at: '---' put: 'vaccination';
 		  at: 'vaccination' put: 'vaccination';
 		  at: 'noromectin' put: 'vaccination';
 		  at: 'ormekur' put: 'vaccination';
@@ -96,7 +96,7 @@ Ovina1DB >> loadLambs [
 			inDate: (row at: #inDate);
 			event: (row at: #event);
 			sex: (row at: #sex);
-			growth: (row at: #growth) asString;
+			growth: (row at: #growth);
 			usage: (row at: #usage);
 			color: (row at: #color);
 			comment: (row at: #comment).

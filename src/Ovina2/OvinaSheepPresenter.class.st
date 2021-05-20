@@ -45,7 +45,6 @@ OvinaSheepPresenter class >> sheepClass [
 OvinaSheepPresenter class >> threeWayCompare: a to: b [
 	a ifNil: [ ^ -1 ].
 	b ifNil: [ ^ 1 ].
-	a class = b class ifFalse: [ self error: 'Should not compere those' ].
 	^ a threeWayCompareTo: b
 ]
 
@@ -111,9 +110,9 @@ OvinaSheepPresenter >> initializeTable [
 	columnSelector activeColumns  do: [ :col |
 		table addColumn: (SpStringTableColumn new
 				 title: col dkName ;
-				 evaluated: col getter ;
+				 evaluated: [ :sheep | (col getFrom: sheep) asDKString ] ;
 				 sortFunction: [ :s1 :s2 | 
-					self class threeWayCompare: (s1 perform: col getter) to: (s2 perform: col  getter)
+					self class threeWayCompare: (col getFrom: s1) to: (col getFrom: s2)
 				] asSortFunction)
 	 ].
 	table 

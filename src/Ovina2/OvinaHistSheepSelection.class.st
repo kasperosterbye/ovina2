@@ -74,6 +74,7 @@ OvinaHistSheepSelection >> initializeTable [
 			evaluated: [ :sheep | sheepSelected at: sheep ifAbsent: [ false ] ] ;
 			onActivation: [ :sheep | self selectSheep: sheep];
 			onDeactivation: [ :sheep | self unselectSheep: sheep ].
+	table sortingBlock: [ :s1 :s2 | s1 ramEweLambOrder: s2 ] asSortFunction.
 	table columns: { selectionColumn  }, table columns
 ]
 

@@ -14,7 +14,7 @@ Class {
 
 { #category : #comparing }
 OvinaColumnSpecification >> = other [
-	^ self dkName = other dkName
+	^ self getter = other getter and: [ self dkName = other dkName ]
 ]
 
 { #category : #accessing }
@@ -30,8 +30,12 @@ OvinaColumnSpecification >> dkName: anObject [
 ]
 
 { #category : #accessing }
-OvinaColumnSpecification >> getter [
+OvinaColumnSpecification >> getFrom: obj [
+	^ obj perform: getter
+]
 
+{ #category : #accessing }
+OvinaColumnSpecification >> getter [
 	^ getter
 ]
 
@@ -43,7 +47,7 @@ OvinaColumnSpecification >> getter: anObject [
 
 { #category : #comparing }
 OvinaColumnSpecification >> hash [
-	^ dkName hash
+	^ getter hash bitXor: dkName hash
 ]
 
 { #category : #printing }
@@ -53,6 +57,11 @@ OvinaColumnSpecification >> printOn: aStream [
 		self dkName printString.
 		self getter.
 		self setter ifNotNil: [ '/',setter ] ifNil:[''] } )
+]
+
+{ #category : #accessing }
+OvinaColumnSpecification >> set: value on: obj [
+	^ obj perform: setter with: value
 ]
 
 { #category : #accessing }

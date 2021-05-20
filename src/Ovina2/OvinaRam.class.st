@@ -85,3 +85,8 @@ OvinaRam >> raceCompute [
 	^ OvinaRace fromString: (self property: #race)
 	
 ]
+
+{ #category : #'as yet unclassified' }
+OvinaRam >> sortingScore [
+	^ number negated
+]

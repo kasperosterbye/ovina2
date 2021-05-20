@@ -140,7 +140,7 @@ OvinaHistEvents >> setDateAndResult [
 	table selection isEmpty 
 		ifTrue: [ dateField text: ''. resultField text: '' ]
 		ifFalse: [ 
-			dateField text: (table selection selectedItem date) asDKDateString ;
+			dateField text: (table selection selectedItem date) asDKString ;
 				selectionInterval: (dateField text size + 1 to: dateField text size).
 			resultField 
 				text: (table selection selectedItem result asString);

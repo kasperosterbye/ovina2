@@ -167,6 +167,7 @@ OvinaSheep >> initialize [
 { #category : #caching }
 OvinaSheep >> invalidateCache [
 	cachings := Dictionary new.
+	OvinaModel announcer announce: (OvinaModelSheepChanged new sheep: self)
 ]
 
 { #category : #testing }
@@ -199,6 +200,12 @@ OvinaSheep >> location [
 				ifNotNil: [ :event | event result ] 
 				ifNil: [ 'hjemme' ]
 			 ]
+]
+
+{ #category : #accessing }
+OvinaSheep >> name [
+	<sheepColumn: #('navn' name:)>
+	self subclassResponsibility 
 ]
 
 { #category : #printing }
@@ -272,6 +279,17 @@ OvinaSheep >> race: race [
 ]
 
 { #category : #history }
+OvinaSheep >> ramEweLambOrder: otherSheep [
+	"I am a threeWayCompareTo: implementation used in OvinaHistSheepSelection"
+	"Rams before Ewes before Lambs"
+	"Lambs order by mothers number, lambs of same mother as equal"
+	^ self sortingScore threeWayCompareTo: otherSheep sortingScore 
+	
+	
+	
+]
+
+{ #category : #history }
 OvinaSheep >> slaughterWeight [
 	"return the weight of the meat as returned from the slaughter. If not slaughtered, return nil" 
 	^ self 
@@ -287,4 +305,9 @@ OvinaSheep >> slaughterWeightCompute [
 		detect: [ :ev | ev kind asLowercase = 'slagtevægt' ] 
 		ifNone: [ ^-1 ].
 	^ event result asDKNumber 
+]
+
+{ #category : #'as yet unclassified' }
+OvinaSheep >> sortingScore [
+	^ self subclassResponsibility 
 ]

@@ -48,6 +48,24 @@ OvinaRace >> + other [
 	
 ]
 
+{ #category : #printing }
+OvinaRace >> asDKString [
+	^ self printString
+]
+
+{ #category : #printing }
+OvinaRace >> asDKString_OLD [
+	| stream sorted|
+	stream := String new writeStream.
+	sorted := races associations sort: [ :a1 :a2 | a1 key < a2 key ].
+	sorted size = 1 ifTrue: [ stream nextPutAll: sorted first key. ^self ].
+	sorted do: [ :assoc |
+		stream 
+			nextPutAll: assoc value asString;
+			nextPutAll: assoc key].
+	^stream contents
+]
+
 { #category : #accessing }
 OvinaRace >> countForRace: race [
 	^ races at: race ifAbsent: [ 0 ].
