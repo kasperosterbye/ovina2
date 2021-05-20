@@ -6,6 +6,11 @@ String >> asDKNumber [
 ]
 
 { #category : #'*Ovina2' }
+String >> asDKString [ 
+	^ self 
+]
+
+{ #category : #'*Ovina2' }
 String >> ovinaDBString [
 	^ self printString
 ]

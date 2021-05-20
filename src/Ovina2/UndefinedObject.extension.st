@@ -6,6 +6,11 @@ UndefinedObject >> asDKNumber [
 ]
 
 { #category : #'*Ovina2' }
+UndefinedObject >> asDKString [ 
+	^''
+]
+
+{ #category : #'*Ovina2' }
 UndefinedObject >> ovinaDBString [
 
 	^ '' printString
