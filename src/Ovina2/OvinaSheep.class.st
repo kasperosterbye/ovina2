@@ -38,15 +38,32 @@ OvinaSheep class >> all [
 { #category : #columns }
 OvinaSheep class >> allColumns [
 	"return a list of all columns. A column is specified using pragma 
-	sheepColumn:#('name in danish' optionalStringSetter:)"
+	sheepColumn:#('name in danish' optionalSampleStringWidth<String> optionalStringSetter:<Symbol>)"
 	^ (Pragma allNamed: #sheepColumn: from: self to: OvinaSheep)
 		collect: [ :prag | |args|
 			args := prag arguments first.
+			args isArray ifFalse: [ ^ self error: 'argument to #sheepColumn pragma must be array' ].
 			OvinaColumnSpecification new
 				dkName: args first;
 				getter: prag method selector;
-				setter: (args size > 1 ifTrue: [ args last ] ifFalse: [ nil ])
+				widthSample: 
+					((args size > 1 and: [args second isSymbol not]) 
+						ifTrue: [ args second]);
+				setter: 
+					(args last isSymbol ifTrue: [ args last ] ifFalse: [ nil ])
 				]
+]
+
+{ #category : #browsing }
+OvinaSheep class >> browseAllColumns [
+	| all |
+	<script>
+	all := {OvinaEwe. OvinaLamb. OvinaRam} 
+				inject: OrderedCollection new into: [ :allGetters :sheepClass |
+					allGetters, (sheepClass allColumns 
+						collect: [ :col | sheepClass lookupSelector: col getter])].
+	all := all asSet asArray sort: [:a :b | a selector <= b selector].  
+	ClyQueryBrowser browseMethods: all
 ]
 
 { #category : #sheeps }

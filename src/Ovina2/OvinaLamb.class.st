@@ -71,7 +71,7 @@ OvinaLamb >> event: val [
 { #category : #columns }
 OvinaLamb >> finalWeight [
 	"Estimated live weight in kg on the day it was slaughtered, -1 if not slaughtered"
-	<sheepColumn: 'slutvægt'>
+	<sheepColumn: #('slutvægt')>
 	^ self cache: #finalWeight compute: [ self finalWeightCompute  ]
 ]
 
@@ -164,7 +164,7 @@ OvinaLamb >> kind [
 
 { #category : #columns }
 OvinaLamb >> meatPercent [
-	<sheepColumn: 'slagte%'>
+	<sheepColumn: #('slagte%')>
 	^ self 
 		cache: #meatPercent 
 		compute: [ self meatPercentCompute  ]
@@ -260,14 +260,13 @@ OvinaLamb >> sireName [
 { #category : #columns }
 OvinaLamb >> slaughterAge [
 	"return the age of the lamb when it was slaughtered (in days)"
-	<sheepColumn: 'slagtealder'>
+	<sheepColumn: #('slagtealder')>
 	^ self cache: #slaughterAge compute: [ self slaughterAgeCompute  ]
 ]
 
 { #category : #columns }
 OvinaLamb >> slaughterAgeCompute [
 	"return the age of the lamb when it was slaughtered (in days)"
-	<sheepColumn: 'slagtealder'>
 	| slaughtered | 
 	slaughtered := self events detect: [ :ev | ev kind = 'slagtevægt' ] ifNone: [ ^ -1 ].
 	^ (slaughtered date - self inDate ) days
