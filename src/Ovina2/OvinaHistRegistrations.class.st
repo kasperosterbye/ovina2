@@ -208,8 +208,8 @@ OvinaHistRegistrations >> registrations [
 	| registrations |
 	registrations :=OvinaRegistration registrations values.
 	filterPastYear ifTrue: [ |cutof|
-		cutof := (registrations collect: [:ds| ds date asISO8601Date]) max - 365 days.
-		registrations := registrations select: [ :r | r date asISO8601Date > cutof ] ].
+		cutof := (registrations collect: [:ds| ds date]) max - 365 days.
+		registrations := registrations select: [ :r | r date  > cutof ] ].
 	(filterKind = 'all') ifFalse: [ 
 		registrations := registrations select: [ :r | r kind = filterKind  ] ].
 	^registrations 
