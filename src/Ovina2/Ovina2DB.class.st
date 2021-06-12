@@ -26,7 +26,7 @@ Ovina2DB class >> currentOpen [
 
 { #category : #connecting }
 Ovina2DB class >> dbPath [
-	^'/Users/kasper/tmp/ovina_2_01.db3'
+	^FileLocator imageDirectory pathString, '/ovina_2_01.db3'
 ]
 
 { #category : #migration }
