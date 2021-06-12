@@ -58,12 +58,12 @@ OvinaAllSheepsPresenter >> initializePresenters [
 		do: [:ann | lambs setSelected: ann sheep].
 	rams announcer 
 		when: OvinaGUISheepSelectionChanged 
-		do: [ :ann | lambs filterSire: ann sheep.
+		do: [ :ann | 
+			lambs filterSire: ann sheep.
 		 	overview sheep: ann sheep ].
 	lambs announcer
 		when: OvinaGUILampPromotion 
 		do: [ :ann | ewes setSelected: ann sheep ].
-	
 	self setLayout.
 	
 	
