@@ -82,19 +82,20 @@ OvinaSheepPresenter >> initialize [
 
 { #category : #initialization }
 OvinaSheepPresenter >> initializeButtons [
-	 buttonBar 
-		add: (self newButton  
-			icon: (ThemeIcons current iconNamed: #smallPrint) ;
-			label: 'Print';
-			action: [ self printTable ]);
+
+	buttonBar
 		add: (self newButton
-			icon: (ThemeIcons current iconNamed: #edit) ;
-			label: 'Ret';
-			action: [ self editSheep ]);
-		add: ( self newButton 
-			label: 'Vælg';
-			icon: (ThemeIcons current iconNamed: #smallBarcode) ;
-			action: [ self selectColumns ])
+				 icon: (Smalltalk ui icons iconNamed: #smallPrint);
+				 label: 'Print';
+				 action: [ self printTable ]);
+		add: (self newButton
+				 icon: (Smalltalk ui icons iconNamed: #edit);
+				 label: 'Ret';
+				 action: [ self editSheep ]);
+		add: (self newButton
+				 label: 'Vælg';
+				 icon: (Smalltalk ui icons iconNamed: #smallBarcode);
+				 action: [ self selectColumns ])
 ]
 
 { #category : #initialization }
