@@ -131,9 +131,6 @@ OvinaHistRegistrations >> initializeRegButtons [
 		add: (self newButton
 				 label: 'Slet registrering';
 				 action: [ self removeRegistration ]);
-		add: (self newButton
-				 label: 'Print';
-				 action: [ self error: 'to be implemented' ]);
 		add: (self newCheckBox
 				 label: 'Seneste år';
 				 whenChangedDo: [ :newValue | 
