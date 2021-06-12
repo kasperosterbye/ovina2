@@ -201,6 +201,7 @@ OvinaHistRegistrations >> newRegistrationFromEditor: editor [
 			comment: editor comment.
 	OvinaRegistration addNewRegistration: reg.
 	self updatePresenter.
+	table selection selectItem: reg
 ]
 
 { #category : #private }
