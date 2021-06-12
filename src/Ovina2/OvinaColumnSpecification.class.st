@@ -79,7 +79,7 @@ OvinaColumnSpecification >> setter: anObject [
 
 { #category : #accessing }
 OvinaColumnSpecification >> width [
-	width ifNil: [ ^ self widthOfString: '12345678' ].
+	width ifNil: [ ^ self widthOfString: dkName ].
 	^ width
 ]
 
@@ -91,6 +91,5 @@ OvinaColumnSpecification >> widthOfString: str [
 
 { #category : #accessing }
 OvinaColumnSpecification >> widthSample: aString [
-
 	width := self widthOfString: aString
 ]
