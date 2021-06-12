@@ -1,5 +1,6 @@
 "
 * allColumns is an ordered collection of associations of OvinaColumnSpecifications to boolean (indicating if column should be included in the view)
+<!-- bla -->
 "
 Class {
 	#name : #OvinaSheepPresenter,
@@ -108,7 +109,9 @@ OvinaSheepPresenter >> initializePresenters [
 OvinaSheepPresenter >> initializeTable [
 	table := self instantiate: SpTablePresenter.
 	columnSelector activeColumns  do: [ :col |
+		Transcript nextPutAll: col dkName, ' ', col width asString;cr;endEntry.
 		table addColumn: (SpStringTableColumn new
+				 width: col width + 15;
 				 title: col dkName ;
 				 evaluated: [ :sheep | (col getFrom: sheep) asDKString ] ;
 				 sortFunction: [ :s1 :s2 | 
@@ -119,8 +122,7 @@ OvinaSheepPresenter >> initializeTable [
 		whenSelectedDo: [ :sheep | self announceNewSelection: sheep];
 		whenNoneSelectedDo: [ self announceNewSelection: nil ].
 	table announcer when: SpWidgetBuilt do: [ :ann | 
-		ann widget allowsDeselection: true.
-		ann widget beResizable].
+		ann widget allowsDeselection: true.].
 	OvinaModel announcer 
 		when: OvinaModelSheepChanged do: [ :ann |
 			(ann sheep class = self class sheepClass) ifTrue: [self updatePresenter] ];

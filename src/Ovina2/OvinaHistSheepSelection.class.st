@@ -71,6 +71,7 @@ OvinaHistSheepSelection >> initializeTable [
 	super initializeTable.
 	selectionColumn := SpCheckBoxTableColumn new
 			title: 'vælg' ;
+			width: (TextStyle defaultFont widthOfString: 'vælg') + 15;
 			evaluated: [ :sheep | sheepSelected at: sheep ifAbsent: [ false ] ] ;
 			onActivation: [ :sheep | self selectSheep: sheep];
 			onDeactivation: [ :sheep | self unselectSheep: sheep ].
