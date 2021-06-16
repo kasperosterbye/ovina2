@@ -168,7 +168,7 @@ OvinaHistEvents >> sheepRemoved: sheep [
 	"Remove an event for sheep in the current registration"
 	
 	registration  ifNil: [ ^self ].
-	OvinaEvent removeEvent:  (table items detect: [:ev | ev sheep = sheep  ]).
+	OvinaEvent removeEvent:  (table items detect: [:ev | ev sheep = sheep  ] ifNone: [^self]).
 	self updatePresenter.
 	
 ]

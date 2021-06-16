@@ -122,6 +122,7 @@ OvinaHistSheepSelection >> unselectAll [
 
 { #category : #'as yet unclassified' }
 OvinaHistSheepSelection >> unselectSheep: sheep [
+	(sheepSelected includesKey: sheep) ifFalse: [ ^self ].
 	sheepSelected at: sheep put: false.
 	table selection unselectItem: sheep.
 	self announce: (OvinaGUIHistSelectorRemoved new sheep: sheep).

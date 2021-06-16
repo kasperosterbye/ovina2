@@ -2,8 +2,7 @@ Class {
 	#name : #OvinaOverviewPresenter,
 	#superclass : #SpNotebookPage,
 	#instVars : [
-		'sheep',
-		'yearsLayout'
+		'sheep'
 	],
 	#category : #'Ovina2-GUI Sheep'
 }
@@ -86,12 +85,13 @@ OvinaOverviewPresenter >> myPresenter [
 	titleHeight :=22.
 	rowHeight:=20.5.
 	years := #().
-	myPresenter := SpPresenter new.
 	self sheep ifNotNil: [
 			years := self sheep events collect: [ :ev | ev date year ].
 			years := (years , (self sheep lambs collect: [ :lamb | lamb inDate year ])) 
 					asSet asArray sort reversed].
 	myLayout := SpBoxLayout  newTopToBottom spacing: 5.
+	myPresenter := SpPresenter new layout: (SpScrollableLayout with: (SpPresenter new 
+						layout: myLayout) ).
 	years do: [ :year |
 		myLayout 
 			add: (SpBoxLayout newVertical spacing: 3;
@@ -103,8 +103,6 @@ OvinaOverviewPresenter >> myPresenter [
 			expand: false
 	].
 	myLayout add: ' ' expand: false.
-	myPresenter layout: (SpScrollableLayout with: (SpPresenter new 
-						layout: myLayout) ).
 	^myPresenter .
 ]
 
