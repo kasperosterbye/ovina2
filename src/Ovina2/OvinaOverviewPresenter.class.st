@@ -1,9 +1,9 @@
 Class {
 	#name : #OvinaOverviewPresenter,
-	#superclass : #SpPresenter,
+	#superclass : #SpNotebookPage,
 	#instVars : [
-		'overview',
-		'sheep'
+		'sheep',
+		'yearsLayout'
 	],
 	#category : #'Ovina2-GUI Sheep'
 }
@@ -29,10 +29,10 @@ OvinaOverviewPresenter >> eventsForYear: year [
 ]
 
 { #category : #'as yet unclassified' }
-OvinaOverviewPresenter >> eventsTableForYear: year [
+OvinaOverviewPresenter >> eventsTableForYear: year in: aPresenter [
 	| events table |
 	events := self sheep events select: [ :ev | ev date year = year ].
-	table := self instantiate: SpTablePresenter.
+	table := aPresenter instantiate: SpTablePresenter.
 	table 
 		addColumn: (SpStringTableColumn new
 			title: 'type' ; evaluated: [:event | event registration kind]);
@@ -46,39 +46,11 @@ OvinaOverviewPresenter >> eventsTableForYear: year [
 ]
 
 { #category : #initialization }
-OvinaOverviewPresenter >> initializePresenters [
-	| years details titleHeight rowHeight|
-	titleHeight :=24.
-	rowHeight:=20.
-	years := #().
-	self sheep ifNotNil: [
-			years := self sheep events collect: [ :ev | ev date year ].
-			years := (years , (self sheep lambs collect: [ :lamb | lamb inDate year ])) 
-					asSet asArray sort reversed].
-	details := SpBoxLayout  newTopToBottom spacing: 5.
-	years do: [ :year |
-		details 
-			add: (SpBoxLayout newVertical spacing: 3;
-						add: year asString expand: false;
-						add: (self lambsTableForYear: year) 
-							height: rowHeight * (self lambsForYear: year ) + titleHeight ;
-						add: (self eventsTableForYear: year) 
-							height: rowHeight * (self eventsForYear: year) + titleHeight) 
-			expand: false
-	].
-	details add: ' ' expand: false.
-	overview := SpPresenter new 
-		layout: (SpScrollableLayout with: (SpPresenter new 
-		layout: details) ).
-]
-
-{ #category : #initialization }
-OvinaOverviewPresenter >> initializeWindow: aWindowPresenter [
-
-	super initializeWindow: aWindowPresenter.
-	aWindowPresenter
-		title: 'Oversigt';
-		initialExtent: 500@600. 
+OvinaOverviewPresenter >> initialize [
+	super initialize.
+	self title: 'Oversigt'.
+	self presenterProvider: [ self myPresenter ]
+	
 ]
 
 { #category : #'as yet unclassified' }
@@ -87,11 +59,11 @@ OvinaOverviewPresenter >> lambsForYear: year [
 ]
 
 { #category : #'as yet unclassified' }
-OvinaOverviewPresenter >> lambsTableForYear: year [
+OvinaOverviewPresenter >> lambsTableForYear: year in: aPresenter [
 	"Columns: nummer, inDato, køn, event, farve"
 	| lambs table |
 	lambs := self sheep lambs select: [ :l | l inDate year = year ].
-	table := self instantiate: SpTablePresenter.
+	table := aPresenter instantiate: SpTablePresenter.
 	table 
 		addColumn: (SpStringTableColumn new
 			title: 'nummer' ; evaluated: #number);
@@ -108,6 +80,34 @@ OvinaOverviewPresenter >> lambsTableForYear: year [
 	^table
 ]
 
+{ #category : #initialization }
+OvinaOverviewPresenter >> myPresenter [
+	| years myLayout myPresenter titleHeight rowHeight|
+	titleHeight :=22.
+	rowHeight:=20.5.
+	years := #().
+	myPresenter := SpPresenter new.
+	self sheep ifNotNil: [
+			years := self sheep events collect: [ :ev | ev date year ].
+			years := (years , (self sheep lambs collect: [ :lamb | lamb inDate year ])) 
+					asSet asArray sort reversed].
+	myLayout := SpBoxLayout  newTopToBottom spacing: 5.
+	years do: [ :year |
+		myLayout 
+			add: (SpBoxLayout newVertical spacing: 3;
+						add: year asString expand: false;
+						add: (self lambsTableForYear: year in: myPresenter ) 
+							height: rowHeight * (self lambsForYear: year ) + titleHeight ;
+						add: (self eventsTableForYear: year in: myPresenter) 
+							height: rowHeight * (self eventsForYear: year) + titleHeight) 
+			expand: false
+	].
+	myLayout add: ' ' expand: false.
+	myPresenter layout: (SpScrollableLayout with: (SpPresenter new 
+						layout: myLayout) ).
+	^myPresenter .
+]
+
 { #category : #accessing }
 OvinaOverviewPresenter >> sheep [
 
@@ -118,6 +118,5 @@ OvinaOverviewPresenter >> sheep [
 OvinaOverviewPresenter >> sheep: anEwe [
 
 	sheep := anEwe.
-	self initializePresenters.
-	self  rebuildLayout 
+	self resetContent
 ]

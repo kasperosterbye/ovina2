@@ -47,7 +47,7 @@ OvinaAllSheepsPresenter >> initializePresenters [
 	ewes := self instantiate: OvinaEwePresenter .
 	rams := self instantiate: OvinaRamPresenter .
 	lambs := self instantiate: OvinaLambPresenter .
-	overview := self instantiate: OvinaOverviewPresenter.
+	overview := OvinaOverviewPresenter new.
 	
 	ewes announcer 
 		when: OvinaGUISheepSelectionChanged 
@@ -88,5 +88,5 @@ OvinaAllSheepsPresenter >> setLayout [
 			addPageTitle: 'Væddere' provider: [rams] );
 		addSecond: (SpNotebookPresenter new 
 			addPageTitle: 'Lam' provider: [lambs];
-			addPageTitle: 'Oversigt' provider: [overview] ))
+			addPage: overview ))
 ]
