@@ -26,14 +26,6 @@ Class {
 	#category : #'Ovina2-GUI Sheep'
 }
 
-{ #category : #specs }
-OvinaSingleSheepPresenter class >> defaultSpec [
-
-	^SpBoxLayout newVertical 
-		add: #propertyPresenters;
-		yourself
-]
-
 { #category : #'instance creation' }
 OvinaSingleSheepPresenter class >> on: sheepBlock [
 	^ self basicNew sheepBlock: sheepBlock; initialize.
@@ -77,7 +69,7 @@ OvinaSingleSheepPresenter >> initializePresenters [
 { #category : #initialization }
 OvinaSingleSheepPresenter >> initializePropertyPresenters [	
 	| aLayout|
-	propertyPresenters := SpPresenter new.
+	propertyPresenters ifNil: [propertyPresenters := SpPresenter new].
 	aLayout := (SpBoxLayout newTopToBottom spacing: 5).
 	properties do: [ :prop |
 		aLayout add: (OvinaPropertyPresenter new
@@ -161,7 +153,6 @@ OvinaSingleSheepPresenter >> updatePresenter [
 	sheep := nil.
 	self sheep.
 	self initializePropertyPresenters.
-	self layout: self myLayout.
 	self takeKeyboardFocus
 	
 ]
