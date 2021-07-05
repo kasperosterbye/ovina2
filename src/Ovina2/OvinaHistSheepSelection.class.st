@@ -117,11 +117,13 @@ OvinaHistSheepSelection >> sheeps [
 
 { #category : #selection }
 OvinaHistSheepSelection >> unselectAll [
+	"cannot just unselect all selectedSheeps, as unselecting an Ewe might unselect its lambs, making iteration over selectedSheeps unstable"
 	self sheeps do: [ :sheep | self unselectSheep: sheep ] 
 ]
 
 { #category : #'as yet unclassified' }
 OvinaHistSheepSelection >> unselectSheep: sheep [
+	"sheep might not be selected"
 	(sheepSelected includesKey: sheep) ifFalse: [ ^self ].
 	sheepSelected at: sheep put: false.
 	table selection unselectItem: sheep.

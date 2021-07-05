@@ -24,7 +24,6 @@ OvinaSheepPresenter class >> allColumns: anObject [
 
 { #category : #specs }
 OvinaSheepPresenter class >> defaultSpec [
-
 	^ SpBoxLayout newVertical
 		add: #table;
 		add: (SpBoxLayout newHorizontal add: #buttonBar) expand: false fill: true padding: 3;
@@ -110,7 +109,6 @@ OvinaSheepPresenter >> initializePresenters [
 OvinaSheepPresenter >> initializeTable [
 	table := self instantiate: SpTablePresenter.
 	columnSelector activeColumns  do: [ :col |
-		Transcript nextPutAll: col dkName, ' ', col width asString;cr;endEntry.
 		table addColumn: (SpStringTableColumn new
 				 width: col width + 15;
 				 title: col dkName ;
@@ -201,8 +199,8 @@ OvinaSheepPresenter >> sheeps [
 { #category : #initialization }
 OvinaSheepPresenter >> updateColumns [
 	self initializeTable.
+	self updatePresenter.
 	self rebuildLayout.
-	self updatePresenter 
 ]
 
 { #category : #accessing }
@@ -214,5 +212,6 @@ OvinaSheepPresenter >> updatePresenter [
 	(selected notNil and: [ table items includes: selected ]) 
 		ifTrue: [ 
 			table selection selectItem: selected.
-			self announceNewSelection: selected ]
+			self announceNewSelection: selected ].
+	buttonBar rebuildLayout
 ]
