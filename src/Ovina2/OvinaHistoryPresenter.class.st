@@ -66,7 +66,8 @@ OvinaHistoryPresenter >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		title: 'Historik';
-		initialExtent: 1200 @ 950 
+		initialExtent: 1200 @ 950;
+		whenClosedDo: [ self removeAnnouncements ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -75,6 +76,12 @@ OvinaHistoryPresenter >> registrationChanged [
 	events registration: registrations selectedRegistration.
 	selections selected: (events events collect: #sheep)
 	
+]
+
+{ #category : #removing }
+OvinaHistoryPresenter >> removeAnnouncements [
+	{ registrations. selections. events  } do: [ :presenter |
+		presenter announcer unsubscribe: self]
 ]
 
 { #category : #'as yet unclassified' }

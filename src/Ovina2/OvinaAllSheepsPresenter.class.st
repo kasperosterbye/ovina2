@@ -77,7 +77,15 @@ OvinaAllSheepsPresenter >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		title: 'Får, Lam & Væddere';
-		initialExtent: 1300 @ 950 
+		initialExtent: 1300 @ 950; 
+		whenClosedDo: [ self removeAnnouncements ]
+]
+
+{ #category : #removing }
+OvinaAllSheepsPresenter >> removeAnnouncements [
+	{ ewes. rams. lambs } do: [ :presenter |
+	presenter announcer unsubscribe: self.
+	presenter removeAnnouncements ]
 ]
 
 { #category : #accessing }

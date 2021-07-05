@@ -146,6 +146,12 @@ OvinaSheepPresenter >> printTable [
 		
 ]
 
+{ #category : #removing }
+OvinaSheepPresenter >> removeAnnouncements [
+	OvinaModel announcer unsubscribe: self.
+	table announcer unsubscribe: self.
+]
+
 { #category : #'as yet unclassified' }
 OvinaSheepPresenter >> selectColumns [
 	|colSelPresenter subscription|
