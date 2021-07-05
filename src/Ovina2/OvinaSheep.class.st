@@ -46,9 +46,6 @@ OvinaSheep class >> allColumns [
 			OvinaColumnSpecification new
 				dkName: args first;
 				getter: prag method selector;
-				widthSample: 
-					((args size > 1 and: [args second isSymbol not]) 
-						ifTrue: [ args second]);
 				setter: 
 					(args last isSymbol ifTrue: [ args last ] ifFalse: [ nil ])
 				]
@@ -63,7 +60,7 @@ OvinaSheep class >> browseAllColumns [
 					allGetters, (sheepClass allColumns 
 						collect: [ :col | sheepClass lookupSelector: col getter])].
 	all := all asSet asArray sort: [:a :b | a selector <= b selector].  
-	ClyQueryBrowser browseMethods: all
+	ClyQueryBrowserMorph  browseMethods: all
 ]
 
 { #category : #sheeps }
