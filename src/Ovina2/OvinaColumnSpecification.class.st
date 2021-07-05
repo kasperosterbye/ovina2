@@ -7,8 +7,7 @@ Class {
 	#instVars : [
 		'dkName',
 		'getter',
-		'setter',
-		'width'
+		'setter'
 	],
 	#category : #'Ovina2-GUI Sheep'
 }
@@ -75,21 +74,4 @@ OvinaColumnSpecification >> setter [
 OvinaColumnSpecification >> setter: anObject [
 
 	setter := anObject
-]
-
-{ #category : #accessing }
-OvinaColumnSpecification >> width [
-	width ifNil: [ ^ self widthOfString: dkName ].
-	^ width
-]
-
-{ #category : #measuring }
-OvinaColumnSpecification >> widthOfString: str [
-
-	^ TextStyle defaultFont widthOfString: str
-]
-
-{ #category : #accessing }
-OvinaColumnSpecification >> widthSample: aString [
-	width := self widthOfString: aString
 ]
