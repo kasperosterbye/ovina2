@@ -284,7 +284,6 @@ OvinaSheep >> property: property put: value [
 
 { #category : #'accessing - properties' }
 OvinaSheep >> race [
-	|race|
 	<sheepColumn: #('race' race:)>
 	^self cache: #race 
 		compute: [ self raceCompute  ]
