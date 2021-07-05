@@ -22,17 +22,8 @@ OvinaSheepPresenter class >> allColumns: anObject [
 	allColumns := anObject
 ]
 
-{ #category : #specs }
-OvinaSheepPresenter class >> defaultSpec [
-	^ SpBoxLayout newVertical
-		add: #table;
-		add: (SpBoxLayout newHorizontal add: #buttonBar) expand: false fill: true padding: 3;
-		yourself
-]
-
 { #category : #examples }
 OvinaSheepPresenter class >> open [
-	<example>
 	self new openWithSpec 
 ]
 
@@ -103,29 +94,36 @@ OvinaSheepPresenter >> initializePresenters [
 	self initializeTable.
 	buttonBar := self newButtonBar.
 	self initializeButtons.
-]
-
-{ #category : #initialization }
-OvinaSheepPresenter >> initializeTable [
-	table := self instantiate: SpTablePresenter.
-	columnSelector activeColumns  do: [ :col |
-		table addColumn: (SpStringTableColumn new
-				 width: col width + 15;
-				 title: col dkName ;
-				 evaluated: [ :sheep | (col getFrom: sheep) asDKString ] ;
-				 sortFunction: [ :s1 :s2 | 
-					self class threeWayCompare: (col getFrom: s1) to: (col getFrom: s2)
-				] asSortFunction)
-	 ].
-	table 
-		whenSelectedDo: [ :sheep | self announceNewSelection: sheep];
-		whenNoneSelectedDo: [ self announceNewSelection: nil ].
-	table announcer when: SpWidgetBuilt do: [ :ann | 
-		ann widget allowsDeselection: true.].
+	self setLayout.
 	OvinaModel announcer 
 		when: OvinaModelSheepChanged do: [ :ann |
 			(ann sheep class = self class sheepClass) ifTrue: [self updatePresenter] ];
 		when: OvinaModelSheepRemoved do: [ self updatePresenter ]
+]
+
+{ #category : #initialization }
+OvinaSheepPresenter >> initializeTable [
+	|cols|
+	table ifNil: [ 
+		table := self instantiate: SpTablePresenter.
+		table 
+			whenSelectedDo: [ :sheep | self announceNewSelection: sheep];
+			whenNoneSelectedDo: [ self announceNewSelection: nil ].
+		table announcer 
+			when: SpWidgetBuilt do: [ :ann | 
+			ann widget allowsDeselection: true.]].
+	
+	cols := columnSelector activeColumns  collect:  [ :col |
+		SpStringTableColumn new
+				 "width: col width + 15;"
+				 title: col dkName ;
+				 evaluated: [ :sheep | (col getFrom: sheep) asDKString ] ;
+				 sortFunction: [ :s1 :s2 | 
+					self class threeWayCompare: (col getFrom: s1) to: (col getFrom: s2)
+				] asSortFunction
+	 ].
+	table columns: cols.
+	
 	
 ]
 
@@ -181,6 +179,14 @@ OvinaSheepPresenter >> selectPreviousSheep [
 	self announcer announce: (OvinaGUISheepSelectionChanged new sheep: table selection selectedItem )
 ]
 
+{ #category : #initialization }
+OvinaSheepPresenter >> setLayout [
+	self layout: (SpBoxLayout newVertical
+		add: table;
+		add: (SpBoxLayout newHorizontal add: buttonBar) expand: false fill: true padding: 3;
+		yourself)
+]
+
 { #category : #'as yet unclassified' }
 OvinaSheepPresenter >> setSelected: sheep [
 	"Currently selected sheep changed"
@@ -199,19 +205,18 @@ OvinaSheepPresenter >> sheeps [
 { #category : #initialization }
 OvinaSheepPresenter >> updateColumns [
 	self initializeTable.
+	"self setLayout."
 	self updatePresenter.
-	self rebuildLayout.
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 OvinaSheepPresenter >> updatePresenter [
 	|selected|
-	super updatePresenter.
 	selected := table selection selectedItem.
 	table items: self sheeps.
 	(selected notNil and: [ table items includes: selected ]) 
 		ifTrue: [ 
 			table selection selectItem: selected.
-			self announceNewSelection: selected ].
-	buttonBar rebuildLayout
+			self announceNewSelection: selected ]
+
 ]
