@@ -167,15 +167,6 @@ OvinaHistRegistrations >> initializeRegisterTable [
 	
 ]
 
-{ #category : #initialization }
-OvinaHistRegistrations >> initializeWindow: aWindowPresenter [
-
-	super initializeWindow: aWindowPresenter.
-	aWindowPresenter
-		title: 'Registreringer';
-		initialExtent: 600 @ 950 
-]
-
 { #category : #private }
 OvinaHistRegistrations >> kinds [
 	"return a list of the existing kinds, sorted by most used first"

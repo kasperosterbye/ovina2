@@ -83,15 +83,6 @@ OvinaHistRegistrationEditor >> initializePresenters [
 	comment := (self instantiate: SpTextPresenter )
 ]
 
-{ #category : #initialization }
-OvinaHistRegistrationEditor >> initializeWindow: aWindowPresenter [
-
-	super initializeWindow: aWindowPresenter.
-	aWindowPresenter
-		title: 'Ny registrering';
-		initialExtent: 350@260
-]
-
 { #category : #description }
 OvinaHistRegistrationEditor >> kind [
 	"return the result from kindExisting, or if '-- ny --', the input from the kindNew"

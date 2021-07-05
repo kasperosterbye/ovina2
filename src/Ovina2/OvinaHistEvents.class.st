@@ -80,15 +80,6 @@ OvinaHistEvents >> initializeTable [
 	
 ]
 
-{ #category : #'as yet unclassified' }
-OvinaHistEvents >> initializeWindow: aWindowPresenter [
-
-	super initializeWindow: aWindowPresenter.
-	aWindowPresenter
-		title: 'Hændelser';
-		initialExtent: 600 @ 950 
-]
-
 { #category : #printing }
 OvinaHistEvents >> printPageForNotes [
 	|specialTable tablePrinter|
