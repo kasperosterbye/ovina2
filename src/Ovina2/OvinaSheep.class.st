@@ -288,6 +288,10 @@ OvinaSheep >> race [
 
 { #category : #'accessing - properties' }
 OvinaSheep >> race: race [
+	self chr = OvinaSheep maarumlamChr 
+		ifTrue: [ 
+			UIManager default alert: 'Racen er beregnet for dyr født hos os'.
+			^self ].
 	^self property: #race put: race
 ]
 
