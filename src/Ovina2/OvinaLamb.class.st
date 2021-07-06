@@ -11,7 +11,7 @@ OvinaLamb class >> all [
 
 { #category : #'accessing - properties' }
 OvinaLamb >> color [
-	<sheepColumn:#('Farve' color: #('Hvid' 'Sort' 'Andet'))>
+	<sheepColumn:#('Farve' color: #('hvid' 'sort' 'andet'))>
 	^ (self property: #color) ifNil: [ '' ]
 ]
 
@@ -24,7 +24,7 @@ OvinaLamb >> color: val [
 { #category : #'accessing - properties' }
 OvinaLamb >> comment [
 	<sheepColumn: #('kommentar' comment:)>
-	^ (self property: #comment)
+	^ (self property: #comment) ifNil: [ '' ]
 ]
 
 { #category : #'accessing - properties' }
