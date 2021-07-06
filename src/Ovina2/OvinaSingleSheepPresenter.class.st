@@ -43,6 +43,16 @@ OvinaSingleSheepPresenter >> closeBlock: aBlock [
 	closeBlock := aBlock
 ]
 
+{ #category : #'as yet unclassified' }
+OvinaSingleSheepPresenter >> completionFor: prop [
+	prop choices ifNil: [ ^ nil ].
+	^ EntryCompletion new
+		dataSourceBlock: [ :currText | prop choices ];
+		filterBlock: [ :choice :currText | choice asLowercase beginsWith: currText asLowercase  ].
+
+	
+]
+
 { #category : #initialization }
 OvinaSingleSheepPresenter >> initializeActionBar [ 
 

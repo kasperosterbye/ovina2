@@ -46,9 +46,8 @@ OvinaSheep class >> allColumns [
 			OvinaColumnSpecification new
 				dkName: args first;
 				getter: prag method selector;
-				setter: 
-					(args last isSymbol ifTrue: [ args last ] ifFalse: [ nil ])
-				]
+				setter: args secondOrNil;
+				choices: args thirdOrNil]
 ]
 
 { #category : #browsing }

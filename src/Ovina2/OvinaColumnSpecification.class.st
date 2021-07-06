@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'dkName',
 		'getter',
-		'setter'
+		'setter',
+		'choices'
 	],
 	#category : #'Ovina2-GUI Sheep'
 }
@@ -15,6 +16,18 @@ Class {
 { #category : #comparing }
 OvinaColumnSpecification >> = other [
 	^ self getter = other getter and: [ self dkName = other dkName ]
+]
+
+{ #category : #accessing }
+OvinaColumnSpecification >> choices [
+
+	^ choices
+]
+
+{ #category : #accessing }
+OvinaColumnSpecification >> choices: anObject [
+	choices ifNotNil: [ self halt ].
+	choices := anObject
 ]
 
 { #category : #accessing }
@@ -53,10 +66,11 @@ OvinaColumnSpecification >> hash [
 { #category : #printing }
 OvinaColumnSpecification >> printOn: aStream [
 
-	aStream nextPutAll: ('OvinaColumnSpecification [{1} {2}{3}]' format:  {
+	aStream nextPutAll: ('OvinaColumnSpecification [{1} {2}{3}{4}]' format:  {
 		self dkName printString.
 		self getter.
-		self setter ifNotNil: [ '/',setter ] ifNil:[''] } )
+		self setter ifNotNil: [ '/',setter ] ifNil:[''].
+		self choices ifNotNil: [ ' - ', choices printString ] ifNil: [ '' ] } )
 ]
 
 { #category : #accessing }
