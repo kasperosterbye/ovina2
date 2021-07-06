@@ -4,11 +4,6 @@ Class {
 	#category : #'Ovina2-GUI General'
 }
 
-{ #category : #specs }
-OvinaLabelledTextInput class >> defaultSpec [
-	^ self labelLeft
-]
-
 { #category : #generated }
 OvinaLabelledTextInput >> acceptBlock: aBlockWithOneArgument [
 
