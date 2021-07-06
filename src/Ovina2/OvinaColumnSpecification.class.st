@@ -18,6 +18,21 @@ OvinaColumnSpecification >> = other [
 	^ self getter = other getter and: [ self dkName = other dkName ]
 ]
 
+{ #category : #'as yet unclassified' }
+OvinaColumnSpecification >> buildPresenterForSheep: sheep [
+	choices ifNil: 
+		[ ^ (SpTextInputFieldPresenter new
+				text: (sheep perform: getter) asString;
+				whenTextChangedDo:  [ :newText| sheep perform: setter with: newText];
+				yourself) 
+			withLabelAtTop: dkName  ].
+	^ (SpDropListPresenter new
+			items: choices;
+			whenSelectedItemChangedDo: [ :newText| sheep perform: setter with: newText];
+			yourself)
+		withLabelAtTop: dkName
+]
+
 { #category : #accessing }
 OvinaColumnSpecification >> choices [
 
@@ -26,7 +41,6 @@ OvinaColumnSpecification >> choices [
 
 { #category : #accessing }
 OvinaColumnSpecification >> choices: anObject [
-	choices ifNotNil: [ self halt ].
 	choices := anObject
 ]
 

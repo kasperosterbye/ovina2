@@ -11,7 +11,7 @@ OvinaLamb class >> all [
 
 { #category : #'accessing - properties' }
 OvinaLamb >> color [
-	<sheepColumn:#('Farve' color:)>
+	<sheepColumn:#('Farve' color: #('Hvid' 'Sort' 'Andet'))>
 	^ (self property: #color) ifNil: [ '' ]
 ]
 
@@ -58,7 +58,7 @@ OvinaLamb >> defaultPropertyOrder [
 
 { #category : #'accessing - properties' }
 OvinaLamb >> event [
-	<sheepColumn: #('Fødsel' event: #('let' 'svær' 'død') )>
+	<sheepColumn: #('Fødsel' event: ('let' 'vanskelig') )>
 	^ (self property: #event)
 ]
 
@@ -231,7 +231,7 @@ OvinaLamb >> remove [
 
 { #category : #'accessing - properties' }
 OvinaLamb >> sex [
-	<sheepColumn:#('køn' sex:)>
+	<sheepColumn:#('køn' sex: ('gimmer' 'vædder'))>
 	^ (self property: #sex) ifNil: [ '' ]
 ]
 
@@ -279,7 +279,7 @@ OvinaLamb >> sortingScore [
 
 { #category : #accessing }
 OvinaLamb >> usage [
-	<sheepColumn: #('brug' usage:)>
+	<sheepColumn: #('brug' usage: ('avl' 'slagt' 'flaske' 'død'))>
 	^ self property: #usage
 ]
 

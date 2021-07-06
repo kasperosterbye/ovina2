@@ -81,13 +81,7 @@ OvinaSingleSheepPresenter >> initializePropertyPresenters [
 	| aLayout|
 	propertyPresenters ifNil: [propertyPresenters := SpPresenter new].
 	aLayout := (SpBoxLayout newTopToBottom spacing: 5).
-	properties do: [ :prop |
-		aLayout add: (
-			(SpTextInputFieldPresenter new
-				text: (self sheep perform: prop getter) asString;
-				whenTextChangedDo:  [ :newText| self sheep perform: prop setter with: newText];
-				yourself) 
-			withLabelAtTop: prop dkName  )  ].
+	properties do: [ :prop | aLayout add: (prop buildPresenterForSheep: self sheep)  ].
 	propertyPresenters layout: aLayout.
 	
 ]
