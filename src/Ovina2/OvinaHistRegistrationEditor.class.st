@@ -72,15 +72,12 @@ OvinaHistRegistrationEditor >> initializePresenters [
 	"actionBar kindExisting kindNew date comment default"
 	kindExisting := (self instantiate: SpDropListPresenter )
 		items: OvinaRegistration  kinds, #('-- ny --').
-	kindNew := (self instantiate: OvinaLabelledTextInput )
-		layout: OvinaLabelledContainer labelTop;
-		label: 'Ny type'.
+	kindNew := self newTextInput.
 	date := self newTextInput 
 		text: (Date today printString).
-	default := (self instantiate: OvinaLabelledTextInput )
-		layout: OvinaLabelledContainer labelTop;
-		label: 'Default værdi'.
-	comment := (self instantiate: SpTextPresenter )
+	default := self newTextInput.
+	comment := self instantiate: SpTextPresenter .
+	self setLayout
 ]
 
 { #category : #description }
@@ -101,4 +98,21 @@ OvinaHistRegistrationEditor >> kindExisting [
 OvinaHistRegistrationEditor >> kindExisting: item [
 
 	kindExisting selectItem: item
+]
+
+{ #category : #initialization }
+OvinaHistRegistrationEditor >> setLayout [
+	self layout: (SpBoxLayout newVertical
+		add: (SpBoxLayout newHorizontal 
+			add: (SpBoxLayout newVertical 
+				add: (kindExisting withLabelAtTop: 'Type') height: 50 ; 
+				add: (kindNew withLabelAtTop: 'Ny type'))
+			expand: true fill: true padding: 2;
+			add: (SpBoxLayout newVertical 
+					add: (date withLabelAtTop: 'Dato') height: 50; 
+					add: (default withLabelAtTop: 'Default værdi') )
+				expand: true fill: true padding: 2)
+			height: 92; 
+		add: (comment withLabelAtTop: 'Kommentar') expand: true fill: true padding: 1);
+		yourself
 ]
