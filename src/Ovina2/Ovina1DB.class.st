@@ -35,6 +35,20 @@ Ovina1DB class >> kindReductionDictionary [
 ]
 
 { #category : #'as yet unclassified' }
+Ovina1DB >> eweRaceFromRow: row [
+	| id |
+	id := 'E', (row at: #eweID) asString.
+	
+	(#('E22' 'E23' 'E12' 'E4' 'E5' 'E7' 'E8' 'E20') includes: id) 
+		ifTrue: [  ^(row at: #race) copyReplaceAll: 'st' with: '1Såne1Texel' ].
+		
+	(row at: #chr) asString = (OvinaSheep maarumlamChr) asString 
+		ifTrue: [ ^nil ].
+	
+	^row at: #race 
+]
+
+{ #category : #'as yet unclassified' }
 Ovina1DB >> loadAll [
 
 	self
@@ -75,7 +89,7 @@ Ovina1DB >> loadEwes [
 			chr: (row at: #chr) asString;
 			number: (row at: #number) asString;
 			name: (row at: #name);
-			race: ((row at: #race ) ifNotNil: [ :r | r asLowercase]) ;
+			race: (self eweRaceFromRow: row) ;
 			inDate: (row at: #inDate);
 			outDate: ((row at: #outDate) ifNotNil: [:d | d parseISO8601]). "Oddly stored as text"
 		OvinaSheep addSheep: ewe.
