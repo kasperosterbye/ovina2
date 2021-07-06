@@ -26,6 +26,25 @@ OvinaColumnSpecification >> buildPresenterForSheep: sheep [
 				whenTextChangedDo:  [ :newText| sheep perform: setter with: newText];
 				yourself) 
 			withLabelAtTop: dkName  ].
+	^ (SpBoxLayout newTopToBottom spacing: 0)
+		add: (SpLabelPresenter new label: dkName) 
+			withConstraints: [:cons | cons height: SpPresenter labelHeight ];
+		add: (SpDropListPresenter new
+			items: choices;
+			whenSelectedItemChangedDo: [ :newText| sheep perform: setter with: newText];
+			yourself) 
+		withConstraints: [:cons | cons height: SpPresenter labelHeight+4];
+		yourself
+]
+
+{ #category : #'as yet unclassified' }
+OvinaColumnSpecification >> buildPresenterForSheep_Old: sheep [
+	choices ifNil: 
+		[ ^ (SpTextInputFieldPresenter new
+				text: (sheep perform: getter) asString;
+				whenTextChangedDo:  [ :newText| sheep perform: setter with: newText];
+				yourself) 
+			withLabelAtTop: dkName  ].
 	^ (SpDropListPresenter new
 			items: choices;
 			whenSelectedItemChangedDo: [ :newText| sheep perform: setter with: newText];

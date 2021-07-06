@@ -80,7 +80,7 @@ OvinaSingleSheepPresenter >> initializePresenters [
 OvinaSingleSheepPresenter >> initializePropertyPresenters [
 	| aLayout|
 	propertyPresenters ifNil: [propertyPresenters := SpPresenter new].
-	aLayout := (SpBoxLayout newTopToBottom spacing: 5).
+	aLayout := (SpBoxLayout newTopToBottom spacing: 2).
 	properties do: [ :prop | aLayout add: (prop buildPresenterForSheep: self sheep)  ].
 	propertyPresenters layout: aLayout.
 	
