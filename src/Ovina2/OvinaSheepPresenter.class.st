@@ -160,7 +160,7 @@ OvinaSheepPresenter >> selectColumns [
 	subscription := columnSelector announcer
 		when: OvinaGUIColumnSelectionChanged 
 		do: [ self updateColumns  ].
-	colSelPresenter openDialogWithSpec 
+	colSelPresenter openModalWithSpec 
 		okAction: [ columnSelector announcer initialize ];
 		cancelAction: [ colSelPresenter cancel. columnSelector announcer initialize ] 
 ]

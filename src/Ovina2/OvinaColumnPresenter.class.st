@@ -32,7 +32,8 @@ OvinaColumnPresenter class >> defaultSpec [
 OvinaColumnPresenter class >> openOn: sheepPresenter [
 	|instance|
 	instance :=self new on: sheepPresenter.
-	instance openDialogWithSpec 
+	self halt.
+	instance openModalWithSpec 
 		cancelAction: [ instance cancel ]
 ]
 
@@ -64,6 +65,12 @@ OvinaColumnPresenter >> columnsMenu [
 				description: 'Flytter denne søjle mod højre i søjlerne';
 				iconName: #arrowDown;
 				action: [ self moveSelectedColumnRight  ] ]
+]
+
+{ #category : #initialization }
+OvinaColumnPresenter >> initializeDialogWindow: aDialog [
+	super initializeDialogWindow: aDialog.
+	aDialog closeOnBackdropClick: true.
 ]
 
 { #category : #initialization }
@@ -100,7 +107,6 @@ OvinaColumnPresenter >> initializePresenters [
 OvinaColumnPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
-	
 	aWindowPresenter
 		title: 'Søjler';
 		initialExtent: 250 @ 600
