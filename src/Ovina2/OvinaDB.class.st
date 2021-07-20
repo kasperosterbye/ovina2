@@ -1,17 +1,26 @@
 Class {
 	#name : #OvinaDB,
-	#superclass : #SQLite3Connection,
+	#superclass : #Object,
+	#instVars : [
+		'connection'
+	],
 	#category : #'Ovina2-Database'
 }
+
+{ #category : #connecting }
+OvinaDB class >> dbPath [
+	"return the filepath to a database"
+	self subclassResponsibility 
+]
 
 { #category : #migration }
 OvinaDB class >> loadAll [
 
-	| conn |
+	| ovinaDB |
 	OvinaModel initialize.
-	conn := self open.
-	conn loadAll.
-	conn close
+	ovinaDB := self open.
+	ovinaDB loadAll.
+	ovinaDB close
 ]
 
 { #category : #connecting }
@@ -20,11 +29,27 @@ OvinaDB class >> open [
 	|path| 
 	path := self dbPath.
 	path asFileReference exists ifFalse: [ OvinaError signal: 'database ',path, ' not found' ].
-	^self openOn: path
+	^self new openOn: path
 	
 ]
 
-{ #category : #'as yet unclassified' }
-OvinaDB >> connectEventsToSheeps [
-	"estblish the event history for each sheep"
+{ #category : #'initialize-release' }
+OvinaDB >> close [
+	connection close
+]
+
+{ #category : #execution }
+OvinaDB >> execute: anSQLText [
+	"I add a simple exception handling for OvinaDB - in particular I am trying
+	to catch errors occuring from not closing and reopening a database between 
+	Pharo image save and start"
+	[ ^ connection execute: anSQLText  ]
+	on: SQLite3NativeError 
+	do: [ :err | self error: 'to be done' ]
+]
+
+{ #category : #'instance creation' }
+OvinaDB >> openOn: aPath [
+	connection := SQLite3Connection openOn: aPath.
+	^ self
 ]

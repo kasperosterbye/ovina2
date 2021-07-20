@@ -29,7 +29,7 @@ OvinaModel class >> dkNumberFrom: aStringOrNil [
 
 { #category : #'class initialization' }
 OvinaModel class >> initialize [
-	"Remove all cached information in Ovina"
+	"Remove all cached information in Ovina model"
 	<script>
 	OvinaSheep initialize.
 	OvinaEvent initialize.
