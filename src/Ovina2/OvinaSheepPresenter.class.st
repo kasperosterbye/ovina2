@@ -113,7 +113,7 @@ OvinaSheepPresenter >> initializeTable [
 			when: SpWidgetBuilt do: [ :ann | 
 			ann widget allowsDeselection: true.]].
 	
-	cols := columnSelector activeColumns  collect:  [ :col |
+	cols := columnSelector activeColumns collect:  [ :col |
 		SpStringTableColumn new
 				 "width: col width + 15;"
 				 title: col dkName ;

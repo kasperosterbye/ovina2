@@ -1,5 +1,7 @@
 "
-I am a class to hold a datastructure used by the column presenter
+I represent a column, with getter and setter and danish name.
+I am also used in the OvinaSingleSheepPresenter to create an editor for those aspects of a sheep which can be editet (has a setter).
+If the values of a column/field is an enumeration, my `choices` variable holds this.
 "
 Class {
 	#name : #OvinaColumnSpecification,

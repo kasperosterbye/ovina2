@@ -103,7 +103,7 @@ OvinaColumnPresenter >> initializeWindow: aWindowPresenter [
 	
 	aWindowPresenter
 		title: 'Søjler';
-		initialExtent: 250 @ 300
+		initialExtent: 250 @ 600
 ]
 
 { #category : #'instance creation' }

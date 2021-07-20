@@ -1,3 +1,8 @@
+"
+I am a notebook page used to provide an overview of a selected parent animal (Ewe or Ram).
+
+
+"
 Class {
 	#name : #OvinaOverviewPresenter,
 	#superclass : #SpNotebookPage,

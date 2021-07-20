@@ -1,3 +1,11 @@
+"
+I represent which columns are selected. 
+On the class side I maintain instances for each of Ewe, Ram and Lambs in the class instance variable repository.
+
+My two instance variable are used as:
+* columnSpecs - An array of associations OvinaColumnSpecification->Boolean
+* name - name of the class (I.e. Ewe) I represent. The name is used in the `update` method to update me when new columns are defined in the classes.
+"
 Class {
 	#name : #OvinaColumnSelection,
 	#superclass : #Model,
@@ -11,11 +19,27 @@ Class {
 	#category : #'Ovina2-GUI Sheep'
 }
 
+{ #category : #accessing }
+OvinaColumnSelection class >> defaultOrder [
+	^{
+#id->false. 
+#number->true.
+#name -> true.
+#chr->false.
+#inDate->true.
+#outDate->false.
+#age->false.
+#race->false.
+#color->false.
+#location->false}
+
+]
+
 { #category : #'as yet unclassified' }
-OvinaColumnSelection class >> for: key [
-	(self repository includesKey: key)
-		ifFalse: [ self repository at: key put: (self new name: key) update ].
-	^ (self repository at: key) update
+OvinaColumnSelection class >> for: sheepClassName [
+	(self repository includesKey: sheepClassName)
+		ifFalse: [ self repository at: sheepClassName put: (self new name: sheepClassName) updateColumns ].
+	^ (self repository at: sheepClassName) updateColumns 
 	
 ]
 
@@ -26,9 +50,15 @@ OvinaColumnSelection class >> repository [
 ]
 
 { #category : #initialization }
+OvinaColumnSelection class >> resetRepository [
+	<script>
+	repository := Dictionary new
+]
+
+{ #category : #initialization }
 OvinaColumnSelection >> activeColumns [
-	"return the column names which are active"
-	^ (self allColumns  select: #value) collect: #key
+	"return the columns which are active"
+	^ (self allColumns select: #value) collect: #key
 
 ]
 
@@ -39,7 +69,7 @@ OvinaColumnSelection >> allColumns [
 
 { #category : #initialization }
 OvinaColumnSelection >> allColumns: columns [
-	" columns is {colName->bool. colName->bool...} 
+	" columns is Array of {colName->bool. colName->bool...} 
 	where the booleans indicate if should be included in presentation"
 	columnSpecs := columns.
 	self announcer announce: (OvinaGUIColumnSelectionChanged new)
@@ -58,8 +88,38 @@ OvinaColumnSelection >> name: anObject [
 ]
 
 { #category : #updating }
-OvinaColumnSelection >> update [
-	"Re-evaluate allColumnBlock to see if new columns are now relevant.
+OvinaColumnSelection >> updateColumns [ 
+	"check my class to see if new columns are now relevant.
+	But keep old order, and insert new columns at the end.
+	noteField is a special case and should always be last."
+	|allByGetter existingOrder new noteField|
+	"existing order maps getter names to true/false"
+	existingOrder := OrderedDictionary newFrom: (columnSpecs 
+	 	ifNil: [  self class defaultOrder]
+		ifNotNil: [ columnSpecs collect: [:assoc | assoc key getter -> assoc value]]).
+	existingOrder removeKey: #noteField ifAbsent: [  ].
+	
+	allByGetter := Dictionary newFromAssociations: 
+		(name asSymbol asClass allColumns collect: [:col | col getter -> col]).
+	noteField := allByGetter at: #noteField.
+	allByGetter removeKey: #noteField ifAbsent: [  ].
+		
+	new := OrderedDictionary new.
+	existingOrder associationsDo: [ :assoc |	
+		(allByGetter includesKey: assoc key)
+			ifTrue: [ new at: (allByGetter at: assoc key) put: assoc value.
+				allByGetter removeKey: assoc key ] ].
+	allByGetter valuesDo: [ :col |
+		new at: col put: false ].
+	"Add noteField to the end"
+	new at: noteField  put: false.
+	columnSpecs := new associations
+	
+]
+
+{ #category : #updating }
+OvinaColumnSelection >> update_old [
+	"check my class to see if new columns are now relevant.
 	But keep old order, and insert new columns at the end"
 	|newColumns|
 	newColumns := name asSymbol asClass allColumns collect: [:colSpec | colSpec -> true].
