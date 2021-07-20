@@ -26,7 +26,7 @@ Ovina2DB class >> currentOpen [
 
 { #category : #connecting }
 Ovina2DB class >> dbPath [
-	^FileLocator imageDirectory pathString, '/ovina_2_01.db3'
+	^FileLocator imageDirectory parent parent pathString, '/ovina_2_01.db3'
 ]
 
 { #category : #migration }

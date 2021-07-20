@@ -6,7 +6,7 @@ Class {
 
 { #category : #connecting }
 Ovina1DB class >> dbPath [
-	^ FileLocator imageDirectory pathString, '/ovina3a.db'
+	^ FileLocator imageDirectory parent parent pathString, '/ovina3a.db'
 ]
 
 { #category : #'as yet unclassified' }
