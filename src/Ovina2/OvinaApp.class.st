@@ -3,7 +3,8 @@ Class {
 	#superclass : #SpApplication,
 	#classInstVars : [
 		'ddd',
-		'uuu'
+		'uuu',
+		'bab'
 	],
 	#category : #'Ovina2-GUI General'
 }
