@@ -30,6 +30,12 @@ OvinaApp class >> open [
 	self todo
 ]
 
+{ #category : #registration }
+OvinaApp class >> registerWithSessionManager [
+	<script>
+	SessionManager default registerUserClassNamed: self name
+]
+
 { #category : #'system startup' }
 OvinaApp class >> shutDown: dummy [
 	"Close GUI"
@@ -44,4 +50,10 @@ OvinaApp class >> startUp: dummy [
 	Ovina2DB currentOpen.
 	"Start GUI"
 	
+]
+
+{ #category : #registration }
+OvinaApp class >> unregisterWithSessionManager [
+	<script>
+	SessionManager default unregisterClassNamed: self name
 ]
