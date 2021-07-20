@@ -39,9 +39,9 @@ OvinaApp class >> shutDown: dummy [
 
 { #category : #'system startup' }
 OvinaApp class >> startUp: dummy [
-	"OvinaModel initialize."
-	"Ovina2DB loadAll.
-	Ovina2DB currentOpen."
+	OvinaModel initialize.
+	Ovina2DB loadAll.
+	Ovina2DB currentOpen.
 	"Start GUI"
 	
 ]
