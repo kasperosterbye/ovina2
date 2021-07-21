@@ -1,6 +1,6 @@
 Class {
 	#name : #OvinaEvent,
-	#superclass : #Object,
+	#superclass : #OvinaModelElement,
 	#instVars : [
 		'id',
 		'registration',

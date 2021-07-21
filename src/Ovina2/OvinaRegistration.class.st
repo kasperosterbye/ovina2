@@ -1,6 +1,6 @@
 Class {
 	#name : #OvinaRegistration,
-	#superclass : #Object,
+	#superclass : #OvinaModelElement,
 	#instVars : [
 		'id',
 		'kind',
@@ -97,6 +97,13 @@ OvinaRegistration >> default: anObject [
 
 	default := anObject.
 	self changed
+]
+
+{ #category : #accessing }
+OvinaRegistration >> events [
+	"^ events for this regrstration "
+	^ self cache: #events
+		 compute: [ OvinaEvent events values select:[:ev | ev registration  = self ]]
 ]
 
 { #category : #accessing }
