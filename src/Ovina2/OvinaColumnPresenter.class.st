@@ -2,7 +2,8 @@
 I am used to select a which table columns are to be presented, and in which order.
 
 list is an SpListPresenter, 
-while columns store the column names as OrderedCollection<Association<ColumnName:String,Include:Boolean>>
+while columns store the column names as 
+OrderedCollection< Association<ColumnName:String, Include:Boolean> >
 "
 Class {
 	#name : #OvinaColumnPresenter,
