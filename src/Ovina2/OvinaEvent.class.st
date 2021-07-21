@@ -42,7 +42,8 @@ OvinaEvent class >> initialize [
 { #category : #initialization }
 OvinaEvent class >> removeEvent: event [
 
-	self events removeKey: event id
+	self events removeKey: event id.
+	OvinaModel announcer announce: (OvinaModelEventRemoved new event: event).
 ]
 
 { #category : #updating }
@@ -102,7 +103,7 @@ OvinaEvent >> registration [
 { #category : #accessing }
 OvinaEvent >> registration: anObject [
 	registration := anObject.
-	"Registrations do not change - hence no announcement"
+	"Registrations do not change for an event- hence no announcement"
 ]
 
 { #category : #accessing }
@@ -130,5 +131,5 @@ OvinaEvent >> sheep [
 OvinaEvent >> sheep: anObject [
 
 	sheep := anObject.
-	"Sheep does not change, no announcement"
+	"Sheep does not change within an event, no announcement"
 ]

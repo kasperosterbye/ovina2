@@ -50,8 +50,10 @@ OvinaRegistration class >> registrations [
 
 { #category : #removing }
 OvinaRegistration class >> removeRegistration: reg [
-	self registrations removeKey: reg id
-	
+	"remove registration. If regstration has any events associated, those will be removed first"
+	reg events do: [ :ev | OvinaEvent removeEvent: ev ].
+	self registrations removeKey: reg id.
+	OvinaModel announcer announce: (OvinaModelRegistrationRemoved new registration: reg).
 ]
 
 { #category : #updating }
@@ -80,9 +82,9 @@ OvinaRegistration >> date [
 
 { #category : #accessing }
 OvinaRegistration >> date: anObject [
-	anObject isString
-		ifTrue: [ date := anObject parseDKDate  ]
-		ifFalse: [ date := anObject. ].
+	date := anObject isString
+		ifTrue: [ anObject parseDKDate  ]
+		ifFalse: [ anObject. ].
 	self changed
 ]
 
