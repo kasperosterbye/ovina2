@@ -203,6 +203,8 @@ OvinaSheep >> location [
 
 { #category : #accessing }
 OvinaSheep >> name [
+
+	<sheepColumn: #('navn' name:)>
 	self subclassResponsibility 
 ]
 

@@ -52,7 +52,6 @@ OvinaRam >> lambs [
 { #category : #'accessing - properties' }
 OvinaRam >> name [
 	
-	<sheepColumn: #('navn' name:)>
 	^ self property: #name
 ]
 

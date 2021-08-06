@@ -136,7 +136,6 @@ OvinaEwe >> maleneScore [
 
 { #category : #'accessing - properties' }
 OvinaEwe >> name [
-	<sheepColumn: #('navn' name:)>
 	^ self property: #name
 ]
 
