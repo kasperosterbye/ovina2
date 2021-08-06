@@ -73,6 +73,7 @@ OvinaSheepPresenter >> initialize [
 { #category : #initialization }
 OvinaSheepPresenter >> initializeButtons [
 
+	buttonBar := self newButtonBar.
 	buttonBar
 		add: (self newButton
 				 icon: (Smalltalk ui icons iconNamed: #smallPrint);
@@ -92,7 +93,6 @@ OvinaSheepPresenter >> initializeButtons [
 OvinaSheepPresenter >> initializePresenters [
 	 
 	self initializeTable.
-	buttonBar := self newButtonBar.
 	self initializeButtons.
 	self setLayout.
 	OvinaModel announcer 

@@ -8,7 +8,11 @@ Class {
 	#superclass : #OvinaSheepPresenter,
 	#instVars : [
 		'includeLambs',
-		'sheepSelected'
+		'onlyPresent',
+		'location',
+		'onlyLambs',
+		'sheepSelected',
+		'buttonBar2'
 	],
 	#category : #'Ovina2-GUI History'
 }
@@ -26,8 +30,16 @@ OvinaHistSheepSelection class >> sheepClass [
 
 { #category : #accessing }
 OvinaHistSheepSelection >> filter: sheepCollection [
-	^ sheepCollection select: [ :sheep | sheep present ]
-	
+	"return a filtered sheepCollection"
+	"onlyPresent location onlyLambs "
+	| filtered | 
+	filtered := sheepCollection.
+	onlyPresent ifTrue: [ filtered := filtered select: [ :sheep | sheep present ]].
+	location = 'alle' ifFalse: [ 
+		filtered := filtered select: [ :sheep | 
+			sheep location asLowercase = location  ]].
+	onlyLambs ifTrue: [ filtered := filtered select: [ :sheep | sheep isLamb ]].
+	^filtered
 ]
 
 { #category : #'as yet unclassified' }
@@ -39,6 +51,9 @@ OvinaHistSheepSelection >> filteredLambsOf: anEwe [
 { #category : #initialization }
 OvinaHistSheepSelection >> initialize [
 	includeLambs := true.
+	onlyPresent := true.
+	location := 'alle'.
+	onlyLambs := false.
 	sheepSelected := Dictionary new.
 	
 	super initialize.
@@ -46,23 +61,42 @@ OvinaHistSheepSelection >> initialize [
 
 { #category : #initialization }
 OvinaHistSheepSelection >> initializeButtons [
+
 	super initializeButtons.
-	buttonBar
-		add: (self newButton 
-				 icon: (ThemeIcons current iconNamed: #checkboxUnselected) ;
-				 label: 'alle';
-				 action: [self unselectAll]);
-		add: (self newButton 
-				 icon: (ThemeIcons current iconNamed: #checkboxSelected) ;
-				 label: 'alle';
-				 action: [self selectAll]);
+	buttonBar2 := self newButtonBar.
+	buttonBar2
+		add: (self newDropList  
+				 "label: 'placering';"
+				 items: #('alle' 'hjemme' 'losse' 'konge');
+				 whenSelectedItemChangedDo: [ :newValue | 
+					location := newValue. 
+					self updatePresenter ]);
+		add: (self newCheckBox 
+				 label: 'aktuelle';
+				 state: onlyPresent;
+				 whenChangedDo: [ :newValue | 
+					onlyPresent := newValue. 
+					self updatePresenter ]);
+		add: (self newCheckBox 
+				 label: 'kun lam';
+				 state: onlyLambs ;
+				 whenChangedDo: [ :newValue | 
+					onlyLambs := newValue. 
+					self updatePresenter ]);
 		add: (self newCheckBox
-				 label: 'Inkluder lam';
-				 state: includeLambs ;
+				 label: '+lam';
+				 state: includeLambs;
 				 whenChangedDo: [ :newValue | 
 					 includeLambs := newValue.
 					 self updatePresenter ]);
-		yourself 
+		add: (self newButton
+				 icon: (Smalltalk ui icons iconNamed: #checkboxUnselected);
+				 label: 'alle';
+				 action: [ self unselectAll ]);
+		add: (self newButton
+				 icon: (Smalltalk ui icons iconNamed: #checkboxSelected);
+				 label: 'alle';
+				 action: [ self selectAll ])
 ]
 
 { #category : #initialization }
@@ -107,6 +141,14 @@ OvinaHistSheepSelection >> selected: someSheeps [
 OvinaHistSheepSelection >> selectedSheeps [
 	"return which sheeps are currently selected"
 	^(sheepSelected select: [ :bool | bool ]) keys
+]
+
+{ #category : #initialization }
+OvinaHistSheepSelection >> setLayout [ 
+	super setLayout.
+	self layout 
+		add: (SpBoxLayout newHorizontal add: buttonBar2) expand: false fill: true padding: 3
+	
 ]
 
 { #category : #accessing }

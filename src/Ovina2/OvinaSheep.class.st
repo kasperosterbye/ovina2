@@ -196,7 +196,7 @@ OvinaSheep >> location [
 	^ self cache: #location
 		compute: [ 
 			(self events detect: [ :ev | ev kind = 'flytning' ] ifNone: [ nil ])
-				ifNotNil: [ :event | event result ] 
+				ifNotNil: [ :event | (event result ifEmpty:  ['hjemme']) asLowercase  ] 
 				ifNil: [ 'hjemme' ]
 			 ]
 ]
@@ -275,7 +275,7 @@ OvinaSheep >> race [
 { #category : #'accessing - properties' }
 OvinaSheep >> race: race [
 	((self property: #race) isNotNil and: [ self chr = OvinaSheep maarumlamChr ])
-		ifTrue: [ self halt.
+		ifTrue: [ 
 			UIManager default alert: 'Racen er beregnet for dyr født hos os'.
 			^self ].
 	^self property: #race put: race
