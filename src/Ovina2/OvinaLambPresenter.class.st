@@ -46,8 +46,8 @@ OvinaLambPresenter >> promoteToEwe [
 	|lamb newEwe|
 	lamb := table selection selectedItem.
 	lamb ifNil: [ ^self ].
-	lamb usage = 'avl' ifFalse: [ OvinaApp beep. ^self ].
 	newEwe := lamb promoteToEwe.
+	newEwe ifNil: [ ^self ].
 	self announcer announce: (OvinaGUILampPromotion new sheep: newEwe )
 	
 ]

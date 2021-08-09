@@ -25,6 +25,13 @@ OvinaApp class >> confirm: question [
 	
 ]
 
+{ #category : #accessing }
+OvinaApp class >> errorMessage: text [
+	^ UIManager default 
+		abort: text 
+		title: 'Fejl'
+]
+
 { #category : #'instance creation' }
 OvinaApp class >> open [
 	self todo

@@ -9,6 +9,21 @@ OvinaLamb class >> all [
 	^ self lambs values
 ]
 
+{ #category : #accessing }
+OvinaLamb >> canPromoteToEwe [
+	"Check the conditions for promotions is in place"
+	
+	OvinaSheep ewes values 
+		detect:  [ :ewe | ewe number = self number]
+		ifFound: [ :ewe | 
+			OvinaApp errorMessage: ('Lam ', self number asString, ' er allerede får og hedder ', ewe name). 
+			^false ].
+		
+	self usage = 'avl' ifFalse: 
+		[ OvinaApp errorMessage: 'Kun lam udvalgt til avl kan blive får'. 
+		^false ].
+]
+
 { #category : #'accessing - properties' }
 OvinaLamb >> color [
 	<sheepColumn:#('Farve' color: #('hvid' 'sort' 'andet'))>
@@ -201,8 +216,9 @@ OvinaLamb >> printOn: aStream [
 
 { #category : #accessing }
 OvinaLamb >> promoteToEwe [
-	"Assumes the conditions for promotions is in place"
 	|nextEweId newEwe|
+	self canPromoteToEwe ifFalse: [ ^nil ].
+	
 	nextEweId := (OvinaSheep ewes keys collect: [ :key | key extractNumber ]) max +1.
 	newEwe := OvinaEwe new
 		id: 'E', nextEweId asString;
