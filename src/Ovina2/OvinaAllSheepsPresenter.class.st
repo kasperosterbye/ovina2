@@ -88,12 +88,21 @@ OvinaAllSheepsPresenter >> removeAnnouncements [
 	presenter removeAnnouncements ]
 ]
 
+{ #category : #initialization }
+OvinaAllSheepsPresenter >> resetSelections [
+	ewes setSelected: nil.
+	rams setSelected: nil.
+	lambs setSelected: nil.
+	
+]
+
 { #category : #accessing }
 OvinaAllSheepsPresenter >> setLayout [
 	self layout: (SpPanedLayout newHorizontal
 		addFirst: (SpNotebookPresenter new 
 			addPageTitle: 'Får' provider: [ewes];
-			addPageTitle: 'Væddere' provider: [rams] );
+			addPageTitle: 'Væddere' provider: [rams];
+			whenSelectedPageChangedDo: [ self resetSelections] );
 		addSecond: (SpNotebookPresenter new 
 			addPageTitle: 'Lam' provider: [lambs];
 			addPage: overview ))

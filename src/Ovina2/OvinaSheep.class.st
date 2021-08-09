@@ -112,9 +112,8 @@ OvinaSheep class >> sheeps [
 
 { #category : #updating }
 OvinaSheep >> changed [
-	"I have changed, notify my dependents"
+	"I have changed, invalidateCache (which notifies using announcer)"
 	self invalidateCache.
-	OvinaModel announcer announce: (OvinaModelSheepChanged new sheep: self).
 ]
 
 { #category : #accessing }
@@ -167,6 +166,12 @@ OvinaSheep >> inDate: date [
 OvinaSheep >> initialize [
 	super initialize.
 	properties := Dictionary new.
+]
+
+{ #category : #updating }
+OvinaSheep >> invalidateCache [ 
+	super invalidateCache.
+	OvinaModel announcer announce: (OvinaModelSheepChanged new sheep: self)
 ]
 
 { #category : #testing }

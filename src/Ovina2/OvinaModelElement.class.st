@@ -22,5 +22,4 @@ OvinaModelElement >> initialize [
 { #category : #caching }
 OvinaModelElement >> invalidateCache [
 	cachings := Dictionary new.
-	OvinaModel announcer announce: (OvinaModelSheepChanged new sheep: self)
 ]

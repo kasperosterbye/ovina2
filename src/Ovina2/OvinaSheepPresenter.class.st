@@ -54,11 +54,7 @@ OvinaSheepPresenter >> editSheep [
 	editor := OvinaSingleSheepPresenter on: [ table selection selectedItem ].
 	editor
 		prevBlock: [ self selectPreviousSheep  ];
-		nextBlock: [ self selectNextSheep  ]";
-		closeBlock: [ |selected| 
-			selected := table selection selectedItem.
-			self updatePresenter.
-			table selection selectItem: selected ]".
+		nextBlock: [ self selectNextSheep  ].
 	editor openWithSpec.
 	 
 ]
@@ -105,7 +101,7 @@ OvinaSheepPresenter >> initializePresenters [
 OvinaSheepPresenter >> initializeTable [
 	|cols|
 	table ifNil: [ 
-		table := self instantiate: SpTablePresenter.
+		table := self instantiate: OvinaTablePresenter.
 		table 
 			whenSelectedDo: [ :sheep | self announceNewSelection: sheep];
 			whenNoneSelectedDo: [ self announceNewSelection: nil ].
@@ -219,11 +215,11 @@ OvinaSheepPresenter >> updateColumns [
 { #category : #initialization }
 OvinaSheepPresenter >> updatePresenter [
 	|selected|
-	selected := table selection selectedItem.
+	"selected := table selection selectedItem."
 	table items: self sheeps.
-	(selected notNil and: [ table items includes: selected ]) 
+	"(selected notNil and: [ table items includes: selected ]) 
 		ifTrue: [ 
 			table selection selectItem: selected.
-			self announceNewSelection: selected ]
+			self announceNewSelection: selected ]"
 
 ]
