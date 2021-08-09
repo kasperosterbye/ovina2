@@ -84,11 +84,10 @@ OvinaHistEvents >> initializeTable [
 OvinaHistEvents >> printPageForNotes [
 	|specialTable tablePrinter|
 	"Create a new table to be printed, now we have a table printer"
-	specialTable := SpTablePresenter new 
-		columns: (table columns copyFrom: 1 to: 2), 
-			{SpStringTableColumn new title: 'værdi' ; evaluated: [ :d| '' ]};
-		sortingBlock: [ :e1 :e2 | (e2 sheep number) threeWayCompareTo:  (e1 sheep number)] asSortFunction;
-		items: table items.
+	specialTable := SpTablePresenter new
+		columns: {SpStringTableColumn new title: 'værdi' ; evaluated: [ :d| '' ]},
+		(table columns copyFrom: 1 to: 2);
+		items: ((1 to: table items size) collect: [ :index | table itemAt: index ]).
 	tablePrinter := OvinaTablePrinter new
 		title: 'Notering af ', registration kind, ' - ', registration date asString;
 		table: specialTable .

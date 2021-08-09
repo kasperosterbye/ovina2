@@ -86,27 +86,13 @@ OvinaTablePrinter >> printTableRows: html [
 
 	"use the order of the table"
 	|inOrder|
-	"Odd, but this is the best I could come up with"
+	"Odd, but this is the best I could come up with to get the order right"
 	inOrder := (1 to: table items size) collect: [ :index | table itemAt: index ].
 	inOrder  do: [ :item | 
 		html
 			tag: #tr
 			do: [ 
-			table columns   do: [ :col | html tag: #td with: (col evaluation value: item) asString ] ] ] 
-]
-
-{ #category : #printing }
-OvinaTablePrinter >> printTableRowsOld: html [
-
-	"use the order of the table"
-	|inOrder|
-	"Odd, but this is the best I could come up with"
-	inOrder := (1 to: table items size) collect: [ :index | table itemAt: index ].
-	inOrder  do: [ :sheep | 
-		html
-			tag: #tr
-			do: [ 
-			columnsSelector activeColumns  do: [ :col | html tag: #td with: (sheep perform: col getter) asString ] ] ] 
+			table columns do: [ :col | html tag: #td with: (col evaluation value: item) asString ] ] ] 
 ]
 
 { #category : #accessing }
