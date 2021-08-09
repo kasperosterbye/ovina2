@@ -225,13 +225,15 @@ Ovina2DB >> storeSheep: sheep [
 
 { #category : #'as yet unclassified' }
 Ovina2DB >> subscribeToChangeAnnouncers [
-	Transcript nextPutAll: 'Subscribing';cr;endEntry.
 	OvinaModel announcer
 		when: OvinaModelSheepChanged do: [:ann | self storeSheep: ann sheep];
-		when: OvinaModelEventChanged do: [:ann | self storeEvent: ann event];
-		when: OvinaModelRegistrationChanged do: [:ann | self storeRegistration: ann registration];
-		when: OvinaModelSheepRemoved do: [ :ann | self removeSheep: ann sheep ]
+		when: OvinaModelSheepRemoved do: [ :ann | self removeSheep: ann sheep ];
 		
+		when: OvinaModelEventChanged do: [:ann | self storeEvent: ann event];
+		when: OvinaModelEventRemoved do: [ :ann | self removeEvent: ann event ];
+		
+		when: OvinaModelRegistrationChanged do: [:ann | self storeRegistration: ann registration];
+		when: OvinaModelRegistrationRemoved do: [:ann | self removeRegistration: ann registration]
 ]
 
 { #category : #'as yet unclassified' }
