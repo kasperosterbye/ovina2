@@ -88,10 +88,11 @@ OvinaEvent >> printOn: aStream [
 
 	"id registration sheep date value"
 
-	aStream nextPutAll: ('Event [{1}, {2}, {3}]' format: { 
+	aStream nextPutAll: ('Event [{1} @ {2}: {3} - sheep: {4}]' format: { 
 				 registration kind.
-				 sheep.
-				 result })
+				 registration date.
+				 result.
+				 sheep. })
 ]
 
 { #category : #accessing }
