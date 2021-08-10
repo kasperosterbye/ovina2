@@ -243,13 +243,16 @@ OvinaEwe >> sumOfLastThreeYears [
 
 { #category : #columns }
 OvinaEwe >> sumOfLastThreeYearsCompute [
-	|newestSeason|
-	self lambs ifEmpty: [ ^ -1 ].
-	newestSeason := ((self lambs select: [ :l | l gramPerDay > 0 ]) "ignore lambs not weighted"
-						collect: [ :l | l inDate year ]) inject: 0 into: [:sofar :l| sofar max: l].
-	^ ((self lambs select: [:l | (l inDate year >= (newestSeason -2)) and: [ l gramPerDay > 0 ] ])
-		collect: [ :l | l gramPerDay  ]) inject: 0 into: [:sofar :l| sofar + l]
-	
+	"I am using inject:into: as the inject value is return in case of empty collection"
+	|lambsList newestSeason firstSeason totalWeight|
+	lambsList := self lambs select: [ :l | l gramPerDay > 0 ].
+	lambsList ifEmpty: [ ^ -1 ].
+	newestSeason := (lambsList  collect: [ :l | l inDate year ]) inject: 0 into: [:sofar :l| sofar max: l].
+	firstSeason := (lambsList  collect: [ :l | l inDate year ]) inject: 3000 into: [:sofar :l| sofar min: l].
+	firstSeason := newestSeason -2 max: firstSeason.
+	totalWeight := ((lambsList select: [:l | l inDate year >= (newestSeason -2) ])
+		collect: [ :l | l gramPerDay  ]) inject: 0 into: [:sofar :l| sofar + l].
+	^totalWeight / (newestSeason - firstSeason + 1 ) * 3
 ]
 
 { #category : #private }

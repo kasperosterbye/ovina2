@@ -108,7 +108,7 @@ OvinaLamb >> finalWeightCompute [
 { #category : #columns }
 OvinaLamb >> gramPerDay [
 	"return projected gram per day based on weight measurements"
-	<sheepColumn: #('prognose')>
+	<sheepColumn: #('gram/dag')>
 	^self cache: #gramPerDay compute: [ self gramPerDayCompute  ] 
 	
 	
@@ -123,6 +123,7 @@ OvinaLamb >> gramPerDayCompute [
 	weightnings := self events select: [ :ev | ev kind = 'vejning' ].
 	"Some old lambs do not have events, but might store growth in a property"
 	weightnings ifEmpty: [ ^ self growthProperty ].
+	weightnings := weightnings sort: [ :e1 :e2 | e1 date >= e2 date].
 	secondLastWeight := 5.0.
 	secondLastDate := self inDate.
 	weightnings size > 1 ifTrue: [ 
