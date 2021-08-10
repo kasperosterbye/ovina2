@@ -8,8 +8,6 @@ Class {
 	#superclass : #OvinaSheepPresenter,
 	#instVars : [
 		'includeLambs',
-		'onlyPresent',
-		'location',
 		'onlyLambs',
 		'sheepSelected',
 		'buttonBar2'
@@ -31,18 +29,13 @@ OvinaHistSheepSelection class >> sheepClass [
 { #category : #accessing }
 OvinaHistSheepSelection >> filter: sheepCollection [
 	"return a filtered sheepCollection"
-	"onlyPresent location onlyLambs "
 	| filtered | 
-	filtered := sheepCollection.
-	onlyPresent ifTrue: [ filtered := filtered select: [ :sheep | sheep present ]].
-	location = 'alle' ifFalse: [ 
-		filtered := filtered select: [ :sheep | 
-			sheep location asLowercase = location  ]].
+	filtered := super filter: sheepCollection.
 	onlyLambs ifTrue: [ filtered := filtered select: [ :sheep | sheep isLamb ]].
 	^filtered
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 OvinaHistSheepSelection >> filteredLambsOf: anEwe [
 	anEwe isEwe ifFalse: [ ^#() ].
 	^ self filter: anEwe lambs
@@ -51,8 +44,6 @@ OvinaHistSheepSelection >> filteredLambsOf: anEwe [
 { #category : #initialization }
 OvinaHistSheepSelection >> initialize [
 	includeLambs := true.
-	onlyPresent := true.
-	location := 'alle'.
 	onlyLambs := false.
 	sheepSelected := Dictionary new.
 	
@@ -65,18 +56,6 @@ OvinaHistSheepSelection >> initializeButtons [
 	super initializeButtons.
 	buttonBar2 := self newButtonBar.
 	buttonBar2
-		add: (self newDropList  
-				 "label: 'placering';"
-				 items: #('alle' 'hjemme' 'losse' 'konge');
-				 whenSelectedItemChangedDo: [ :newValue | 
-					location := newValue. 
-					self updatePresenter ]);
-		add: (self newCheckBox 
-				 label: 'aktuelle';
-				 state: onlyPresent;
-				 whenChangedDo: [ :newValue | 
-					onlyPresent := newValue. 
-					self updatePresenter ]);
 		add: (self newCheckBox 
 				 label: 'kun lam';
 				 state: onlyLambs ;
@@ -118,7 +97,7 @@ OvinaHistSheepSelection >> selectAll [
 	self sheeps do: [ :sheep | self selectSheep: sheep ] 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #selection }
 OvinaHistSheepSelection >> selectSheep: sheep [
 	sheepSelected at: sheep put: true.
 	table selection selectItem: sheep.
@@ -137,7 +116,7 @@ OvinaHistSheepSelection >> selected: someSheeps [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #selection }
 OvinaHistSheepSelection >> selectedSheeps [
 	"return which sheeps are currently selected"
 	^(sheepSelected select: [ :bool | bool ]) keys
@@ -163,7 +142,7 @@ OvinaHistSheepSelection >> unselectAll [
 	self sheeps do: [ :sheep | self unselectSheep: sheep ] 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #selection }
 OvinaHistSheepSelection >> unselectSheep: sheep [
 	"sheep might not be selected"
 	(sheepSelected includesKey: sheep) ifFalse: [ ^self ].
@@ -175,7 +154,7 @@ OvinaHistSheepSelection >> unselectSheep: sheep [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 OvinaHistSheepSelection >> updatePresenter [
 	table items: self sheeps.
 	

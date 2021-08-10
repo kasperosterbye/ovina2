@@ -8,7 +8,9 @@ Class {
 	#instVars : [
 		'table',
 		'buttonBar',
-		'columnSelector'
+		'columnSelector',
+		'onlyPresent',
+		'location'
 	],
 	#classInstVars : [
 		'allColumns'
@@ -39,14 +41,14 @@ OvinaSheepPresenter class >> threeWayCompare: a to: b [
 	^ a threeWayCompareTo: b
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #selection }
 OvinaSheepPresenter >> announceNewSelection: sheep [
 	"Currently selected sheep changed"
 	
 	self announcer announce: (OvinaGUISheepSelectionChanged new sheep: sheep)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 OvinaSheepPresenter >> editSheep [
 	"OvinaSingleSheepPresenter openOn: table selection selectedItem"
 	|editor|
@@ -59,8 +61,24 @@ OvinaSheepPresenter >> editSheep [
 	 
 ]
 
+{ #category : #accessing }
+OvinaSheepPresenter >> filter: sheepCollection [
+	"return a filtered sheepCollection"
+	"onlyPresent location onlyLambs "
+	| filtered | 
+	filtered := sheepCollection.
+	onlyPresent ifTrue: [ filtered := filtered select: [ :sheep | sheep present ]].
+	location = 'alle' ifFalse: [ 
+		filtered := filtered select: [ :sheep | 
+			sheep location asLowercase = location  ]].
+	^filtered
+]
+
 { #category : #initialization }
 OvinaSheepPresenter >> initialize [
+
+	onlyPresent := true.
+	location := 'alle'.
 	columnSelector := OvinaColumnSelection 
 		for: self class sheepClass name.
 	super initialize.
@@ -71,6 +89,18 @@ OvinaSheepPresenter >> initializeButtons [
 
 	buttonBar := self newButtonBar.
 	buttonBar
+		add: (self newDropList  
+				 "label: 'placering';"
+				 items: #('alle' 'hjemme' 'losse' 'konge');
+				 whenSelectedItemChangedDo: [ :newValue | 
+					location := newValue. 
+					self updatePresenter ]);
+		add: (self newCheckBox 
+				 label: 'aktuelle';
+				 state: onlyPresent;
+				 whenChangedDo: [ :newValue | 
+					onlyPresent := newValue. 
+					self updatePresenter ]);
 		add: (self newButton
 				 icon: (Smalltalk ui icons iconNamed: #smallPrint);
 				 label: 'Print';
@@ -149,7 +179,7 @@ OvinaSheepPresenter >> removeAnnouncements [
 	columnSelector announcer unsubscribe: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #selection }
 OvinaSheepPresenter >> selectColumns [
 	|colSelPresenter subscription|
 	colSelPresenter := OvinaColumnPresenter new on: columnSelector.
@@ -161,7 +191,7 @@ OvinaSheepPresenter >> selectColumns [
 		cancelAction: [ colSelPresenter cancel. columnSelector announcer initialize ] 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #selection }
 OvinaSheepPresenter >> selectNextSheep [
 	"Should select next sheep in the list"
 	"Should select previous sheep in the list"
@@ -172,7 +202,7 @@ OvinaSheepPresenter >> selectNextSheep [
 	self announcer announce: (OvinaGUISheepSelectionChanged new sheep: table selection selectedItem )
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #selection }
 OvinaSheepPresenter >> selectPreviousSheep [
 	"Should select previous sheep in the list"
 	|index|
@@ -190,7 +220,7 @@ OvinaSheepPresenter >> setLayout [
 		yourself)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #selection }
 OvinaSheepPresenter >> setSelected: sheep [
 	"Currently selected sheep changed"
 	table selection selectItem: sheep.
@@ -201,8 +231,7 @@ OvinaSheepPresenter >> setSelected: sheep [
 { #category : #accessing }
 OvinaSheepPresenter >> sheeps [
 	"Get the list of all sheeps"
-	^ "(OvinaSheep sheeps values select: [ :sheep | sheep class = self class sheepClass  ]) "
-		self class sheepClass all sort: [ :r1 :r2 | r1 id < r2 id]
+	^ self filter: (self class sheepClass all sort: [ :r1 :r2 | r1 id < r2 id])
 ]
 
 { #category : #initialization }
@@ -214,12 +243,5 @@ OvinaSheepPresenter >> updateColumns [
 
 { #category : #initialization }
 OvinaSheepPresenter >> updatePresenter [
-	|selected|
-	"selected := table selection selectedItem."
 	table items: self sheeps.
-	"(selected notNil and: [ table items includes: selected ]) 
-		ifTrue: [ 
-			table selection selectItem: selected.
-			self announceNewSelection: selected ]"
-
 ]

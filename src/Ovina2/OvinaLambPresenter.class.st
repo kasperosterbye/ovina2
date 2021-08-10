@@ -33,6 +33,12 @@ OvinaLambPresenter >> filterSire: sire [
 ]
 
 { #category : #initialization }
+OvinaLambPresenter >> initialize [
+	super initialize.
+	onlyPresent := false
+]
+
+{ #category : #initialization }
 OvinaLambPresenter >> initializeButtons [ 
 	super initializeButtons.
 	buttonBar  add: ( self newButton 
