@@ -2,6 +2,9 @@
 I am holding a few global methods to handle the Ovina model as a whole.
 In particular initialize before loading a new model from database.
 
+## Announcement
+Any change to any model element is announced using my global announcer
+
 
 "
 Class {
