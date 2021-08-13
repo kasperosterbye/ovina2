@@ -1,6 +1,6 @@
 Class {
 	#name : #OvinaSheepTest,
-	#superclass : #TestCase,
+	#superclass : #OvinaTestCase,
 	#category : #'Ovina2-Tests-Model'
 }
 
