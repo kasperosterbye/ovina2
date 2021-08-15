@@ -9,6 +9,21 @@ OvinaEwe class >> all [
 	^ self ewes values
 ]
 
+{ #category : #'instance creation' }
+OvinaEwe class >> newEwe [
+	|nextEweId newEwe|
+	nextEweId := (OvinaSheep ewes keys collect: [ :key | key extractNumber ]) max +1.
+	newEwe := OvinaEwe new
+		id: 'E', nextEweId asString;
+		chr: -1;
+		number: -1;
+		inDate: Date today asDKString;
+		name: 'Unavngivet'.
+	OvinaSheep addSheep: newEwe.
+	OvinaModel announcer announce: (OvinaModelSheepChanged new sheep: newEwe ).
+	^ newEwe 	
+]
+
 { #category : #columns }
 OvinaEwe >> age [
 	"in years"

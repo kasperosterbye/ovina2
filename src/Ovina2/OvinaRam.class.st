@@ -12,6 +12,22 @@ OvinaRam class >> all [
 	^ self rams values
 ]
 
+{ #category : #'instance creation' }
+OvinaRam class >> newRam [
+	|nextRamId newRam|
+	nextRamId := (OvinaSheep rams keys collect: [ :key | key extractNumber ]) max +1.
+	newRam := OvinaRam new
+		id: 'R', nextRamId asString;
+		chr: -1;
+		number: -1;
+		inDate: Date today asDKString;
+		name: 'Unavngivet';
+		race: 'Uangivet'.
+	OvinaSheep addSheep: newRam.
+	OvinaModel announcer announce: (OvinaModelSheepChanged new sheep: newRam ).
+	^ newRam 	
+]
+
 { #category : #'as yet unclassified' }
 OvinaRam class >> ramForDate: aDate [
 	| rams |

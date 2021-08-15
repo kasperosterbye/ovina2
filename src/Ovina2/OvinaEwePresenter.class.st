@@ -31,6 +31,14 @@ OvinaEwePresenter >> initializeButtons [
 			action: [ self addLambForSelectedEwe ])
 ]
 
+{ #category : #'instance creation' }
+OvinaEwePresenter >> newEwe [
+	| newEwe |
+	newEwe := OvinaEwe newEwe.
+	table selection selectItem: newEwe.
+	self editSheep
+]
+
 { #category : #initialization }
 OvinaEwePresenter >> title [
 	^'Får'

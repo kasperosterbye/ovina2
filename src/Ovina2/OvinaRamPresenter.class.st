@@ -17,7 +17,15 @@ OvinaRamPresenter >> initializeButtons [
 	super initializeButtons.
 	buttonBar add: (self newButton 
 			label: 'Ny vædder';
-			action: [ self error:'Not implemented yet' ])
+			action: [ self newRam ])
+]
+
+{ #category : #'instance creation' }
+OvinaRamPresenter >> newRam [
+	| newRam |
+	newRam := OvinaRam newRam.
+	table selection selectItem: newRam.
+	self editSheep
 ]
 
 { #category : #initialization }
