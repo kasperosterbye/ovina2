@@ -67,7 +67,7 @@ OvinaHistRegistrationEditor >> default: aStringOrText [
 	default text: aStringOrText asString
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 OvinaHistRegistrationEditor >> initializePresenters [
 	"actionBar kindExisting kindNew date comment default"
 	kindExisting := (self instantiate: SpDropListPresenter )

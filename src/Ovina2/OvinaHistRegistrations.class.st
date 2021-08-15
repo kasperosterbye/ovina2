@@ -54,7 +54,7 @@ OvinaHistRegistrations >> currentRegistration: reg [
 	self announce: (OvinaGUIRegistrationsChanged new registration: self)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #editing }
 OvinaHistRegistrations >> editRegistration [
 	|reg editor|
 	reg := self selectedRegistration.
@@ -218,7 +218,7 @@ OvinaHistRegistrations >> removeRegistration [
 	table selectIndex: index scrollToSelection: true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #editing }
 OvinaHistRegistrations >> selectNextOrLast [
 
 	| index |
@@ -227,7 +227,7 @@ OvinaHistRegistrations >> selectNextOrLast [
 	table selectIndex: index + 1 scrollToSelection: true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #editing }
 OvinaHistRegistrations >> selectPreviousOrFirst [
 
 	| index |

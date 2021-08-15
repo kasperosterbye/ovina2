@@ -70,7 +70,7 @@ OvinaHistoryPresenter >> initializeWindow: aWindowPresenter [
 		whenClosedDo: [ self removeAnnouncements ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #events }
 OvinaHistoryPresenter >> registrationChanged [
 	"callback from registrations"
 	events registration: registrations selectedRegistration.
@@ -84,12 +84,12 @@ OvinaHistoryPresenter >> removeAnnouncements [
 		presenter announcer unsubscribe: self]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #events }
 OvinaHistoryPresenter >> selectedSheeps [
 	^ selections selectedSheeps 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #events }
 OvinaHistoryPresenter >> sheepsChanged [ 
 	"callback from sheep selection"
 	

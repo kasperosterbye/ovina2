@@ -29,7 +29,7 @@ OvinaHistEvents >> events [
 	^ OvinaEvent events values select: [ :ev | ev registration = registration  ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 OvinaHistEvents >> initializButtons [
 
 	actionBar := self newButtonBar.
@@ -116,7 +116,7 @@ OvinaHistEvents >> registration: newRegistration [
 	self updatePresenter 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #events }
 OvinaHistEvents >> selectNextRow [
 	|index|
 	index := table selection selectedIndex.
@@ -139,7 +139,7 @@ OvinaHistEvents >> setDateAndResult [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #events }
 OvinaHistEvents >> sheepAdded: sheep [
 	"Add an event for sheep in the current registration"
 	|newEvent|
@@ -153,7 +153,7 @@ OvinaHistEvents >> sheepAdded: sheep [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #events }
 OvinaHistEvents >> sheepRemoved: sheep [
 	"Remove an event for sheep in the current registration"
 	
@@ -163,7 +163,7 @@ OvinaHistEvents >> sheepRemoved: sheep [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #events }
 OvinaHistEvents >> updateDate [
 	"cr was pressed in the date field - update the selected Event, and move to next event if any"
 	table selection selectedItem date: dateField text.
@@ -180,7 +180,7 @@ OvinaHistEvents >> updatePresenter [
 	self setDateAndResult.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #events }
 OvinaHistEvents >> updateResult [
 	"cr was pressed in the result field - update the selected Event, and move to next event if any"
 	table selection selectedItem result: resultField text.
