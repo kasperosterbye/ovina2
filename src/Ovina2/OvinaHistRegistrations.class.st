@@ -79,7 +79,7 @@ OvinaHistRegistrations >> events [
 { #category : #initialization }
 OvinaHistRegistrations >> initialize [
 	filterPastYear := false.
-	filterKind := 'all'.
+	filterKind := 'alle'.
 	
 	super initialize.
 ]
@@ -202,7 +202,7 @@ OvinaHistRegistrations >> registrations [
 	filterPastYear ifTrue: [ |cutof|
 		cutof := (registrations collect: [:ds| ds date]) max - 365 days.
 		registrations := registrations select: [ :r | r date  > cutof ] ].
-	(filterKind = 'all') ifFalse: [ 
+	(filterKind = 'alle') ifFalse: [ 
 		registrations := registrations select: [ :r | r kind = filterKind  ] ].
 	^registrations 
 ]
