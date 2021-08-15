@@ -36,7 +36,7 @@ Ovina1DB class >> kindReductionDictionary [
 		  yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #migration }
 Ovina1DB >> eweRaceFromRow: row [
 	| id |
 	id := 'E', (row at: #eweID) asString.
@@ -50,7 +50,7 @@ Ovina1DB >> eweRaceFromRow: row [
 	^row at: #race 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #migration }
 Ovina1DB >> loadAll [
 
 	self

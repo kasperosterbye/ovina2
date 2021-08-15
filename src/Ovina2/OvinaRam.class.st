@@ -20,7 +20,7 @@ OvinaRam class >> ramForDate: aDate [
 	^ rams detect: [ :r | r inDate < aDate ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 OvinaRam >> defaultPropertyOrder [
 	^#(name color inDate comment)
 ]
@@ -60,7 +60,7 @@ OvinaRam >> name: name [
 	^self property: #name put: name
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - properties' }
 OvinaRam >> noLambs [
 	<sheepColumn: #('Antal lam')>
 	^ self lambs size
@@ -85,7 +85,7 @@ OvinaRam >> raceCompute [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - properties' }
 OvinaRam >> sortingScore [
 	^ number negated
 ]

@@ -289,7 +289,7 @@ OvinaLamb >> slaughterAgeCompute [
 	^ (slaughtered date - self inDate ) days
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - properties' }
 OvinaLamb >> sortingScore [
 	^ (number+1) + self dam sortingScore 
 ]

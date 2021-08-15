@@ -226,7 +226,7 @@ OvinaEwe >> raceCompute [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - properties' }
 OvinaEwe >> sortingScore [
 	^ number * 10000
 ]

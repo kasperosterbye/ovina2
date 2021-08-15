@@ -315,7 +315,7 @@ OvinaSheep >> slaughterWeightCompute [
 	^ event result asDKNumber 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - properties' }
 OvinaSheep >> sortingScore [
 	^ self subclassResponsibility 
 ]

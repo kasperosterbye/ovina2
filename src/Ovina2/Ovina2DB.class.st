@@ -61,7 +61,7 @@ Ovina2DB class >> storeAll [
 	conn close
 ]
 
-{ #category : #migration }
+{ #category : #loading }
 Ovina2DB >> loadAll [
 
 	self
@@ -71,7 +71,7 @@ Ovina2DB >> loadAll [
 	
 ]
 
-{ #category : #migration }
+{ #category : #loading }
 Ovina2DB >> loadEvents [
 
 	| eventRow |
@@ -90,7 +90,7 @@ Ovina2DB >> loadEvents [
 		 ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #loading }
 Ovina2DB >> loadRegistrations [
 	|  regRow |
 	regRow := (self execute: 'select * from Registrations') rows.
@@ -105,7 +105,7 @@ Ovina2DB >> loadRegistrations [
 		].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #loading }
 Ovina2DB >> loadSheeps [
 	|sheepRows propertyRows|
 	sheepRows := (self execute: 'select * from Sheeps') rows.
@@ -154,7 +154,7 @@ Ovina2DB >> removeSheep: sheep [
 	self execute: stmt
 ]
 
-{ #category : #migration }
+{ #category : #'db handling' }
 Ovina2DB >> resetDB [
 	self 
 		execute: 'delete from Events';
@@ -223,7 +223,7 @@ Ovina2DB >> storeSheep: sheep [
 	self execute: stmt
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'db handling' }
 Ovina2DB >> subscribeToChangeAnnouncers [
 	OvinaModel announcer
 		when: OvinaModelSheepChanged do: [:ann | self storeSheep: ann sheep];
@@ -236,7 +236,7 @@ Ovina2DB >> subscribeToChangeAnnouncers [
 		when: OvinaModelRegistrationRemoved do: [:ann | self removeRegistration: ann registration]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'db handling' }
 Ovina2DB >> unsubscribeFromChangeAnnouncers [
 	"This is called when the image close down, and as such is a good idea"
 	OvinaModel announcer subscriptions reset.
