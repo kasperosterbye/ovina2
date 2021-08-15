@@ -17,20 +17,22 @@ Ovina1DB class >> kindReductionDictionary [
 		  at: 'flytning' put: 'flytning';
 		  at: 'veje lam' put: 'vejning';
 		  at: 'fødsel' put: 'fødsel';
-		  at: '---' put: 'vaccination';
-		  at: 'vaccination' put: 'vaccination';
-		  at: 'noromectin' put: 'vaccination';
-		  at: 'ormekur' put: 'vaccination';
-		  at: 'vaccine' put: 'vaccination';
+		  at: '---' put: 'medicin';
+		  at: 'vaccination' put: 'medicin';
+		  at: 'medicin' put: 'medicin';
+		  
+		  at: 'noromectin' put: 'medicin';
+		  at: 'ormekur' put: 'medicin';
+		  at: 'vaccine' put: 'medicin';
 		  at: 'flytte får' put: 'flytning';
-		  at: 'ormemiddel' put: 'vaccination';
+		  at: 'ormemiddel' put: 'medicin';
 		  at: 'yverbetændelse' put: 'syg';
-		  at: 'coccidier' put: 'vaccination';
+		  at: 'coccidier' put: 'medicin';
 		  at: 'alle lam' put: '---';
 		  at: 'syg' put: 'syg';
-		  at: 'vaccinere' put: 'vaccination';
-		  at: 'vaccinere ' put: 'vaccination ';
-		  at: 'vaccinere ogormekur' put: 'vaccination';
+		  at: 'vaccinere' put: 'medicin';
+		  at: 'vaccinere ' put: 'medicin ';
+		  at: 'vaccinere ogormekur' put: 'medicin';
 		  yourself
 ]
 
