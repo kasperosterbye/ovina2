@@ -27,12 +27,12 @@ OvinaOverviewPresenter class >> open [
 	self new openWithSpec 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #grouping }
 OvinaOverviewPresenter >> eventsForYear: year [
 	^ (self sheep events select: [ :ev | ev date year = year ]) size
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #grouping }
 OvinaOverviewPresenter >> eventsTableForYear: year in: aPresenter [
 	| events table |
 	events := self sheep events select: [ :ev | ev date year = year ].
@@ -57,12 +57,12 @@ OvinaOverviewPresenter >> initialize [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #grouping }
 OvinaOverviewPresenter >> lambsForYear: year [
 	^ (self sheep lambs select: [ :l | l inDate year = year ]) size
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #grouping }
 OvinaOverviewPresenter >> lambsTableForYear: year in: aPresenter [
 	"Columns: nummer, inDato, køn, event, farve"
 	| lambs table |

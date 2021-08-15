@@ -43,16 +43,6 @@ OvinaSingleSheepPresenter >> closeBlock: aBlock [
 	closeBlock := aBlock
 ]
 
-{ #category : #'as yet unclassified' }
-OvinaSingleSheepPresenter >> completionFor: prop [
-	prop choices ifNil: [ ^ nil ].
-	^ EntryCompletion new
-		dataSourceBlock: [ :currText | prop choices ];
-		filterBlock: [ :choice :currText | choice asLowercase beginsWith: currText asLowercase  ].
-
-	
-]
-
 { #category : #initialization }
 OvinaSingleSheepPresenter >> initializeActionBar [ 
 
@@ -95,7 +85,7 @@ OvinaSingleSheepPresenter >> initializeWindow: aWindowPresenter [
 		initialExtent: 500 @ (properties size * 50 + 40). 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 OvinaSingleSheepPresenter >> myLayout [
 	^ SpBoxLayout newVertical 
 		add: #propertyPresenters;

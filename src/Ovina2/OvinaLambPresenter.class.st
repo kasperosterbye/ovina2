@@ -47,7 +47,7 @@ OvinaLambPresenter >> initializeButtons [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #events }
 OvinaLambPresenter >> promoteToEwe [
 	|lamb newEwe|
 	lamb := table selection selectedItem.
