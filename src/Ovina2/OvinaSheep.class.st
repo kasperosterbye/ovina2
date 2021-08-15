@@ -123,9 +123,11 @@ OvinaSheep >> chr [
 ]
 
 { #category : #accessing }
-OvinaSheep >> chr: aString [
-
-	chr := aString asInteger.
+OvinaSheep >> chr: value [
+	
+	chr:= value isString 
+		ifTrue: [ value extractNumber  ] 
+		ifFalse: [ value ].
 	self changed
 ]
 
@@ -226,9 +228,11 @@ OvinaSheep >> number [
 ]
 
 { #category : #accessing }
-OvinaSheep >> number: aString [
+OvinaSheep >> number: value [
 
-	number := aString asInteger.
+	number := value isString 
+		ifTrue: [ value extractNumber  ] 
+		ifFalse: [ value ].
 	self changed
 ]
 
