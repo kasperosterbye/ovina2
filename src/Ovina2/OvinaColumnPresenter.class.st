@@ -31,11 +31,10 @@ OvinaColumnPresenter class >> defaultSpec [
 
 { #category : #examples }
 OvinaColumnPresenter class >> openOn: sheepPresenter [
-	|instance|
-	instance :=self new on: sheepPresenter.
-	self halt.
-	instance openModalWithSpec 
-		cancelAction: [ instance cancel ]
+
+	| instance |
+	instance := self new on: sheepPresenter.
+	instance openModalWithSpec cancelAction: [ instance cancel ]
 ]
 
 { #category : #actions }
