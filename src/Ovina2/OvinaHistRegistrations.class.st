@@ -184,12 +184,15 @@ OvinaHistRegistrations >> newRegistration [
 
 { #category : #private }
 OvinaHistRegistrations >> newRegistrationFromEditor: editor [
-	|reg|
+
+	| reg regID |
+	regID := (OvinaRegistration registrations values collect: [ :r | r id asInteger ]) max + 1.
 	reg := OvinaRegistration new
-			kind: editor kind;
-			date: editor date;
-			default: editor default;
-			comment: editor comment.
+		       id: regID;
+		       kind: editor kind;
+		       date: editor date;
+		       default: editor default;
+		       comment: editor comment.
 	OvinaRegistration addNewRegistration: reg.
 	self updatePresenter.
 	table selection selectItem: reg
