@@ -214,17 +214,23 @@ OvinaSheepPresenter >> selectPreviousSheep [
 
 { #category : #initialization }
 OvinaSheepPresenter >> setLayout [
+
 	self layout: (SpBoxLayout newVertical
-		add: table;
-		add: (SpBoxLayout newHorizontal add: buttonBar) expand: false fill: true padding: 3;
-		yourself)
+			 add: table;
+			 add: buttonBar
+			 expand: false
+			 fill: true
+			 padding: 3;
+			 yourself)
 ]
 
 { #category : #selection }
 OvinaSheepPresenter >> setSelected: sheep [
+
 	"Currently selected sheep changed"
 	table selection selectItem: sheep.
-	table verticalAlignment desiredVisibleRow: table selection selectedIndex.
+	table verticalAlignment desiredVisibleRow:
+		table selection selectedIndex.
 	self announceNewSelection: sheep
 ]
 

@@ -56,7 +56,7 @@ OvinaEwePresenter >> setLayout [
 
 	super setLayout.
 	self layout
-		add: (SpBoxLayout newHorizontal add: buttonBar2)
+		add: buttonBar2
 		expand: false
 		fill: true
 		padding: 3

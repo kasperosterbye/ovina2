@@ -40,17 +40,17 @@ OvinaDB >> close [
 
 { #category : #execution }
 OvinaDB >> execute: anSQLText [
+
 	"I add a simple exception handling for OvinaDB - in particular I am trying
 	to catch errors occuring from not closing and reopening a database between 
 	Pharo image save and start"
-	[ ^ connection execute: anSQLText  ]
-	on: SQLite3Misuse   
-	do: [ :err | |path|
-		path := connection filename.
-		connection close.
-		self openOn: path.
-		^connection execute: anSQLText
-		 ]
+
+	[ ^ connection execute: anSQLText ]
+		on: SQLite3Misuse
+		do: [ :err | 
+			connection close.
+			self openOn: self class dbPath.
+			^ connection execute: anSQLText ]
 ]
 
 { #category : #'instance creation' }

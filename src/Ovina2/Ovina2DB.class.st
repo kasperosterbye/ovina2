@@ -238,7 +238,8 @@ Ovina2DB >> subscribeToChangeAnnouncers [
 
 { #category : #'db handling' }
 Ovina2DB >> unsubscribeFromChangeAnnouncers [
+
 	"This is called when the image close down, and as such is a good idea"
-	OvinaModel announcer subscriptions reset.
-	
+
+	OvinaModel announcer unsubscribe: self
 ]

@@ -34,11 +34,6 @@ OvinaApp class >> errorMessage: text [
 		openModalWithSpec
 ]
 
-{ #category : #'instance creation' }
-OvinaApp class >> open [
-	self todo
-]
-
 { #category : #registration }
 OvinaApp class >> registerWithSessionManager [
 	<script>
@@ -53,12 +48,27 @@ OvinaApp class >> shutDown: dummy [
 ]
 
 { #category : #'system startup' }
-OvinaApp class >> startUp: dummy [
+OvinaApp class >> startMe [
+
+	"Use to set the image in production mode"
+
+	<script>
+	Ovina2DB currentClose.
 	OvinaModel initialize.
 	Ovina2DB loadAll.
 	Ovina2DB currentOpen.
-	"Start GUI"
-	
+	self registerWithSessionManager.
+
+	OvinaHistoryPresenter open.
+
+	OvinaAllSheepsPresenter open
+]
+
+{ #category : #'system startup' }
+OvinaApp class >> startUp: dummy [
+
+	Ovina2DB currentOpen
+
 ]
 
 { #category : #registration }

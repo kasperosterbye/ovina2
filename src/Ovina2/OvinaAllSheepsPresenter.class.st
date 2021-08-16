@@ -28,13 +28,6 @@ Class {
 }
 
 { #category : #specs }
-OvinaAllSheepsPresenter class >> defaultSpec [
-
-	"Layout is taken from the instanceSide method setLayout:"
-	self error: 'Should not be called'
-]
-
-{ #category : #specs }
 OvinaAllSheepsPresenter class >> open [
 	<example>
 	self new openWithSpec 
