@@ -15,21 +15,23 @@ OvinaApp class >> beep [
 
 { #category : #'ui requests' }
 OvinaApp class >> confirm: question [
-	^ UIManager default 
-		confirm: question 
-		label: 'Bekræft' 
-		trueChoice: 'Ja' 
-		falseChoice: 'Nej' 
-		cancelChoice: nil 
-		default: false
-	
+
+	^ SpConfirmDialog new
+		  title: 'Bekræft';
+		  label: question;
+		  acceptLabel: 'Ja';
+		  cancelLabel: 'nej';
+		  openModalWithSpec
 ]
 
 { #category : #accessing }
 OvinaApp class >> errorMessage: text [
-	^ UIManager default 
-		abort: text 
-		title: 'Fejl'
+	
+	^ SpInformDialog new
+		title: 'Fejl';
+		label: text;
+		acceptLabel: 'Luk';
+		openModalWithSpec
 ]
 
 { #category : #'instance creation' }
