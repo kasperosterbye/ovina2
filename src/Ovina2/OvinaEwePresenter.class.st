@@ -24,16 +24,23 @@ OvinaEwePresenter >> addLambForSelectedEwe [
 ]
 
 { #category : #initialization }
-OvinaEwePresenter >> initializeButtons [ 
+OvinaEwePresenter >> initializeButtons [
+
 	super initializeButtons.
-	buttonBar add: (self newButton 
-			label: 'Nyt lam';
-			action: [ self addLambForSelectedEwe ])
+	buttonBar
+		add: (self newButton
+				 label: 'Nyt får';
+				 action: [ self newEwe ]);
+		add: (self newButton
+				 label: 'Nyt lam';
+				 action: [ self addLambForSelectedEwe ])
 ]
 
 { #category : #'instance creation' }
 OvinaEwePresenter >> newEwe [
+
 	| newEwe |
+	(OvinaApp confirm: 'Registrer nyt får?') ifFalse: [ ^self ].
 	newEwe := OvinaEwe newEwe.
 	table selection selectItem: newEwe.
 	self editSheep

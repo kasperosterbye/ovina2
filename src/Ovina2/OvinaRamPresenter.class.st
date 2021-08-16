@@ -22,7 +22,9 @@ OvinaRamPresenter >> initializeButtons [
 
 { #category : #'instance creation' }
 OvinaRamPresenter >> newRam [
+
 	| newRam |
+	(OvinaApp confirm: 'Registrer ny vædder?') ifFalse: [ ^ self ].
 	newRam := OvinaRam newRam.
 	table selection selectItem: newRam.
 	self editSheep
