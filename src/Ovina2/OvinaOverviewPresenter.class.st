@@ -65,21 +65,19 @@ OvinaOverviewPresenter >> lambsForYear: year [
 { #category : #grouping }
 OvinaOverviewPresenter >> lambsTableForYear: year in: aPresenter [
 	"Columns: nummer, inDato, køn, event, farve"
-	| lambs table |
+	| lambs table cols|
 	lambs := self sheep lambs select: [ :l | l inDate year = year ].
 	table := aPresenter instantiate: SpTablePresenter.
-	table 
-		addColumn: (SpStringTableColumn new
-			title: 'nummer' ; evaluated: #number);
-		addColumn: (SpStringTableColumn new
-			title: 'inddato' ; evaluated: #inDate);
-		addColumn: (SpStringTableColumn new
-			title: 'køn' ; evaluated: #sex);
-		addColumn: (SpStringTableColumn new
-			title: 'fødsel' ; evaluated: #event);
-		addColumn: (SpStringTableColumn new
-			title: 'brug' ; evaluated: #usage);
-		sortingBlock: [ :e1 :e2 | (e2 number) threeWayCompareTo: (e1 number)] asSortFunction.
+	cols := (OvinaColumnSelection for: #OvinaLamb) activeColumns collect:  [ :col |
+		SpStringTableColumn new
+				 "width: col width + 15;"
+				 title: col dkName ;
+				 evaluated: [ :lamb | (col getFrom: lamb) asDKString ] ;
+				 sortFunction: [ :s1 :s2 | 
+					self class threeWayCompare: (col getFrom: s1) to: (col getFrom: s2)
+				] asSortFunction
+	 ].
+	table columns: cols.
 	table items: lambs.
 	^table
 ]
