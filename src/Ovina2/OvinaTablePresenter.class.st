@@ -11,7 +11,7 @@ OvinaTablePresenter >> items: newItems [
 	This resets the collection model and unselects any previously selected item."
 	
 |selected|
-	selected := self selection selectedItem.
+	selected := [self selection selectedItem] on: Error do: [nil].
 	model collection: newItems.
 	(selected notNil and: [ newItems includes: selected ]) 
 		ifTrue: [ 
