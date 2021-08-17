@@ -17,7 +17,9 @@ Class {
 { #category : #initialization }
 OvinaEvent class >> addEvent: event [
 
-	self events at: event id put: event
+	self events at: event id put: event.
+	OvinaModel announcer announce: (OvinaModelEventChanged new event: event).
+	
 ]
 
 { #category : #initialization }
@@ -102,8 +104,10 @@ OvinaEvent >> registration [
 ]
 
 { #category : #accessing }
-OvinaEvent >> registration: anObject [
-	registration := anObject.
+OvinaEvent >> registration: aRegistration [
+
+	registration ifNotNil: [ ^ self error: 'registration should not change for events' ].
+	registration := aRegistration.
 	"Registrations do not change for an event- hence no announcement"
 ]
 
@@ -129,8 +133,9 @@ OvinaEvent >> sheep [
 ]
 
 { #category : #accessing }
-OvinaEvent >> sheep: anObject [
+OvinaEvent >> sheep: aSheep [
 
-	sheep := anObject.
+	sheep ifNotNil: [ ^ self error: 'sheep should not change for events' ].
+	sheep := aSheep.
 	"Sheep does not change within an event, no announcement"
 ]
