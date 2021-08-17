@@ -119,20 +119,17 @@ OvinaLamb >> gramPerDay [
 { #category : #columns }
 OvinaLamb >> gramPerDayCompute [
 	"return projected gram per day based on weight measurements"
-	| weightnings lastWeight secondLastWeight lastDate secondLastDate deltaDay|
+	| weightnings lastWeight firstWeight lastDate firstDate deltaDay|
 	weightnings := self events select: [ :ev | ev kind = 'vejning' ].
 	"Some old lambs do not have events, but might store growth in a property"
 	weightnings ifEmpty: [ ^ self growthProperty ].
 	weightnings := weightnings sort: [ :e1 :e2 | e1 date >= e2 date].
-	secondLastWeight := 5.0.
-	secondLastDate := self inDate.
-	weightnings size > 1 ifTrue: [ 
-		secondLastWeight := weightnings second result asDKNumber.
-		secondLastDate := weightnings second date].
+	firstWeight := 5.0.
+	firstDate := self inDate.
 	lastDate := weightnings first date.
 	lastWeight := weightnings first result asDKNumber.
-	deltaDay := (lastDate - secondLastDate ) days.
-	^ ((lastWeight - secondLastWeight) * 1000 / deltaDay ) asFloat.
+	deltaDay := (lastDate - firstDate ) days.
+	^ ((lastWeight - firstWeight) * 1000 / deltaDay ) asFloat.
 	
 	
 	
