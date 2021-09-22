@@ -42,7 +42,7 @@ OvinaEwe >> asLamb [
 { #category : #columns }
 OvinaEwe >> avgLambGrowth [
 	"in years"
-	<sheepColumn: #( 'lam vægst' )>
+	<sheepColumn: #( 'lam vækst' )>
 	^ self 
 		cache: #avgLambGrowth 
 		compute: [ self avgLambGrowthCompute ]
@@ -61,7 +61,8 @@ OvinaEwe >> avgLambGrowthCompute [
 OvinaEwe >> avgLemmingSize [
 	"number of lambs per year"
 	<sheepColumn: #( 'kuldstørrelse' )>
-	^100
+	self lambs ifEmpty: [ ^0 ].
+	^((self lambs groupedBy: [ :lamb | lamb inDate year ]) collect: #size) average
 	
 ]
 
@@ -105,7 +106,7 @@ OvinaEwe >> hardBirths [
 	"return number of hard births"
 	<sheepColumn: #('svære fødsler')>
 	^((self lambs 
-		select: [ :l | l event ~= 'let' ]) 
+		select: [ :l | l event asLowercase  = 'vanskelig' ]) 
 			collect: [ :l | l inDate year ]) 
 				asSet size
 ]
@@ -180,7 +181,7 @@ OvinaEwe >> newLamb [
 { #category : #columns }
 OvinaEwe >> noBottleLambs [
 	"return number of died lambs"
-	<sheepColumn: #('døde')>
+	<sheepColumn: #('flaske')>
 	^ (self lambs select: [ :l | l usage = 'flaske' ]) size
 ]
 
@@ -249,7 +250,7 @@ OvinaEwe >> sortingScore [
 { #category : #columns }
 OvinaEwe >> sumOfLastThreeYears [
 	"In kg"
-	<sheepColumn: #( '3.års vægst' )>
+	<sheepColumn: #( '3.års vækst' )>
 	^self 
 		cache: #sumOfLastThreeYears 
 		compute: [ self sumOfLastThreeYearsCompute rounded ]
