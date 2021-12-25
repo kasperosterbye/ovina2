@@ -17,7 +17,7 @@ OvinaModelTest >> testAnnounceChangeName [
 	"Name is a property"
 	| lamb lambRemoved|
 	OvinaModel initialize.
-	Ovina1DB loadAll.
+	Ovina2DB loadAll.
 	lamb := OvinaSheep lambs values first.
 	self assert: lamb isNotNil.
 	OvinaModel announcer 
@@ -33,7 +33,7 @@ OvinaModelTest >> testAnnounceChangeNumber [
 	"Number is an intrinsic value (not a property)"
 	| number |
 	OvinaModel initialize.
-	Ovina1DB loadAll.
+	Ovina2DB loadAll.
 	OvinaModel announcer 
 		when: OvinaModelSheepChanged
 		do: [ :ann | number := ann sheep number ].

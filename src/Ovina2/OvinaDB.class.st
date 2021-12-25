@@ -53,6 +53,11 @@ OvinaDB >> execute: anSQLText [
 			^ connection execute: anSQLText ]
 ]
 
+{ #category : #testing }
+OvinaDB >> isOpen [
+	^ connection isOpen
+]
+
 { #category : #'instance creation' }
 OvinaDB >> openOn: aPath [
 	connection := SQLite3Connection openOn: aPath.

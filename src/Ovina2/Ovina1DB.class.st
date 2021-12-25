@@ -52,7 +52,7 @@ Ovina1DB >> eweRaceFromRow: row [
 
 { #category : #migration }
 Ovina1DB >> loadAll [
-
+	self error: 'Old database no longer used'.
 	self
 		loadRams;
 		loadEwes;
