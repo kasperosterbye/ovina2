@@ -18,6 +18,8 @@ Class {
 OvinaEvent class >> addEvent: event [
 
 	self events at: event id put: event.
+	event registration invalidateCache.
+	event sheep invalidateCache.
 	OvinaModel announcer announce: (OvinaModelEventChanged new event: event).
 	
 ]
@@ -45,6 +47,8 @@ OvinaEvent class >> initialize [
 OvinaEvent class >> removeEvent: event [
 
 	self events removeKey: event id.
+	event registration invalidateCache.
+	event sheep invalidateCache.
 	OvinaModel announcer announce: (OvinaModelEventRemoved new event: event).
 ]
 
