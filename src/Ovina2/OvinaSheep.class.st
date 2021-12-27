@@ -135,7 +135,7 @@ OvinaSheep >> chr: value [
 OvinaSheep >> events [
 	"return all events on me, last first"
 	^ self cache: #events 
-		compute: [(OvinaEvent events values select: [ :ev | ev sheep = self ]) reversed ].
+		compute: [(OvinaEvent events values select: [ :ev | ev sheep = self ]) sort: [ :a :b | a date > b date ] ].
 ]
 
 { #category : #accessing }
