@@ -246,7 +246,7 @@ OvinaLamb >> remove [
 { #category : #'accessing - properties' }
 OvinaLamb >> sex [
 	<sheepColumn:#('køn' sex: ('gimmer' 'vædder'))>
-	^ (self property: #sex) ifNil: [ '' ]
+	^ (self property: #sex) ifNil: [ 'X' ]
 ]
 
 { #category : #'accessing - properties' }

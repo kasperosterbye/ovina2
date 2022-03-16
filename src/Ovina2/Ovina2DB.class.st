@@ -217,7 +217,7 @@ Ovina2DB >> storeSheep: sheep [
 				              sheep id printString.
 				              a key asString printString.
 				              a value ovinaDBString   } ].
-
+	properties ifEmpty: [ ^ self ]. "When no properties are yet set."
 	stmt := 'replace into Properties (sheep, name, value) values {1};' 
 		        format: { (properties joinUsing: ',') }.
 	self execute: stmt

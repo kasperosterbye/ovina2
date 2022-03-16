@@ -33,7 +33,7 @@ OvinaRam class >> ramForDate: aDate [
 	| rams |
 	"last first"
 	rams := self rams values sort: [ :r1 :r2 | r1 inDate > r2 inDate ].
-	^ rams detect: [ :r | r inDate < aDate ].
+	^ rams detect: [ :r | r inDate <= aDate ].
 ]
 
 { #category : #initialization }

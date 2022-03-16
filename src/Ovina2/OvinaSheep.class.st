@@ -167,6 +167,9 @@ OvinaSheep >> inDate: date [
 { #category : #initialization }
 OvinaSheep >> initialize [
 	super initialize.
+	id := 'X0'.
+	chr := self class maarumlamChr.
+	number := 0.
 	properties := Dictionary new.
 ]
 
