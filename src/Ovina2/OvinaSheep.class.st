@@ -158,9 +158,15 @@ OvinaSheep >> inDate [
 
 { #category : #'accessing - properties' }
 OvinaSheep >> inDate: date [
+	| newDate |	
 	date isString 
-		ifTrue: [ ^self property: #inDate put: date parseDKDate yyyymmdd   ]
-	 	ifFalse: [ ^self property: #inDate put: date yyyymmdd   ]
+		ifFalse: [ ^self property: #inDate put: date yyyymmdd   ].
+	"date string might be incomplete. "
+	[ newDate := date parseDKDate yyyymmdd ]
+		on: Exception
+		do: [ newDate := (self properties at: #inDate ifAbsent: [ Date today yyyymmdd ] ) ].
+	^self property: #inDate put: newDate
+	 	
 	
 ]
 

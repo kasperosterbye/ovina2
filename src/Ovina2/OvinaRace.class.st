@@ -18,6 +18,7 @@ OvinaRace class >> fromString: string [
 	"Format of string is '3Såne1Texel' or 'Texel'"
 	"\d is digits, \D is not-digits"
 	|race parts|
+	string ifNil:[^ self new race: 'Ukendt' count: 1; normalize; yourself ].
 	parts := string allRegexMatches: '(\d+\D+)|\D+'.
 	"check if we are in the single unnumbered case"
 	(parts size = 1 and: [ parts first first isDigit not ]) 

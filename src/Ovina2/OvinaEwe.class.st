@@ -213,10 +213,14 @@ OvinaEwe >> outDate [
 
 { #category : #'accessing - properties' }
 OvinaEwe >> outDate: date [
-	date ifNil: [ ^self ].
+	| newDate |	
 	date isString 
-		ifTrue: [ ^self property: #outDate put: date parseDKDate yyyymmdd  ]
-	 	ifFalse: [ ^self property: #outDate put: date yyyymmdd ]
+		ifFalse: [ ^self property: #outDate put: date yyyymmdd   ].
+	"date string might be incomplete. "
+	[ newDate := date parseDKDate yyyymmdd ]
+		on: Exception
+		do: [ newDate := (self properties at: #outDate ifAbsent: [ Date today yyyymmdd ] ) ].
+	^self property: #outDate put: newDate
 ]
 
 { #category : #'accessing - properties' }
