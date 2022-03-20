@@ -90,19 +90,25 @@ OvinaLamb >> finalWeight [
 	^ self cache: #finalWeight compute: [ self finalWeightCompute  ]
 ]
 
-{ #category : #columns }
+{ #category : #'as yet unclassified' }
 OvinaLamb >> finalWeightCompute [
-	"Estimated live weight in kg on the day it was slaughtered"
-	| growthPerDay slaughterDay weightning ageAtLastWeightning weightAtLastWeightning daysSinceLastWeight |
-	growthPerDay := self gramPerDay.
-	growthPerDay = 0 ifTrue: [ ^-1 ].
-	slaughterDay := self slaughterAge.
-	slaughterDay = -1 ifTrue: [ ^-1 ].
-	weightning := self events detect: [ :ev | ev kind = 'vejning' ] ifNone: [ ^-1 ].
-	ageAtLastWeightning := (weightning date - self inDate) days.
-	weightAtLastWeightning := weightning result asDKNumber.
-	daysSinceLastWeight := slaughterDay - ageAtLastWeightning.
-	^ (weightAtLastWeightning + daysSinceLastWeight * growthPerDay / 1000).
+	"throw away weights which are zero, 
+	or where the lamb has lost or gained more than X percent of growth rathe"
+	| weightings latest second deltaDay deltaWeight growthPerDay delta2Days |
+	self slaughterAge > 0 ifFalse: [ ^ -1 ].
+	weightings := (self events 
+		select: [ :e| e kind = 'vejning' ]
+		thenCollect: [ :e | e date -> e result asDKNumber ]) asOrderedCollection.
+	weightings ifEmpty: [ ^-1 ].
+	weightings addLast: (self inDate -> 5). 
+	weightings := weightings reject: [ :w | w value = 0 ].
+	latest := weightings first.
+	second := weightings detect: [ :weighting | weighting value < latest  value].
+	deltaDay := (latest key - second key) days.
+	deltaWeight := (latest value - second value).
+	growthPerDay := deltaWeight / deltaDay.
+	delta2Days := self slaughterAge - (latest key - self inDate) days.
+	^ (latest value + (delta2Days * growthPerDay)) rounded
 ]
 
 { #category : #columns }
@@ -122,8 +128,8 @@ OvinaLamb >> gramPerDayCompute [
 	| weightnings lastWeight firstWeight lastDate firstDate deltaDay|
 	weightnings := self events select: [ :ev | ev kind = 'vejning' ].
 	"Some old lambs do not have events, but might store growth in a property"
+	weightnings := weightnings reject: [ :w | w result asDKNumber = 0 ].
 	weightnings ifEmpty: [ ^ self growthProperty ].
-	weightnings := weightnings sort: [ :e1 :e2 | e1 date >= e2 date].
 	firstWeight := 5.0.
 	firstDate := self inDate.
 	lastDate := weightnings first date.
