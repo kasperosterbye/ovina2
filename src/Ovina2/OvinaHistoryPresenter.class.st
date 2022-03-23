@@ -13,8 +13,20 @@ Class {
 		'registrations',
 		'events'
 	],
+	#classVars : [
+		'HistoryPresenterInstance'
+	],
 	#category : #'Ovina2-GUI History'
 }
+
+{ #category : #specs }
+OvinaHistoryPresenter class >> close [
+	HistoryPresenterInstance 
+		ifNotNil: [ :inst |
+			inst window close.
+			HistoryPresenterInstance := nil.
+			 ]
+]
 
 { #category : #specs }
 OvinaHistoryPresenter class >> defaultSpec [
@@ -29,7 +41,16 @@ OvinaHistoryPresenter class >> defaultSpec [
 { #category : #specs }
 OvinaHistoryPresenter class >> open [
 	<example>
-	self new openWithSpec 
+	HistoryPresenterInstance
+		ifNil: [
+			HistoryPresenterInstance := self new.
+			HistoryPresenterInstance openWithSpec ] 
+]
+
+{ #category : #specs }
+OvinaHistoryPresenter class >> reOpen [
+	self close.
+	self open
 ]
 
 { #category : #initialization }
@@ -67,7 +88,9 @@ OvinaHistoryPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter
 		title: 'Historik';
 		initialExtent: 1200 @ 950;
-		whenClosedDo: [ self removeAnnouncements ]
+		whenClosedDo: [ 
+			HistoryPresenterInstance := nil.
+			self removeAnnouncements ]
 ]
 
 { #category : #events }

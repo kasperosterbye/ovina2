@@ -82,13 +82,13 @@ OvinaRegistration >> date [
 
 { #category : #accessing }
 OvinaRegistration >> date: stringOrDate [
-	| newDate |	
+	| newDate |
 	stringOrDate isString
 		ifFalse: [ newDate := stringOrDate. ]
 		ifTrue: ["date string might be incomplete. "
-			[ newDate := stringOrDate parseDKDate yyyymmdd ]
+			[ newDate := stringOrDate parseDKDate ]
 				on: Exception
-				do: [ newDate := (date ifNil: [ Date today yyyymmdd ] ) ]].
+				do: [ newDate := (date ifNil: [ Date today] ) ]].
 	date := newDate.
 	self changed.
 	

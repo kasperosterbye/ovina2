@@ -24,13 +24,34 @@ Class {
 		'selectedParent',
 		'selectedLamb'
 	],
+	#classVars : [
+		'AllSheepPresenterInstance'
+	],
 	#category : #'Ovina2-GUI Sheep'
 }
+
+{ #category : #'initialize-release' }
+OvinaAllSheepsPresenter class >> close [
+	AllSheepPresenterInstance  
+		ifNotNil: [ :inst |
+			inst window close.
+			AllSheepPresenterInstance := nil.
+			 ]
+]
 
 { #category : #specs }
 OvinaAllSheepsPresenter class >> open [
 	<example>
-	self new openWithSpec 
+	AllSheepPresenterInstance
+		ifNil: [
+			AllSheepPresenterInstance := self new.
+			AllSheepPresenterInstance openWithSpec ] 
+]
+
+{ #category : #'as yet unclassified' }
+OvinaAllSheepsPresenter class >> reOpen [
+	self close.
+	self open.
 ]
 
 { #category : #initialization }
@@ -71,7 +92,9 @@ OvinaAllSheepsPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter
 		title: 'Får, Lam & Væddere';
 		initialExtent: 1300 @ 950; 
-		whenClosedDo: [ self removeAnnouncements ]
+		whenClosedDo: [ 
+			AllSheepPresenterInstance := nil.
+			self removeAnnouncements ]
 ]
 
 { #category : #removing }

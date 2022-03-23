@@ -66,9 +66,15 @@ OvinaEvent >> date [
 ]
 
 { #category : #accessing }
-OvinaEvent >> date: anObject [
-
-	date := anObject.
+OvinaEvent >> date: stringOrDate [
+	| newDate |
+	stringOrDate isString
+		ifFalse: [ newDate := stringOrDate. ]
+		ifTrue: ["date string might be incomplete. "
+			[ newDate := stringOrDate parseDKDate ]
+				on: Exception
+				do: [ newDate := (date ifNil: [ Date today] ) ]].
+	date := newDate.
 	self changed
 ]
 

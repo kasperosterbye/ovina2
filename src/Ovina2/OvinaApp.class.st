@@ -33,6 +33,16 @@ OvinaApp class >> errorMessage: text [
 		openModalWithSpec
 ]
 
+{ #category : #accessing }
+OvinaApp class >> message: text [
+	
+	^ SpInformDialog new
+		title: 'Besked';
+		label: text;
+		acceptLabel: 'Luk';
+		openModalWithSpec
+]
+
 { #category : #'as yet unclassified' }
 OvinaApp class >> ovinaMenu: aBuilder [
 	<ovinaMenu>
@@ -44,21 +54,21 @@ OvinaApp class >> ovinaMenu: aBuilder [
 			(aBuilder item: #dataCheck)
 				order: 10;
 				label: 'Check data kvalitet';
-				action: [ 1halt ].
+				action: [ :e | OvinaModelcheckPresenter reOpen ].
 			(aBuilder item: #openSheeps)
 				order: 20;
 				label: 'Åbn får og lam';
-				action: [ 1halt ].
+				action: [ OvinaAllSheepsPresenter reOpen ].
 			(aBuilder item: #openHistory)
 				order: 30;
 				label: 'Åbn historik';
-				action: [ 1halt ].
+				action: [ OvinaHistoryPresenter reOpen ].
 			(aBuilder item: #reload)
 				order: 40;
 				label: 'Genindlæs database';
-				action: [ 1halt ].
+				action: [ self startMe ].
 			(aBuilder item: #saveAndQuitOvina)
-				order: 1;
+				order: 50;
 				label: 'Gem og luk';
 				action: [ WorldState saveAndQuit ] ]
 ]
@@ -79,7 +89,8 @@ OvinaApp class >> shaun [
 OvinaApp class >> shutDown: isImageQuitting [
 	"false if image was merely saved"
 	isImageQuitting 
-		ifTrue: [Ovina2DB currentClose].
+		ifTrue: [
+			Ovina2DB currentClose].
 	
 ]
 
@@ -91,21 +102,22 @@ OvinaApp class >> startMe [
 	<script>
 	(self currentWorld submorphs detect: [ :m |m class = ImageMorph ]) delete.
 	self currentWorld addMorph: (self shaun asMorph position: 20@20).
-	Ovina2DB currentClose.
+	WorldState desktopMenuPragmaKeyword: #'ovinaMenu'.
+	MenubarMorph initialize.
 	OvinaModel initialize.
 	Ovina2DB loadAll.
 	Ovina2DB currentOpen.
+	OvinaAllSheepsPresenter reOpen.
+	OvinaHistoryPresenter reOpen.
 	self registerWithSessionManager.
 
-	OvinaHistoryPresenter open.
-
-	OvinaAllSheepsPresenter open
 ]
 
 { #category : #'system startup' }
 OvinaApp class >> startUp: isImageStarting [
 	"false if the image was just saved"
-	isImageStarting ifTrue: [ Ovina2DB currentOpen ]
+	isImageStarting 
+		ifTrue: [ self startMe ]
 
 ]
 
