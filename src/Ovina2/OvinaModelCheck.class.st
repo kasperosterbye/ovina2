@@ -57,6 +57,20 @@ OvinaModelCheck >> checkLambsBornOnSameDay [
 ]
 
 { #category : #'as yet unclassified' }
+OvinaModelCheck >> checkSlaughterWeightsRegistered [
+	"check that all slaughtered lambs have a weight registration"
+	| slaughtered unregistered|
+	slaughtered := OvinaLamb all select: [ :lamb | lamb slaughterAge > 0 ].
+	unregistered := slaughtered select: [ :lamb | lamb slaughterWeight = 0 ].
+	^ unregistered collect: [ :lamb | |slaughterDate |
+		slaughterDate := (lamb events detect: [ :e | e kind = 'slagtevægt' ]) date.
+		'Lam {1} som blev slagtet {2} har ikke slagtevægten registreret'
+			format: { lamb number asDKString . slaughterDate asDKString  } ]
+	
+	
+]
+
+{ #category : #'as yet unclassified' }
 OvinaModelCheck >> checkThatNumberZeroLambsAreMarkedAsDead [
 	| zeroLambs |
 	zeroLambs := OvinaLamb all select: [ :lamb | lamb number = 0 ].

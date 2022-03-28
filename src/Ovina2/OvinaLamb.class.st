@@ -113,7 +113,7 @@ OvinaLamb >> finalWeightCompute [
 
 { #category : #columns }
 OvinaLamb >> gramPerDay [
-	"return projected gram per day based on weight measurements"
+	"return gram per day based on weight measurements"
 	<sheepColumn: #('gram/dag')>
 	^self cache: #gramPerDay compute: [ self gramPerDayCompute  ] 
 	
@@ -124,12 +124,12 @@ OvinaLamb >> gramPerDay [
 
 { #category : #columns }
 OvinaLamb >> gramPerDayCompute [
-	"return projected gram per day based on weight measurements"
+	"return gram per day based on weight measurements"
 	| weightnings lastWeight firstWeight lastDate firstDate deltaDay|
 	weightnings := self events select: [ :ev | ev kind = 'vejning' ].
 	"Some old lambs do not have events, but might store growth in a property"
 	weightnings := weightnings reject: [ :w | w result asDKNumber = 0 ].
-	weightnings ifEmpty: [ ^ self growthProperty ].
+	weightnings ifEmpty: [ ^ self growthProperty  ].
 	firstWeight := 5.0.
 	firstDate := self inDate.
 	lastDate := weightnings first date.
@@ -160,7 +160,12 @@ OvinaLamb >> growth: aStringOrInteger [
 { #category : #'accessing - properties' }
 OvinaLamb >> growthProperty [
 	"read growth property, or return -1"
-	^ ((self property: #growth) ifNil: [ ^ -1.0 ] ) asDKNumber
+	| growth |
+	growth := ((self property: #growth) ifNil: [ '0' ] ) asDKNumber.
+	^ growth > 0 
+		ifTrue: [ growth ] 
+		ifFalse: [ -1 ]
+	
 ]
 
 { #category : #caching }

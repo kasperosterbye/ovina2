@@ -100,7 +100,7 @@ OvinaHistSheepSelection >> selectAll [
 { #category : #selection }
 OvinaHistSheepSelection >> selectSheep: sheep [
 	sheepSelected at: sheep put: true.
-	table selection selectItem: sheep.
+	table selection unselectAll.
 	self announce: (OvinaGUIHistSelectorAdded new sheep: sheep).
 	(includeLambs & sheep isEwe )
 		ifTrue:[ (self filteredLambsOf: sheep) do: [ :lamb | self selectSheep: lamb] ]

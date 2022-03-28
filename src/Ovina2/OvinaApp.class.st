@@ -23,6 +23,17 @@ OvinaApp class >> confirm: question [
 		  openModalWithSpec
 ]
 
+{ #category : #'as yet unclassified' }
+OvinaApp class >> ensureShaunmorph [
+	|shaunMorph|
+	self currentWorld submorphs 
+		detect: [ :m |m class = ImageMorph ]
+		ifFound: [ :m | m delete].
+	shaunMorph := self shaun asMorph position: 20@20.
+	shaunMorph assureExtension locked: true.
+	self currentWorld addMorphBack: (shaunMorph).
+]
+
 { #category : #accessing }
 OvinaApp class >> errorMessage: text [
 	
@@ -46,6 +57,8 @@ OvinaApp class >> message: text [
 { #category : #'as yet unclassified' }
 OvinaApp class >> ovinaMenu: aBuilder [
 	<ovinaMenu>
+	"WorldState desktopMenuPragmaKeyword: #'ovinaMenu'.
+	MenubarMorph initialize."
 	(aBuilder item: #Ovina)
 		order: 500;
 		help: 'Ovina menu';
@@ -66,7 +79,7 @@ OvinaApp class >> ovinaMenu: aBuilder [
 			(aBuilder item: #reload)
 				order: 40;
 				label: 'Genindlæs database';
-				action: [ self startMe ].
+				action: [ self restartMe ].
 			(aBuilder item: #saveAndQuitOvina)
 				order: 50;
 				label: 'Gem og luk';
@@ -79,6 +92,20 @@ OvinaApp class >> registerWithSessionManager [
 	SessionManager default registerUserClassNamed: self name
 ]
 
+{ #category : #'system startup' }
+OvinaApp class >> restartMe [
+	<script>
+	OvinaAllSheepsPresenter close.
+	OvinaHistoryPresenter close.
+	Ovina2DB currentClose.
+	Ovina2DB loadAll.
+	Ovina2DB currentOpen.
+	OvinaAllSheepsPresenter open.
+	OvinaHistoryPresenter open.
+	self registerWithSessionManager.
+
+]
+
 { #category : #accessing }
 OvinaApp class >> shaun [
 	shaun ifNil: [ shaun :=(ImageReadWriter formFromFileNamed: '../../Shaun.png') scaledToSize: 256@256].
@@ -87,21 +114,19 @@ OvinaApp class >> shaun [
 
 { #category : #'system startup' }
 OvinaApp class >> shutDown: isImageQuitting [
-	"false if image was merely saved"
-	isImageQuitting 
-		ifTrue: [
-			Ovina2DB currentClose].
-	
+
+	isImageQuitting ifFalse: [ ^ self ].
+	OvinaAllSheepsPresenter close.
+	OvinaHistoryPresenter close.
+	Ovina2DB currentClose
 ]
 
 { #category : #'system startup' }
 OvinaApp class >> startMe [
-
 	"Use to set the image in production mode"
 
 	<script>
-	(self currentWorld submorphs detect: [ :m |m class = ImageMorph ]) delete.
-	self currentWorld addMorph: (self shaun asMorph position: 20@20).
+	self ensureShaunmorph.
 	WorldState desktopMenuPragmaKeyword: #'ovinaMenu'.
 	MenubarMorph initialize.
 	OvinaModel initialize.
@@ -116,8 +141,10 @@ OvinaApp class >> startMe [
 { #category : #'system startup' }
 OvinaApp class >> startUp: isImageStarting [
 	"false if the image was just saved"
-	isImageStarting 
-		ifTrue: [ self startMe ]
+	isImageStarting ifFalse: [ ^self ].
+	OvinaModel initialize.
+	Ovina2DB loadAll.
+	Ovina2DB currentOpen
 
 ]
 

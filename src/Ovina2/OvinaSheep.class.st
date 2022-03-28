@@ -313,6 +313,7 @@ OvinaSheep >> ramEweLambOrder: otherSheep [
 { #category : #history }
 OvinaSheep >> slaughterWeight [
 	"return the weight of the meat as returned from the slaughter. If not slaughtered, return nil" 
+	<sheepColumn: #('slagtevægt')>
 	^ self 
 		cache: #slaughterWeight
 	 	compute: [ self slaughterWeightCompute  ]

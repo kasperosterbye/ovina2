@@ -49,6 +49,16 @@ OvinaLambTest >> testGramPerDayCompute [
 ]
 
 { #category : #tests }
+OvinaLambTest >> testGramPerDayCompute_l334_error [
+	"test lamb with id l334"
+	| l334 |
+	l334 := OvinaSheep sheeps at: 'L334'.
+	"data error - not sure what the right result is"
+	self assert: l334 gramPerDayCompute rounded equals: -52
+	
+]
+
+{ #category : #tests }
 OvinaLambTest >> testGramPerDayCompute_l470 [
 	"test lamb with id l470"
 	| l470 |
@@ -74,7 +84,7 @@ OvinaLambTest >> testGramPerDayCompute_senseTest [
 	lambs do: [ :lamb | |gpd|
 		gpd := lamb gramPerDayCompute.
 		"-1 is used to indicate missing data"
-		gpd <= 0 ifFalse: [ self assert: gpd  > 70].
+		gpd < 0 ifFalse: [ self assert: gpd  >=70].
 		 ]
 	
 ]
@@ -111,5 +121,17 @@ OvinaLambTest >> testSlaughterAgeCompute_senseTest [
 		"-1 is used to indicate missing data"
 		sa <= 0 ifFalse: [ self assert: sa  > (4*30)].
 		 ]
+	
+]
+
+{ #category : #tests }
+OvinaLambTest >> testSlaughterWeightCompute [
+	"smoke test"
+	| lambs |
+	lambs := OvinaLamb all.
+	lambs do: [ :lamb |
+		self assert: lamb slaughterWeightCompute isNumber. 
+		 ]
+	
 	
 ]

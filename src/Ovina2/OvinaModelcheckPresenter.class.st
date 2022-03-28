@@ -46,10 +46,13 @@ OvinaModelcheckPresenter class >> reOpen [
 { #category : #initialization }
 OvinaModelcheckPresenter >> initializePresenters [
 	checker := OvinaModelCheck new.
-	checks := { 
+	checks := {
 		self newRadioButton
 			label: 'Fødselsdage';
-			whenActivatedDo: [ self show: checker checkLambsBornOnSameDay ].
+			whenActivatedDo: [ self show: checker checkLambsBornOnSameDay ]. 
+		self newRadioButton
+			label: 'Mangler slagtevægt';
+			whenActivatedDo: [ self show: checker checkSlaughterWeightsRegistered ].
 		self newRadioButton
 			label: 'Vægttab';
 			whenActivatedDo: [ self show: checker checkLambWeightloss ].

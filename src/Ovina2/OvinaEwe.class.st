@@ -50,11 +50,10 @@ OvinaEwe >> avgLambGrowth [
 
 { #category : #columns }
 OvinaEwe >> avgLambGrowthCompute [
-	| allWeights totalWeight |
-	self lambs ifEmpty: [ ^ -1 ].
+	| allWeights |
 	allWeights := ((self lambs collect: [:l| l gramPerDay ]) select: [ :v | v > 0 ]).
-	totalWeight := allWeights inject: 0 into: [ :sofar :elem | sofar + elem ].
-	^ (totalWeight / self lambs size) 
+	allWeights ifEmpty: [ ^ -1 ].
+	^ (allWeights sum / allWeights size) 
 ]
 
 { #category : #columns }
