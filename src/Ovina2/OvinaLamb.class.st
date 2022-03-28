@@ -22,6 +22,7 @@ OvinaLamb >> canPromoteToEwe [
 	self usage = 'avl' ifFalse: 
 		[ OvinaApp errorMessage: 'Kun lam udvalgt til avl kan blive får'. 
 		^false ].
+	^ true
 ]
 
 { #category : #'accessing - properties' }
